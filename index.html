@@ -1,0 +1,1679 @@
+```html
+<!doctype html>
+<html lang="zh-Hant-HK">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="小克記帳">
+<meta name="application-name" content="小克記帳">
+<meta name="theme-color" content="#1C2038">
+<link rel="manifest" href="manifest.json">
+<title>小克記帳 - 溫柔陪伴記帳本</title>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:#F4F5F8;color:#1C2038;font:16px/1.45 -apple-system,"PingFang HK","PingFang TC","Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif}
+button,input{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid #E8344E;outline-offset:2px}
+.hero :focus-visible{outline-color:#fff}
+[hidden]{display:none!important}
+#app{max-width:520px;margin:0 auto;min-height:100dvh;background:#F4F5F8;padding-bottom:calc(92px + env(safe-area-inset-bottom))}
+.num,.big,#amount{font-family:ui-rounded,"SF Pro Rounded","Hiragino Maru Gothic ProN",system-ui,-apple-system,"PingFang HK",sans-serif;font-variant-numeric:tabular-nums}
+
+/* hero */
+.hero{background:#1C2038;color:#fff;padding:calc(env(safe-area-inset-top) + 18px) 18px 26px;border-radius:0 0 30px 30px}
+.heroTop{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:14px}
+h1{font-size:24px;margin:0;font-weight:800;letter-spacing:.04em}
+.sub{font-size:14px;color:rgba(255,255,255,.78);text-align:right;white-space:pre-line}
+#banner{margin:12px 16px 0;background:#FFF1CC;color:#4A3A00;border-radius:12px;padding:10px 12px;font-size:14px}
+
+.seg{display:flex;background:rgba(255,255,255,.1);border-radius:12px;padding:3px;gap:3px}
+.seg button{flex:1;border:0;background:transparent;padding:9px 6px;border-radius:9px;color:rgba(255,255,255,.7);font-weight:700}
+.seg button.on{background:#fff;color:#1C2038}
+.cur{margin-top:10px}
+.cur button.on[data-v="HKD"]{background:#E8344E;color:#fff}
+.cur button.on[data-v="CNY"]{background:#F2B731;color:#1C2038}
+
+.amountRow{display:flex;align-items:baseline;gap:10px;margin-top:20px}
+.amountRow span{font-size:26px;font-weight:700;color:#FF7A8C;font-family:ui-rounded,"SF Pro Rounded","Hiragino Maru Gothic ProN",system-ui,-apple-system,"PingFang HK",sans-serif}
+body.cny .amountRow span{color:#F2B731}
+#amount{width:100%;border:0;border-bottom:2px solid rgba(255,255,255,.22);background:transparent;color:#fff;font-size:52px;font-weight:700;padding:0 0 8px;border-radius:0;outline:none;caret-color:#FF7A8C}
+#amount::placeholder{color:rgba(255,255,255,.28)}
+#amount:focus{border-bottom-color:#FF7A8C}
+body.cny #amount:focus{border-bottom-color:#F2B731}
+
+/* body */
+.body{padding:20px 16px 0}
+.lbl{font-size:14px;color:#667089;margin:0 0 8px;font-weight:600}
+.block{margin-top:20px}
+#chips,#quick{display:flex;flex-wrap:wrap;gap:8px}
+.chip{display:inline-flex;align-items:center;gap:8px;border:1px solid #E1E4EC;background:#FFFFFF;border-radius:999px;padding:9px 15px 9px 12px;font-weight:600}
+.dot{width:10px;height:10px;border-radius:50%;background:#999;flex:none}
+.chip.on{background:#1C2038;border-color:#1C2038;color:#fff}
+.txt{display:block;width:100%;border:1px solid #E1E4EC;border-radius:12px;padding:12px;background:#FFFFFF;min-height:46px}
+#quick{margin-top:10px}
+.q{border:1px solid transparent;background:#E9ECF3;border-radius:999px;padding:7px 14px;font-weight:600;font-size:15px}
+.q.on{background:#1C2038;color:#fff}
+.q.add{background:transparent;border:1px dashed #A4ABC0;color:#667089;font-weight:500}
+.primary{width:100%;margin-top:24px;border:0;border-radius:16px;background:#E8344E;color:#fff;font-weight:800;font-size:18px;padding:16px;letter-spacing:.06em}
+body.cny .primary{background:#F2B731;color:#1C2038}
+.ghost{border:1px solid #E1E4EC;background:#FFFFFF;border-radius:12px;padding:10px 14px;font-weight:600}
+.danger{border:1px solid #E7B9B9;background:#fff;color:#B91C1C;border-radius:12px;padding:10px 14px;font-weight:600}
+#editBar{display:flex;gap:10px;margin-top:12px}
+#editBar button{flex:1}
+.wide{width:100%;margin-top:12px}
+
+/* report */
+.nav{display:flex;align-items:center;justify-content:space-between;margin:14px 0 0}
+.nav .lab{font-weight:700;font-size:17px;text-align:center;flex:1}
+.nav button{border:0;background:rgba(255,255,255,.12);color:#fff;width:42px;height:42px;border-radius:50%;font-size:22px;line-height:1}
+.today{display:block;margin:4px auto 0;border:0;background:none;color:#F2B731;font-weight:700;padding:6px}
+.k2{font-size:14px;color:rgba(255,255,255,.7);margin-top:16px}
+.big{font-size:44px;font-weight:800;line-height:1.1;margin-top:2px}
+.trio{display:flex;gap:28px;margin-top:12px}
+.trio span{display:block;font-size:13px;color:rgba(255,255,255,.7)}
+.trio b{font-family:ui-rounded,"SF Pro Rounded","Hiragino Maru Gothic ProN",system-ui,-apple-system,"PingFang HK",sans-serif;font-variant-numeric:tabular-nums;font-size:18px}
+.note{margin-top:12px;font-size:14px;color:#F2B731}
+.bars{display:flex;align-items:flex-end;gap:3px;height:84px;margin-top:20px}
+.col{flex:1;height:100%;display:flex;align-items:flex-end;min-width:0}
+.bar{width:100%;border:0;background:#FF7A8C;border-radius:4px 4px 0 0;padding:0;min-height:3px}
+.bar.zero{background:rgba(255,255,255,.18)}
+.axis{display:flex;gap:3px;margin-top:5px}
+.axis span{flex:1;height:14px;position:relative}
+.axis i{position:absolute;left:50%;transform:translateX(-50%);font-style:normal;font-size:11px;color:rgba(255,255,255,.65);white-space:nowrap}
+
+.panel{background:#FFFFFF;border-radius:20px;padding:16px;margin-bottom:14px}
+h2{font-size:16px;margin:0 0 12px;font-weight:700}
+.ribbon{display:flex;gap:3px;height:16px;border-radius:8px;overflow:hidden;margin-bottom:14px}
+.ribbon i{display:block;min-width:4px}
+.lg{display:flex;align-items:center;gap:10px;padding:7px 0}
+.lg .n{flex:1;font-weight:600}
+.lg .p{color:#667089;font-size:14px;min-width:38px;text-align:right}
+.lg .a{min-width:96px;text-align:right;font-family:ui-rounded,"SF Pro Rounded","Hiragino Maru Gothic ProN",system-ui,-apple-system,"PingFang HK",sans-serif;font-variant-numeric:tabular-nums;font-weight:700}
+.gh{display:flex;justify-content:space-between;font-size:13px;color:#667089;margin:16px 0 2px;font-weight:600}
+.gh:first-of-type{margin-top:0}
+.row{display:flex;width:100%;align-items:center;gap:12px;text-align:left;border:0;background:transparent;padding:10px 0;border-bottom:1px solid #EEF0F5}
+.row:last-child{border-bottom:0}
+.ic{width:38px;height:38px;border-radius:50%;background:#667089;color:#fff;display:grid;place-items:center;font-weight:700;flex:none}
+.rc{flex:1;min-width:0}
+.rc b{display:block;font-weight:700}
+.rc i{display:block;font-style:normal;font-size:13px;color:#667089;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ra{text-align:right;font-family:ui-rounded,"SF Pro Rounded","Hiragino Maru Gothic ProN",system-ui,-apple-system,"PingFang HK",sans-serif;font-variant-numeric:tabular-nums}
+.ra b{display:block;font-weight:700}
+.ra i{display:block;font-style:normal;font-size:12px;color:#8A5A00}
+.ra.income b{color:#15803D}
+.empty{color:#667089;text-align:center;padding:18px 8px}
+
+/* settings */
+.line{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.line input,.add input{border:1px solid #E1E4EC;border-radius:10px;padding:9px 10px;background:#fff}
+.line input{width:110px;font-family:ui-rounded,"SF Pro Rounded","Hiragino Maru Gothic ProN",system-ui,-apple-system,"PingFang HK",sans-serif}
+.help{font-size:13px;color:#667089;margin-top:10px;line-height:1.5}
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 12px}
+.tag{display:inline-flex;align-items:center;gap:6px;border:1px solid #E1E4EC;border-radius:999px;padding:5px 6px 5px 12px;background:#fff;font-size:15px}
+.tag button{border:0;background:#E9ECF3;border-radius:50%;width:22px;height:22px;line-height:1;padding:0;color:#667089}
+.add{display:flex;gap:8px}
+.add input{flex:1;min-width:0}
+.pick .chip{padding:7px 12px 7px 10px;font-size:15px}
+
+/* tab bar */
+.tabbar{position:fixed;left:0;right:0;bottom:0;background:rgba(255,255,255,.94);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-top:1px solid #E1E4EC;padding-bottom:env(safe-area-inset-bottom);z-index:40}
+.tabbar div{max-width:520px;margin:0 auto;display:flex}
+.tabbar button{position:relative;flex:1;border:0;background:transparent;padding:9px 4px 8px;color:#7C849C;font-size:12px;font-weight:700;display:flex;flex-direction:column;align-items:center;gap:3px}
+.tabbar svg{width:25px;height:25px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.tabbar button.on{color:#E8344E}
+.tabbar .dot2{position:absolute;top:7px;left:calc(50% + 9px);width:10px;height:10px;border-radius:50%;background:#E8344E;border:2px solid #fff}
+#toast{white-space:pre-line;position:fixed;left:50%;bottom:calc(88px + env(safe-area-inset-bottom));transform:translateX(-50%);background:#1C2038;color:#fff;border-radius:12px;padding:11px 18px;font-size:15px;opacity:0;pointer-events:none;transition:opacity .2s;max-width:90vw;text-align:center;box-shadow:0 6px 20px rgba(28,32,56,.3);z-index:60}
+#toast.show{opacity:1}
+
+/* 小克 */
+.petTop{align-items:center}
+.petTop .sub{text-align:left;white-space:pre-line;margin-top:6px;line-height:1.55}
+.pet{border:0;background:none;padding:0;width:112px;flex:none;border-radius:14px;-webkit-user-select:none;user-select:none;touch-action:manipulation}
+.pet svg{display:block;width:100%;height:auto;overflow:visible;transform-origin:50% 100%;animation:bob 2s ease-in-out infinite}
+.pet.nervous svg{animation:bob 1.1s ease-in-out infinite}
+.pet.sleep svg{animation:breathe 3.4s ease-in-out infinite}
+.pet.full1 svg,.pet.full2 svg,.pet.full3 svg{animation:sway 2.4s ease-in-out infinite}
+.aL,.aR,.ey,.bub2{transform-box:fill-box}
+.aL{transform-origin:100% 0}
+.aR{transform-origin:0 0}
+.ey{transform-origin:50% 50%}
+.bub2{transform-origin:0 100%}
+.gz{transition:transform .18s ease-out}
+.pet.look-l .gz{transform:translateX(-1px)}
+.pet.look-r .gz{transform:translateX(1px)}
+.pet.look-u .gz{transform:translateY(-1px)}
+.pet.look-d .gz{transform:translateY(1px)}
+.pet .ey.bl{animation:blink 4.6s ease-in-out infinite}
+
+/* 動作 */
+.pet.a-jump svg{animation:jump .65s ease-out}
+.pet.a-jiggle svg{animation:jig .65s ease-out}
+.pet.a-cheer svg{animation:hop2 .6s ease-out 3}
+.pet.a-cheer .aL,.pet.a-stretch .aL{animation:armL 1.8s ease-in-out}
+.pet.a-cheer .aR,.pet.a-stretch .aR{animation:armR 1.8s ease-in-out}
+.pet.a-wave .aR{animation:wave 1.9s ease-in-out}
+.pet.a-dance svg{animation:dance 1.3s ease-in-out 2}
+.pet.a-dance .aL{animation:danceL 1.3s ease-in-out 2}
+.pet.a-dance .aR{animation:danceR 1.3s ease-in-out 2}
+.pet.a-stretch svg,.pet.a-yawn svg{animation:stretch 1.8s ease-in-out}
+.pet.a-sing svg{animation:sing 1.35s ease-in-out 2}
+.pet.a-turn svg{animation:turn 1s ease-in-out}
+.pet.a-stroll{animation:stroll 2.6s ease-in-out}
+.pet.a-stroll .lg1,.pet.a-stroll .lg2{animation:step .34s linear infinite}
+.pet.a-stroll .lg2{animation-delay:-.17s}
+.pet.a-shiver svg{animation:shiver .1s linear 12}
+.pet.a-sigh svg{animation:sigh 1.8s ease-in-out}
+.pet.a-snore svg{animation:snore 1.6s ease-in-out}
+.pet.a-waddle svg{animation:waddle .9s ease-in-out 2}
+.pet.a-dizzy svg{animation:dizzy 1.8s ease-in-out}
+.pet.a-think svg{animation:tilt 2.3s ease-in-out}
+
+/* 特效 */
+.fxz{animation:zf 2.4s ease-in-out infinite}
+.bub2{animation:bubl 3s ease-in-out infinite}
+.burp{animation:bp 2.8s ease-in-out infinite}
+.drip{animation:drip 1.4s ease-in infinite}
+.rise{animation:rise 1.7s ease-out infinite}
+.coin{animation:cf .9s ease-in infinite}
+.tw{animation:tw 1.1s ease-in-out infinite}
+.dd{animation:dd 1.8s ease-in-out infinite}
+.orb1{animation:orb 1s ease-in-out infinite alternate}
+.orb2{animation:orb 1s ease-in-out infinite alternate-reverse}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-4%)}}
+@keyframes breathe{0%,100%{transform:scaleY(1)}50%{transform:scaleY(.94)}}
+@keyframes sway{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(3deg)}}
+@keyframes blink{0%,90%,100%{transform:scaleY(1)}94%{transform:scaleY(.1)}}
+@keyframes jump{0%{transform:translateY(0) scale(1.1,.88)}35%{transform:translateY(-24%) scale(.94,1.08)}70%{transform:translateY(0) scale(1.08,.9)}100%{transform:none}}
+@keyframes jig{0%{transform:scale(1)}20%{transform:scale(1.14,.86)}45%{transform:scale(.92,1.1)}70%{transform:scale(1.05,.96)}100%{transform:scale(1)}}
+@keyframes hop2{0%{transform:translateY(0) scale(1.06,.92)}40%{transform:translateY(-18%) scale(.96,1.05)}80%,100%{transform:none}}
+@keyframes dance{0%,100%{transform:none}25%{transform:translateY(-8%) rotate(-7deg)}50%{transform:none}75%{transform:translateY(-8%) rotate(7deg)}}
+@keyframes danceL{0%,50%,100%{transform:none}25%{transform:rotate(130deg)}}
+@keyframes danceR{0%,50%,100%{transform:none}75%{transform:rotate(-130deg)}}
+@keyframes armL{0%,100%{transform:none}15%,45%,85%{transform:rotate(155deg)}30%,60%{transform:rotate(172deg)}}
+@keyframes armR{0%,100%{transform:none}15%,45%,85%{transform:rotate(-155deg)}30%,60%{transform:rotate(-172deg)}}
+@keyframes wave{0%,100%{transform:none}12%,36%,60%,84%{transform:rotate(-128deg)}24%,48%,72%{transform:rotate(-156deg)}}
+@keyframes stretch{0%,100%{transform:none}30%,70%{transform:scale(.9,1.17)}}
+@keyframes sing{0%,100%{transform:rotate(0)}25%{transform:rotate(-5deg) translateY(-3%)}75%{transform:rotate(5deg) translateY(-3%)}}
+@keyframes turn{0%,100%{transform:scaleX(1)}35%,55%{transform:scaleX(.06)}}
+@keyframes stroll{0%,100%{transform:none}30%,60%{transform:translateX(-18px)}}
+@keyframes step{0%,100%{transform:translateY(0)}50%{transform:translateY(-1px)}}
+@keyframes shiver{0%,100%{transform:translateX(0)}25%{transform:translateX(-1.5px)}75%{transform:translateX(1.5px)}}
+@keyframes sigh{0%,100%{transform:none}40%,70%{transform:scale(1.04,.9)}}
+@keyframes snore{0%,100%{transform:scale(1)}45%{transform:scale(1.06,.96)}}
+@keyframes waddle{0%,100%{transform:rotate(-5deg) translateX(-2%)}50%{transform:rotate(5deg) translateX(2%)}}
+@keyframes dizzy{0%,100%{transform:rotate(0)}15%{transform:rotate(-9deg)}35%{transform:rotate(8deg)}55%{transform:rotate(-6deg)}75%{transform:rotate(5deg)}}
+@keyframes tilt{0%,100%{transform:none}25%,75%{transform:rotate(-8deg)}}
+@keyframes zf{0%,100%{opacity:.3}50%{opacity:1}}
+@keyframes bp{0%,100%{opacity:0}40%,70%{opacity:.95}}
+@keyframes bubl{0%{transform:scale(.3);opacity:0}30%{opacity:1}80%{transform:scale(1.4);opacity:1}100%{transform:scale(1.5);opacity:0}}
+@keyframes drip{0%{transform:translateY(-1px);opacity:0}30%{opacity:1}100%{transform:translateY(2px);opacity:0}}
+@keyframes rise{0%{transform:translateY(2px);opacity:0}20%{opacity:1}100%{transform:translateY(-6px);opacity:0}}
+@keyframes cf{0%{transform:translateY(0);opacity:0}15%,85%{opacity:1}100%{transform:translateY(9px);opacity:0}}
+@keyframes tw{0%,100%{opacity:.15}50%{opacity:1}}
+@keyframes dd{0%,15%{opacity:0}35%,85%{opacity:1}100%{opacity:0}}
+@keyframes orb{from{transform:translateX(-6px)}to{transform:translateX(6px)}}
+
+.bubble{position:relative;background:#fff;color:#1C2038;border-radius:16px;padding:12px 15px 12px;margin:4px 0 16px;font-size:15px;line-height:1.55;box-shadow:0 4px 12px rgba(0,0,0,.08)}
+.bubble::before{content:"";position:absolute;top:-8px;right:48px;border:8px solid transparent;border-top:0;border-bottom-color:#fff}
+.bubble .bn{display:block;font-size:12px;color:#B4532F;font-weight:800;margin-bottom:2px}
+.bubble.pop{animation:pop .3s ease-out}
+@keyframes pop{from{opacity:0;transform:translateY(-6px) scale(.97)}to{opacity:1;transform:none}}
+
+/* achievements */
+.lv{display:flex;align-items:center;gap:10px;margin-top:6px}
+.lvb{background:#D97757;color:#fff;font-weight:800;border-radius:8px;padding:2px 9px;font-size:14px}
+.lvt{font-size:22px;font-weight:800}
+.pbar{height:12px;background:rgba(255,255,255,.14);border-radius:6px;overflow:hidden;margin-top:16px}
+.pbar i{display:block;height:100%;background:linear-gradient(90deg,#D97757,#F2B731);border-radius:6px;transition:width .6s}
+.pnote{margin-top:8px;font-size:14px;color:rgba(255,255,255,.72)}
+.agrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.acard{border:0;background:#fff;border-radius:16px;border-top:4px solid var(--c);padding:14px 6px 10px;min-height:116px;display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center}
+.acard .ai{font-size:32px;line-height:1.15}
+.acard b{font-size:13px;font-weight:700;line-height:1.3}
+.acard i{font-style:normal;font-size:11px;color:#667089}
+.acard.lock{background:#E3E6EE;border-top-color:#C9CEDB}
+.acard.lock .ai,.acard.lock b{color:#8E96AD}
+.acard.lock .ai{font-weight:800;font-size:30px}
+
+/* modal */
+.modal{position:fixed;inset:0;z-index:50;background:rgba(28,32,56,.64);display:grid;place-items:center;padding:20px}
+.mcard{position:relative;background:#fff;border-radius:24px;padding:22px 20px 20px;width:100%;max-width:340px;max-height:88dvh;overflow:auto;text-align:center;animation:mpop .4s cubic-bezier(.2,1.4,.4,1)}
+@keyframes mpop{from{opacity:0;transform:scale(.8)}to{opacity:1;transform:none}}
+.mtag{font-size:14px;font-weight:700;color:#667089}
+.micon{width:96px;height:96px;margin:14px auto 12px;border-radius:50%;display:grid;place-items:center;font-size:48px;background:color-mix(in srgb,var(--c) 16%,#fff);box-shadow:0 0 0 5px color-mix(in srgb,var(--c) 38%,#fff)}
+.mcard.fresh .micon{animation:shine 1.4s ease-out}
+@keyframes shine{0%{transform:scale(.4) rotate(-40deg)}60%{transform:scale(1.15) rotate(8deg)}100%{transform:none}}
+.mname{font-size:21px;font-weight:800}
+.mdesc{font-size:14px;color:#667089;margin-top:2px}
+.msay{display:flex;gap:10px;align-items:center;text-align:left;background:#FFF1E8;border-radius:14px;padding:10px 12px;margin-top:16px;font-size:15px;line-height:1.45}
+.mpet{width:56px;flex:none}
+.mpet svg{display:block;width:100%;height:auto}
+.mrest{margin-top:14px;font-size:13px;color:#667089;text-align:left}
+.mrest span{display:inline-block;margin:6px 6px 0 0;padding:3px 10px;border-radius:999px;background:#F0F2F7;color:#1C2038}
+.mok{margin-top:18px;padding:13px}
+#confetti{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+#confetti i{position:absolute;top:-14px;width:8px;height:13px;border-radius:2px;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(112vh) rotate(var(--r))}}
+
+@media (prefers-reduced-motion:reduce){
+  #toast{transition:none}
+  .pet,.pet svg,.pet svg *,.mcard,.mcard .micon,.bubble.pop,.pbar i{animation:none!important;transition:none!important}
+}
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="banner" hidden>目前無法儲存資料，關閉分頁後記錄會消失。請使用手機 Safari 或 Chrome 等瀏覽器開啟。</div>
+
+  <!-- 記帳主頁 -->
+  <section id="tab-add">
+    <div class="hero">
+      <div class="heroTop petTop">
+        <div><h1 id="title">記帳</h1><div class="sub num" id="sub"></div></div>
+        <button class="pet" id="pet" type="button" aria-label="小克"></button>
+      </div>
+      <div class="bubble" id="bubble" hidden></div>
+      <div class="seg" id="typeSeg" role="group" aria-label="類型">
+        <button data-v="expense" class="on">支出</button><button data-v="income">收入</button>
+      </div>
+      <div class="seg cur" id="curSeg" role="group" aria-label="幣別">
+        <button data-v="HKD" class="on">港幣 HK$</button><button data-v="CNY">人民幣 ¥</button>
+      </div>
+      <div class="amountRow">
+        <span id="sym">HK$</span>
+        <input id="amount" type="number" inputmode="decimal" step="0.01" min="0" placeholder="0.00" autocomplete="off" aria-label="金額">
+      </div>
+    </div>
+    <div class="body">
+      <div class="lbl">分類</div>
+      <div id="chips"></div>
+      <div class="block">
+        <div class="lbl">備註</div>
+        <input class="txt" type="text" id="note" placeholder="選填，或點擊下方常用備註" autocomplete="off">
+        <div id="quick"></div>
+      </div>
+      <div class="block">
+        <div class="lbl">日期</div>
+        <input class="txt" type="date" id="date">
+      </div>
+      <button class="primary" id="save">記一筆</button>
+      <button class="ghost wide" id="nospend" type="button">🍃 今天沒有花錢</button>
+      <div id="editBar" hidden>
+        <button class="danger" id="del">刪除這筆</button>
+        <button class="ghost" id="cancel">取消修改</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 報表頁 -->
+  <section id="tab-report" hidden></section>
+
+  <!-- 成就頁 -->
+  <section id="tab-ach" hidden></section>
+
+  <!-- 設定頁 -->
+  <section id="tab-settings" hidden>
+    <div class="hero"><div class="heroTop" style="margin:0"><h1>設定</h1></div></div>
+    <div class="body" id="setBody"></div>
+  </section>
+</div>
+
+<!-- 底部導航欄 -->
+<nav class="tabbar" aria-label="主選單"><div>
+  <button data-tab="add" class="on"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>記帳</button>
+  <button data-tab="report"><svg viewBox="0 0 24 24"><path d="M5 20v-9M12 20V4M19 20v-6"/></svg>報表</button>
+  <button data-tab="ach"><svg viewBox="0 0 24 24"><path d="M8 4h8v5a4 4 0 0 1-8 0V4zM8 6H5v1a3 3 0 0 0 3 3M16 6h3v1a3 3 0 0 1-3 3M12 13v4M8 20h8"/></svg>成就<span class="dot2" id="achDot" hidden></span></button>
+  <button data-tab="settings"><svg viewBox="0 0 24 24"><path d="M4 7h9M19 7h1M4 17h1M11 17h9"/><circle cx="16" cy="7" r="2.2"/><circle cx="8" cy="17" r="2.2"/></svg>設定</button>
+</div></nav>
+
+<div id="toast" role="status" aria-live="polite"></div>
+<div class="modal" id="modal" hidden role="dialog" aria-modal="true"><div id="confetti"></div><div class="mcard" id="mcard"></div></div>
+<input type="file" id="file" accept=".csv,text/csv" hidden>
+
+<script>
+(() => {
+'use strict';
+const $ = id => document.getElementById(id);
+const pad = n => String(n).padStart(2, '0');
+const ymd = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+const addDays = (d, n) => { const x = new Date(d); x.setDate(x.getDate() + n); return x; };
+const startOfWeek = d => { const x = new Date(d); x.setDate(x.getDate() - ((x.getDay() + 6) % 7)); x.setHours(0, 0, 0, 0); return x; };
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+const round2 = n => Math.round(n * 100) / 100;
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const fmt = n => n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const WD = ['日', '一', '二', '三', '四', '五', '六'];
+
+const CAT_COLORS = {
+  '餐飲': '#C2570C', '交通': '#2563EB', '日常用品': '#0F766E', '服飾裝扮': '#BE185D',
+  '娛樂愛好': '#7C3AED', '外出消遣': '#0891B2', '醫療': '#B91C1C', '其他': '#64748B',
+  '薪資': '#15803D', '其他收入': '#0E7490',
+  '居住': '#0F766E', '購物': '#BE185D', '娛樂': '#7C3AED'
+};
+const EXTRA = ['#9333EA', '#0369A1', '#A16207', '#BE123C', '#4D7C0F', '#6D28D9'];
+const colorOf = c => CAT_COLORS[c] || EXTRA[[...String(c)].reduce((s, ch) => s + ch.charCodeAt(0), 0) % EXTRA.length];
+
+/* ---------- 儲存 ---------- */
+const store = (() => {
+  const mem = {}; let ok = true;
+  try { localStorage.setItem('__t', '1'); localStorage.removeItem('__t'); } catch (e) { ok = false; }
+  return {
+    get persistent() { return ok; },
+    get(k, d) {
+      try { if (ok) { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } } catch (e) {}
+      return k in mem ? mem[k] : d;
+    },
+    set(k, v) {
+      mem[k] = v;
+      if (ok) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { ok = false; $('banner').hidden = false; } }
+    }
+  };
+})();
+if (!store.persistent) $('banner').hidden = false;
+if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => {});
+
+/* ---------- 資料結構與設定 ---------- */
+const DEFAULT_CATS = {
+  expense: ['餐飲', '交通', '日常用品', '服飾裝扮', '娛樂愛好', '外出消遣', '醫療', '其他'],
+  income: ['薪資', '其他收入']
+};
+const OLD_CATS = ['居住', '購物', '娛樂'];
+
+let entries = store.get('ledger.entries', []);
+let settings = Object.assign({
+  hkdToRmb: 0.9200,      /* 1 港幣 = hkdToRmb 人民幣 */
+  rateUpdated: null,
+  cats: JSON.parse(JSON.stringify(DEFAULT_CATS)),
+  quick: { '交通': ['上下學', '地鐵', '打車'], '餐飲': ['早餐', '午餐', '晚餐', '咖啡', '奶茶'] },
+  dismissed: [],
+  budget: 0,             /* 每月預算（人民幣 ¥） */
+  petName: '小克',
+  ach: {}, achSeen: 0, noSpend: [], flags: {}
+}, store.get('ledger.settings', {}));
+
+const saveEntries = () => store.set('ledger.entries', entries);
+const saveSettings = () => store.set('ledger.settings', settings);
+
+/* 核心統計統一為人民幣 ¥ */
+const sym = () => '¥';
+const money = n => '¥' + fmt(n);
+const val = e => e.cny;
+const sumBase = a => a.reduce((s, e) => s + val(e), 0);
+
+/* 計算雙幣金額 */
+const calcDual = (amt, cur, rateHkdToRmb) => {
+  const r = rateHkdToRmb || settings.hkdToRmb || 0.92;
+  if (cur === 'HKD') {
+    return { hkd: round2(amt), cny: round2(amt * r) };
+  } else {
+    return { cny: round2(amt), hkd: round2(amt / r) };
+  }
+};
+
+/* 舊版資料相容與平滑升級 */
+(() => {
+  let dirtyEntries = false, dirtySettings = false;
+  if (!settings.hkdToRmb) {
+    if (settings.rate && settings.rate > 0) {
+      settings.hkdToRmb = settings.rate > 1 ? +(1 / settings.rate).toFixed(4) : +settings.rate.toFixed(4);
+    } else {
+      settings.hkdToRmb = 0.9200;
+    }
+    dirtySettings = true;
+  }
+  entries.forEach(e => {
+    if (e.cny == null || e.hkd == null) {
+      const r = settings.hkdToRmb;
+      const d = calcDual(e.amount, e.cur || 'HKD', r);
+      e.hkd = d.hkd; e.cny = d.cny; e.rate = r;
+      dirtyEntries = true;
+    } else if (e.rate > 1.0) {
+      e.rate = +(1 / e.rate).toFixed(4);
+      dirtyEntries = true;
+    }
+  });
+  if (dirtyEntries) saveEntries();
+  if (dirtySettings) saveSettings();
+})();
+
+// 註冊 Service Worker
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js').catch(() => {});
+  });
+}
+
+/* ---------- 提示與標籤 ---------- */
+let toastTimer;
+function toast(msg) {
+  const t = $('toast'); t.textContent = msg; t.classList.add('show');
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('show'), 2400);
+}
+function mark(seg, v) {
+  seg.querySelectorAll('button').forEach(b => {
+    const on = b.dataset.v === v;
+    b.classList.toggle('on', on);
+    b.setAttribute('aria-pressed', on);
+  });
+}
+
+/* ---------- 記帳表單 ---------- */
+const form = { type: 'expense', cur: 'HKD', cat: '', editId: null };
+
+function renderChips() {
+  const list = settings.cats[form.type].slice();
+  if (form.cat && !list.includes(form.cat)) list.push(form.cat);
+  $('chips').innerHTML = list.map(c =>
+    `<button class="chip${c === form.cat ? ' on' : ''}" data-c="${esc(c)}" aria-pressed="${c === form.cat}">
+      <span class="dot" style="background:${colorOf(c)}"></span>${esc(c)}
+    </button>`
+  ).join('');
+  renderQuick();
+}
+
+function renderQuick() {
+  const note = $('note').value.trim();
+  const list = (form.cat && settings.quick[form.cat]) || [];
+  const col = form.cat ? colorOf(form.cat) : '#667089';
+  let h = list.map(q => `<button class="q${q === note ? ' on' : ''}" style="${q === note ? `background:${col};color:#fff` : `background:color-mix(in srgb,${col} 14%,#fff)`}" data-q="${esc(q)}">${esc(q)}</button>`).join('');
+  if (form.cat && note && !list.includes(note)) h += `<button class="q add" data-qadd="1">＋ 存為「${esc(form.cat)}」常用備註</button>`;
+  $('quick').innerHTML = h;
+  $('quick').hidden = !h;
+}
+
+function setType(t) {
+  form.type = t; form.cat = '';
+  mark($('typeSeg'), t);
+  renderChips();
+}
+
+function setCur(c) {
+  form.cur = c;
+  mark($('curSeg'), c);
+  $('sym').textContent = c === 'HKD' ? 'HK$' : '¥';
+  document.body.classList.toggle('cny', c === 'CNY');
+}
+
+function updateSub() {
+  const st = refreshPet(); refreshNoSpend();
+  if ($('tab-add').hidden) return;
+  if (form.editId) { $('sub').textContent = '正在修改帳目'; return; }
+  const today = ymd(new Date());
+  const t = sumBase(entries.filter(e => e.type === 'expense' && e.date === today));
+  let s = `今日支出 ¥${fmt(t)}`;
+  if (st.b) {
+    s += '\n' + (st.over > 0 ? `本月超支 ¥${fmt(st.spent - st.b)}` : `本月還剩 ¥${fmt(st.b - st.spent)}`);
+  }
+  if (st.streak >= 2) s += `\n🔥 連續記帳 ${st.streak} 天`;
+  $('sub').textContent = s;
+}
+
+function refreshNoSpend() {
+  const t = ymd(new Date());
+  const spent = entries.some(e => e.type === 'expense' && e.date === t), marked = settings.noSpend.includes(t);
+  const b = $('nospend'); b.hidden = !!form.editId || spent;
+  b.textContent = marked ? '✓ 今天已標記沒花錢（點擊取消）' : '🍃 今天沒有花錢';
+}
+
+function resetForm() {
+  form.editId = null; $('amount').value = ''; $('note').value = '';
+  $('date').value = ymd(new Date());
+  $('save').textContent = '記一筆'; $('editBar').hidden = true; $('title').textContent = '記帳';
+  updateSub(); renderQuick();
+}
+
+function saveEntry() {
+  const amt = parseFloat($('amount').value);
+  if (!(amt > 0)) { toast('請輸入大於 0 的金額'); return; }
+  const old = form.editId ? entries.find(x => x.id === form.editId) : null;
+  let r = old && old.rate ? old.rate : settings.hkdToRmb;
+  r = Math.round(r * 1e6) / 1e6;
+  if (!form.cat) { toast('請選擇一個分類'); return; }
+
+  const dual = calcDual(amt, form.cur, r);
+  const e = {
+    id: form.editId || uid(),
+    type: form.type,
+    cur: form.cur,
+    amount: round2(amt),
+    rate: r,
+    hkd: dual.hkd,
+    cny: dual.cny,
+    cat: form.cat,
+    note: $('note').value.trim(),
+    date: $('date').value || ymd(new Date()),
+    ts: old ? old.ts : Date.now()
+  };
+
+  const i = entries.findIndex(x => x.id === e.id);
+  if (i >= 0) entries[i] = e; else entries.push(e);
+  saveEntries();
+
+  const wasEdit = !!form.editId, keepDate = $('date').value;
+  const auto = autoQuick(e);
+  resetForm();
+  if (!wasEdit && keepDate) $('date').value = keepDate;
+
+  const tipText = (wasEdit ? '已更新：' : '已記錄：') + (e.cur === 'HKD' ? `HK$${fmt(e.amount)}（折合 ¥${fmt(e.cny)}）` : `¥${fmt(e.amount)}`) + (auto ? `\n「${e.note}」已加入「${e.cat}」常用備註` : '');
+  toast(tipText);
+  if (wasEdit) setFlag('edited');
+  petReact(e, wasEdit);
+  checkAch();
+}
+
+const AUTO_QUICK_AT = 5;
+function autoQuick(e) {
+  if (!e.note) return false;
+  const l = settings.quick[e.cat] = settings.quick[e.cat] || [];
+  if (l.includes(e.note) || settings.dismissed.includes(e.cat + '|' + e.note)) return false;
+  const n = entries.filter(x => x.cat === e.cat && x.note === e.note).length;
+  if (n < AUTO_QUICK_AT) return false;
+  l.push(e.note); saveSettings();
+  return true;
+}
+
+function startEdit(id) {
+  const e = entries.find(x => x.id === id); if (!e) return;
+  form.editId = id; form.type = e.type; form.cat = e.cat; mark($('typeSeg'), e.type);
+  $('note').value = e.note || '';
+  setCur(e.cur); renderChips();
+  $('amount').value = e.amount; $('date').value = e.date;
+  $('save').textContent = '更新'; $('editBar').hidden = false; $('title').textContent = '修改帳目';
+  showTab('add');
+}
+
+function deleteEntry() {
+  if (!form.editId) return;
+  if (!confirm('確定刪除這筆帳目嗎？')) return;
+  entries = entries.filter(x => x.id !== form.editId);
+  saveEntries(); resetForm(); toast('已刪除帳目');
+}
+
+/* ---------- 報表模組 ---------- */
+const rep = { mode: 'day', anchor: new Date() };
+function range() {
+  const a = new Date(rep.anchor); a.setHours(0, 0, 0, 0);
+  if (rep.mode === 'day') return [a, a];
+  if (rep.mode === 'week') { const s = startOfWeek(a); return [s, addDays(s, 6)]; }
+  return [new Date(a.getFullYear(), a.getMonth(), 1), new Date(a.getFullYear(), a.getMonth() + 1, 0)];
+}
+function shift(n) {
+  const a = new Date(rep.anchor);
+  if (rep.mode === 'day') a.setDate(a.getDate() + n);
+  else if (rep.mode === 'week') a.setDate(a.getDate() + 7 * n);
+  else { a.setDate(1); a.setMonth(a.getMonth() + n); }
+  rep.anchor = a;
+}
+function rangeLabel(f, t) {
+  if (rep.mode === 'day') return `${f.getFullYear()}年${f.getMonth() + 1}月${f.getDate()}日 週${WD[f.getDay()]}`;
+  if (rep.mode === 'week') return `${f.getMonth() + 1}月${f.getDate()}日 至 ${t.getMonth() + 1}月${t.getDate()}日`;
+  return `${f.getFullYear()}年${f.getMonth() + 1}月`;
+}
+
+function renderReport() {
+  const [f, t] = range(), fs = ymd(f), ts = ymd(t), todayS = ymd(new Date());
+  const list = entries.filter(e => e.date >= fs && e.date <= ts);
+  const exp = list.filter(e => e.type === 'expense'), inc = list.filter(e => e.type === 'income');
+  const E = sumBase(exp), I = sumBase(inc), net = I - E;
+  const hkdList = exp.filter(e => e.cur === 'HKD');
+  const isCurrent = todayS >= fs && todayS <= ts;
+  const unit = { day: '日', week: '週', month: '月' }[rep.mode];
+
+  let h = `<div class="hero"><div class="heroTop"><h1>報表</h1></div>
+    <div class="seg" id="modeSeg">${[['day', '日'], ['week', '週'], ['month', '月']].map(([v, n]) => `<button data-mode="${v}" class="${rep.mode === v ? 'on' : ''}">${n}</button>`).join('')}</div>
+    <div class="nav"><button data-nav="-1" aria-label="上一${unit}">‹</button><div class="lab">${rangeLabel(f, t)}</div><button data-nav="1" aria-label="下一${unit}">›</button></div>`;
+  if (!isCurrent) h += `<button class="today" data-nav="today">回到本${unit}</button>`;
+  h += `<div class="k2">支出（折合人民幣）</div><div class="big">¥${fmt(E)}</div>
+    <div class="trio"><div><span>收入</span><b>¥${fmt(I)}</b></div><div><span>結餘</span><b>${net < 0 ? '−' : ''}¥${fmt(Math.abs(net))}</b></div></div>`;
+  if (hkdList.length) {
+    const rawHkdSum = hkdList.reduce((s, e) => s + e.amount, 0);
+    h += `<div class="note">含港幣支出 HK$${fmt(rawHkdSum)}，已折合 ¥${fmt(sumBase(hkdList))}</div>`;
+  }
+
+  if (rep.mode !== 'day') {
+    const days = []; for (let d = new Date(f); d <= t; d = addDays(d, 1)) days.push(new Date(d));
+    const per = days.map(d => sumBase(exp.filter(e => e.date === ymd(d))));
+    const mx = Math.max(...per, 1);
+    h += `<div class="bars">${days.map((d, i) =>
+      `<div class="col"><button class="bar${per[i] ? '' : ' zero'}" data-d="${ymd(d)}" style="height:${per[i] ? Math.max(per[i] / mx * 100, 5) : 3}%" aria-label="${d.getMonth() + 1}月${d.getDate()}日 ¥${fmt(per[i])}"></button></div>`).join('')}</div>
+      <div class="axis">${days.map((d, i) => {
+        const txt = rep.mode === 'week' ? WD[d.getDay()] : ((d.getDate() - 1) % 5 === 0 || i === days.length - 1 ? d.getDate() : '');
+        return `<span><i>${txt}</i></span>`;
+      }).join('')}</div>`;
+  }
+  h += '</div><div class="body">';
+
+  const by = {}; exp.forEach(e => by[e.cat] = (by[e.cat] || 0) + val(e));
+  const cats = Object.entries(by).sort((a, b) => b[1] - a[1]);
+  h += '<div class="panel"><h2>支出分類</h2>';
+  if (cats.length) {
+    h += `<div class="ribbon">${cats.map(([c, v]) => `<i style="flex:${v};background:${colorOf(c)}"></i>`).join('')}</div>`;
+    h += cats.map(([c, v]) => `<div class="lg"><span class="dot" style="background:${colorOf(c)}"></span><span class="n">${esc(c)}</span><span class="p">${Math.round(v / E * 100)}%</span><span class="a">¥${fmt(v)}</span></div>`).join('');
+  } else h += '<div class="empty">這段時間沒有支出記錄</div>';
+  h += '</div>';
+
+  h += '<div class="panel"><h2>明細</h2>';
+  if (!list.length) h += '<div class="empty">還沒有任何記錄。到「記帳」記下美好的一筆吧。</div>';
+  else {
+    [...new Set(list.map(e => e.date))].sort().reverse().forEach(ds => {
+      const items = list.filter(e => e.date === ds).sort((a, b) => b.id < a.id ? -1 : 1);
+      if (rep.mode !== 'day') {
+        const d = new Date(ds + 'T00:00:00');
+        h += `<div class="gh"><span>${d.getMonth() + 1}月${d.getDate()}日 週${WD[d.getDay()]}</span><span class="num">支出 ¥${fmt(sumBase(items.filter(e => e.type === 'expense')))}</span></div>`;
+      }
+      items.forEach(e => {
+        const sign = e.type === 'expense' ? '−' : '+';
+        const displayCur = e.cur === 'HKD' ? `HK$${fmt(e.amount)}` : `¥${fmt(e.amount)}`;
+        const subConverted = e.cur === 'HKD' ? `折合 ¥${fmt(e.cny)}（匯率 ${e.rate}）` : '';
+        h += `<button class="row" data-id="${e.id}">
+          <span class="ic" style="background:${colorOf(e.cat)}">${esc([...e.cat][0])}</span>
+          <span class="rc"><b>${esc(e.cat)}</b>${e.note ? `<i>${esc(e.note)}</i>` : ''}</span>
+          <span class="ra ${e.type}"><b>${sign}${displayCur}</b>${subConverted ? `<i>${subConverted}</i>` : ''}</span>
+        </button>`;
+      });
+    });
+  }
+  h += '</div></div>';
+  $('tab-report').innerHTML = h;
+}
+
+/* ---------- 設定頁面 ---------- */
+let qSel = null;
+function renderSettings() {
+  const upd = settings.rateUpdated ? new Date(settings.rateUpdated).toLocaleString('zh-HK', { hour12: false }) : '尚未自動更新';
+  const tags = t => settings.cats[t].map(c => `<span class="tag">${esc(c)}<button data-act="delcat" data-t="${t}" data-c="${esc(c)}" aria-label="刪除 ${esc(c)}">×</button></span>`).join('');
+  const allCats = settings.cats.expense.concat(settings.cats.income);
+  if (!qSel || !allCats.includes(qSel)) qSel = allCats[0];
+  const qs = settings.quick[qSel] || [];
+
+  $('setBody').innerHTML = `
+  <div class="panel"><h2>每月預算與${esc(petName())}</h2>
+    <div class="line"><span>每月預算 ¥</span><input id="setBudget" type="number" inputmode="decimal" step="1" min="0" value="${settings.budget || ''}" placeholder="例如 4000"></div>
+    <div class="help">預算以人民幣計算，港幣消費會依記錄時的匯率折合。如果超過預算，${esc(petName())}會心疼地為你吃成圓滾滾的小胖子喔；留空代表不設預算。</div>
+    <div class="line" style="margin-top:12px"><span>伴侶名字</span><input id="setPet" maxlength="8" value="${esc(petName())}" style="font-family:inherit"></div></div>
+
+  <div class="panel"><h2>匯率設定（港幣 HKD → 人民幣 RMB）</h2>
+    <div class="line">
+      <span>1 港幣 =</span>
+      <input id="setRate" type="number" inputmode="decimal" step="0.0001" value="${settings.hkdToRmb}">
+      <span>人民幣</span>
+      <button class="ghost" data-act="fetchRate">連網更新匯率</button>
+    </div>
+    <div class="help">最後更新時間：${upd}。<br>記帳時會自動以最新匯率計算並鎖定於該筆帳目，日後匯率波動不會影響過去的歷史記錄。</div>
+  </div>
+
+  <div class="panel"><h2>常用備註</h2>
+    <div class="help" style="margin:0 0 10px">點選分類設定快速點選標籤。同一個備註在同一分類用滿 5 次，小克也會貼心地自動為你加入。</div>
+    <div class="tags pick">${allCats.map(c => `<button class="chip${c === qSel ? ' on' : ''}" data-act="qsel" data-c="${esc(c)}"><span class="dot" style="background:${colorOf(c)}"></span>${esc(c)}</button>`).join('')}</div>
+    <div class="tags">${qs.length ? qs.map(q => `<span class="tag">${esc(q)}<button data-act="qdel" data-q="${esc(q)}" aria-label="刪除 ${esc(q)}">×</button></span>`).join('') : '<span class="help" style="margin:0">「' + esc(qSel) + '」目前還沒有常用備註</span>'}</div>
+    <div class="add"><input id="newq" placeholder="例如：拿鐵、上下學" maxlength="12"><button class="ghost" data-act="qadd">新增</button></div>
+  </div>
+
+  <div class="panel"><h2>自訂分類</h2>
+    <div class="lbl" style="margin:0">支出分類</div><div class="tags">${tags('expense')}</div>
+    <div class="add"><input id="newcat-expense" placeholder="新增支出分類" maxlength="10"><button class="ghost" data-act="addcat" data-t="expense">新增</button></div>
+    <div class="lbl" style="margin:18px 0 0">收入分類</div><div class="tags">${tags('income')}</div>
+    <div class="add"><input id="newcat-income" placeholder="新增收入分類" maxlength="10"><button class="ghost" data-act="addcat" data-t="income">新增</button></div>
+  </div>
+
+  <div class="panel"><h2>資料備份</h2>
+    <div class="help" style="margin:0 0 12px">目前共有 ${entries.length} 筆帳目。資料安全儲存在本機瀏覽器中，建議定期匯出備份。</div>
+    <div class="line"><button class="ghost" data-act="export">匯出 CSV 檔案</button><button class="ghost" data-act="import">匯入 CSV 備份</button></div>
+  </div>
+
+  <div class="panel"><h2>資料清除</h2>
+    <button class="danger" data-act="clear">清除所有帳目資料</button>
+  </div>`;
+}
+
+/* 連網更新最新匯率 */
+let isFetchingRate = false;
+async function fetchRate(manual) {
+  if (isFetchingRate) return;
+  isFetchingRate = true;
+  const btns = document.querySelectorAll('[data-act="fetchRate"]');
+  btns.forEach(b => { b.classList.add('loading'); if (b.tagName === 'BUTTON') b.textContent = '更新中...'; });
+
+  let success = false;
+  try {
+    const ctrl = new AbortController();
+    const tm = setTimeout(() => ctrl.abort(), 6500);
+    const res = await fetch('https://open.er-api.com/v6/latest/HKD', { signal: ctrl.signal });
+    clearTimeout(tm);
+    if (res.ok) {
+      const data = await res.json();
+      if (data && data.rates && data.rates.CNY > 0) {
+        settings.hkdToRmb = +data.rates.CNY.toFixed(4);
+        settings.rateUpdated = Date.now();
+        saveSettings();
+        success = true;
+      }
+    }
+  } catch (e1) {
+    try {
+      const ctrl2 = new AbortController();
+      const tm2 = setTimeout(() => ctrl2.abort(), 6000);
+      const res2 = await fetch('https://api.exchangerate-api.com/v4/latest/HKD', { signal: ctrl2.signal });
+      clearTimeout(tm2);
+      if (res2.ok) {
+        const data2 = await res2.json();
+        if (data2 && data2.rates && data2.rates.CNY > 0) {
+          settings.hkdToRmb = +data2.rates.CNY.toFixed(4);
+          settings.rateUpdated = Date.now();
+          saveSettings();
+          success = true;
+        }
+      }
+    } catch (e2) {}
+  } finally {
+    isFetchingRate = false;
+    btns.forEach(b => {
+      b.classList.remove('loading');
+      if (b.dataset.act === 'fetchRate') b.textContent = '連網更新匯率';
+    });
+  }
+
+  if (success) {
+    if (!$('tab-settings').hidden) renderSettings();
+    if (manual) toast(`✨ 匯率已更新！\n1 港幣 = ${settings.hkdToRmb} 人民幣`);
+  } else {
+    if (manual) toast('連線失敗，請檢查網路或手動輸入匯率');
+  }
+}
+
+/* ---------- CSV 匯入與匯出 ---------- */
+const csvCell = v => { const s = String(v == null ? '' : v); return /[",\r\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; };
+function exportCsv() {
+  const head = ['date', 'type', 'currency', 'amount', 'rate_hkd_to_rmb', 'hkd', 'rmb', 'category', 'note'];
+  const rows = entries.map(e => [e.date, e.type, e.cur, e.amount, e.rate, e.hkd, e.cny, e.cat, e.note])
+    .concat(settings.noSpend.map(d => [d, 'nospend', 'HKD', 0, settings.hkdToRmb, 0, 0, '', '']))
+    .sort((a, b) => a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : 0);
+  const csv = '\ufeff' + [head, ...rows].map(r => r.map(csvCell).join(',')).join('\r\n');
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));
+  a.download = `ledger-backup-${ymd(new Date()).replace(/-/g, '')}.csv`;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+  setFlag('exported'); checkAch();
+}
+
+function parseCsv(text) {
+  text = text.replace(/^\ufeff/, ''); const rows = []; let row = [], cell = '', q = false;
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (q) { if (c === '"') { if (text[i + 1] === '"') { cell += '"'; i++; } else q = false; } else cell += c; }
+    else if (c === '"') q = true;
+    else if (c === ',') { row.push(cell); cell = ''; }
+    else if (c === '\n' || c === '\r') { if (c === '\r' && text[i + 1] === '\n') i++; row.push(cell); cell = ''; rows.push(row); row = []; }
+    else cell += c;
+  }
+  if (cell !== '' || row.length) { row.push(cell); rows.push(row); }
+  return rows.filter(r => r.some(x => x !== ''));
+}
+
+function importCsv(text) {
+  const rows = parseCsv(text); if (rows.length < 2) { toast('檔案沒有有效內容'); return; }
+  const h = rows[0].map(x => x.trim().toLowerCase()); const col = n => h.indexOf(n);
+  if (col('date') < 0 || col('amount') < 0) { toast('格式不相符，請使用本記帳本匯出的 CSV'); return; }
+  const key = e => [e.date, e.type, e.cur, e.amount, e.cat, e.note].join('|');
+  const have = new Set(entries.map(key)); let added = 0, skipped = 0;
+
+  rows.slice(1).forEach(r => {
+    const g = n => (col(n) >= 0 ? r[col(n)] : '') || '';
+    if (g('type') === 'nospend') {
+      if (/^\d{4}-\d{2}-\d{2}$/.test(g('date')) && !settings.noSpend.includes(g('date'))) {
+        settings.noSpend.push(g('date')); added++;
+      } else skipped++;
+      return;
+    }
+    const type = g('type') === 'income' ? 'income' : 'expense';
+    const cur = g('currency') === 'CNY' ? 'CNY' : 'HKD';
+    const amount = round2(parseFloat(g('amount')));
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(g('date')) || !(amount > 0)) { skipped++; return; }
+
+    let rate = parseFloat(g('rate_hkd_to_rmb')) || parseFloat(g('rate')) || settings.hkdToRmb;
+    if (rate > 1.0) rate = +(1 / rate).toFixed(4);
+    const dual = calcDual(amount, cur, rate);
+    const e = {
+      id: uid(), type, cur, amount, rate,
+      hkd: dual.hkd, cny: dual.cny,
+      cat: g('category') || '其他',
+      note: g('note') || '',
+      date: g('date'),
+      ts: Date.now()
+    };
+    if (have.has(key(e))) { skipped++; return; }
+    have.add(key(e)); entries.push(e); added++;
+    if (!settings.cats[type].includes(e.cat) && !OLD_CATS.includes(e.cat)) settings.cats[type].push(e.cat);
+  });
+
+  saveEntries(); saveSettings(); renderChips(); renderSettings(); updateSub();
+  toast(`成功匯入 ${added} 筆帳目，略過 ${skipped} 筆重複記錄`);
+  setFlag('imported'); checkAch();
+}
+
+/* =====================================================================
+   小克：日系男友風洗牌台詞庫
+   ===================================================================== */
+const petName = () => settings.petName || '小克';
+const daysBetween = (a, b) => Math.round((new Date(b + 'T00:00:00') - new Date(a + 'T00:00:00')) / 86400000);
+const nextMonth = k => { const [y, m] = k.split('-').map(Number); return m === 12 ? `${y + 1}-01` : `${y}-${pad(m + 1)}`; };
+function setFlag(k) { if (!settings.flags[k]) { settings.flags[k] = true; saveSettings(); } }
+
+const L = {
+  meet: [
+    '初次見面，我是{name}。從今天起，我會一直在你身邊，陪你把生活裡的一點一滴都溫柔記下。',
+    '你好呀，我是{name}。以後你的錢包和心情，都由我來好好守護吧。',
+    '終於見到你了呢。我是{name}，未來的每一天，請多依賴我一點喔。'
+  ],
+  saved: [
+    '今天也有好好記下來呢，真乖，想要摸摸你的頭。',
+    '辛苦了～看著你每次都這麼認真，真的覺得你特別有魅力。',
+    '嗯，我好好收下了。有你在身邊，每天都覺得很踏實。',
+    '又記下一筆了呢！生活就是這樣一步一步走踏實的，你做得很好喔。',
+    '完成了！累不累？休息一下，喝口溫水吧。',
+    '記帳這件事你堅持得真好。能看著你一點一滴進步，我好開心。',
+    '收到了～不管花在哪裡，只要是為了你的生活，都是值得的。',
+    '每一筆都是你認真生活的痕跡呢。謝謝你願意和我分享你的日常。',
+    '好啦，已經幫你收進帳本了！今晚給認真的你一個大大的擁抱。',
+    '有好好記下來呢。看著你這麼用心生活，我也要更加努力才行。',
+    '記好囉！放輕鬆，別給自己太大壓力，我們慢慢來。',
+    '嗯！無論花多花少，你願意面對每一筆花銷的樣子，真的很帥氣。',
+    '肚子會餓嗎？記完帳，要不要一起吃點甜的放鬆一下？',
+    '今天也是閃閃發光的一天呢。有我陪著你，什麼都不用擔心。',
+    '記錄完畢！真想一直在你身邊，看著你認真又可愛的側臉。',
+    '真棒～不知不覺又累積了一筆，我們的回憶也跟著變多了呢。',
+    '收到！不管生活有多繁瑣，回到這裡，我就是你最安心的避風港。',
+    '呼呼～小本子又厚了一點點。你的每一分用心，我都替你記得清清楚楚。',
+    '記好啦！今天過得好嗎？如果遇到不開心的事，隨時都可以跟我訴苦喔。',
+    '剛才認真記帳的表情，真的好吸引人……咳，沒事，我只是自言自語。'
+  ],
+  savedFood: [
+    '有好好吃飯比什麼都重要！能看到你吃得飽飽的，我也覺得好幸福。',
+    '這餐看起來好好吃呢～下次要不要帶我一起去？',
+    '吃飯是為了補充能量，絕對不可以省這筆喔，多吃點營養的。',
+    '辛苦工作之後就是要好好犒賞味蕾呀！今天吃得開心嗎？',
+    '香噴噴的～肚子填飽了，心情也會跟著晴朗起來對吧？',
+    '有按時吃飯我就放心了。答應我，不管多忙都要照顧好胃喔。',
+    '好想親手做頓晚餐給你吃呢……今天這頓就先當作我請你的心意吧！',
+    '美食是治癒疲憊最好的良藥！看你吃得滿足，我就很安心。'
+  ],
+  savedTraffic: [
+    '今天也奔波了一天呢，路上辛苦了，回到家先坐下來歇歇腳吧。',
+    '路上人多不多？有沒有擠到？平安回到我身邊就好。',
+    '移動了一整天，腳一定很痠吧？今晚要好好泡個腳放鬆喔。',
+    '看著你為了夢想在城市裡穿梭的身影，真的很心疼，但也為你驕傲。',
+    '路上要小心看車喔。不管你走得多遠，我都會在這裡等你回來。',
+    '辛苦了！搭車時有沒有稍微閉目養神一下呢？'
+  ],
+  savedCloth: [
+    '買了新衣服嗎？你本來就很好看，穿上新衣服一定更迷人了吧。',
+    '打扮自己是讓生活變美好的魔法喔！真想第一個看到你穿上的樣子。',
+    '為了喜歡的東西投資自己，是世界上最划算的花費了。',
+    '挑了喜歡的風格嗎？只要你穿得自在自信，在我的眼裡你永遠最耀眼。',
+    '真想陪你一起逛街，幫你提袋子、看你一件一件試穿開心的表情呢。'
+  ],
+  savedPlay: [
+    '今天玩得開心嗎？看到你笑得像孩子一樣，我的心情也跟著放晴了。',
+    '適當的放鬆是不可或缺的喔！生活如果只有工作就太辛苦了。',
+    '玩得盡興最重要！看你充滿活力的樣子，我也跟著被治癒了呢。',
+    '今天累積了很棒的回憶吧？下次也把你的快樂分我一點點喔。',
+    '懂得享受生活的你，真的特別有魅力呢。'
+  ],
+  big: [
+    '這筆金額比較大呢～不過你一定是有經過深思熟慮的吧，我相信你的決定。',
+    '別心疼錢包喔，這筆花費換來的是專屬於你的快樂和價值，非常值得。',
+    '只要能讓你感到幸福與安心，這筆錢就花得很有意義。別擔心，有我在呢。',
+    '花了一大筆錢心裡會稍微有點不踏實嗎？過來，我抱抱你，一切都在掌握中喔。',
+    '這是為了讓生活變得更好而做的投資吧！放心地好好享受它吧，你值得擁有最好的。',
+    '錢再賺就有了，但喜歡的東西和當下的心境是無價的。我相信你！',
+    '買下它了呀！看你猶豫了那麼久，終於把它帶回家了，真替你高興。',
+    '大手筆呢！不過看你開心的樣子，我覺得這個決定再正確不過了。'
+  ],
+  income: [
+    '哇，辛苦賺來的收入到帳了！看著你每天努力的樣子，真的好崇拜你。',
+    '這都是你用汗水換來的成果呢。辛苦了，今晚一定要好好犒賞自己一頓！',
+    '太棒了！看著數字增加，我也替你感到滿滿的安心與自豪。',
+    '你的努力終於化成甜美的果實了。你真的很優秀，知道嗎？',
+    '賺錢很不容易呢……辛苦你了。這週末要不要空出時間，讓我好好陪你放鬆？',
+    '好厲害！不過在努力賺錢的同時，也一定要好好照顧身體喔，這才是最重要的。',
+    '荷包補血了呢！看著你踏實前進的步伐，真的覺得你好耀眼。'
+  ],
+  nospend: [
+    '今天一分錢都沒有花呢！好厲害的自律力，我都想為你鼓掌了。',
+    '零支出的一天！不過答應我，千萬不能為了省錢而餓肚子或委屈自己喔。',
+    '錢包今天安安穩穩地休息了一整天呢，這都是多虧了你溫柔的守護。',
+    '這麼克制自己呀？真了不起！但如果累了或想吃甜點，隨時要對自己好一點喔。',
+    '今天過得很平靜知足呢。不用花錢也能過得充實的生活，真的很迷人。',
+    '清爽的一天！看著你把生活節奏掌控得這麼好，我真的好佩服你。',
+    '今天錢包乖乖待在家裡呢。有你在，真的給人一種滿滿的安全感。'
+  ],
+  happy: [
+    '看到你過得這麼從容順利，我打從心底為你感到高興。',
+    '現在的節奏非常完美喔！保持這份輕鬆的心情，我們一起走下去吧。',
+    '錢包穩穩的樣子，是不是就像我給你的擁抱一樣安心呢？',
+    '今天的心情就像晴空萬里一樣好呢。有你在，身邊的空氣都是甜的。',
+    '一切都在你的規劃中呢。我就知道，你一直都是最棒的。',
+    '慢慢來就好，看著你安穩生活的樣子，真的讓人很安心。'
+  ],
+  calm: [
+    '今天也是溫柔平靜的一天。只要能像這樣待在你身邊，我就覺得很滿足。',
+    '日子一天天平淡地過著，但因為有你的陪伴，每一天都變得特別有意義。',
+    '不用著急，按照你自己的步調走就好。無論何時，我都會配合你的腳步。',
+    '今天有發生什麼有趣的小事嗎？隨時都可以跟我分享喔，我很想聽。',
+    '想記的時候隨時記下就好，我會一直在這裡等你的。'
+  ],
+  nervous: [
+    '這個月的預算剩得不多了呢……別慌，有我在你身邊，我們一起小心把關就好。',
+    '千萬不要給自己太大壓力喔！接下來的日子，我會陪你一起精打細算，牽著手度過。',
+    '有點吃緊對吧？沒事的，只要我們兩個人一起面對，就沒有解決不了的難題。',
+    '稍微踩個煞車就好囉。如果想買什麼，先告訴我，我幫你一起評估，好嗎？',
+    '別皺眉頭嘛，你一皺眉我會心疼的。就算吃得簡單一點，只要在一起也很幸福呀。',
+    '接下來就交給我吧，我會更認真幫你看緊錢包的。別怕，有我呢。'
+  ],
+  full1: [
+    '好像稍微吃得有點太多了呢……臉頰鼓鼓的我，你不會嫌棄吧？',
+    '超支了一點點也沒關係的！生活總會有些預料之外的開銷，你已經很努力了。',
+    '肚子稍微圓了一點點。不要緊，接下來幾天我們慢慢調整就好。',
+    '不用自責喔！人又不是機器，偶爾放縱一下也是完全可以被原諒的。'
+  ],
+  full2: [
+    '肚子變得像個小麻糬一樣了……嘿嘿，但如果你摸著覺得療癒的話，那就值得了。',
+    '走起路來搖搖晃晃的……不過就算吃胖了，我也會牢牢牽著你的手喔。',
+    '吃得有點多呢。我知道你這陣子辛苦了，有我在，你不用一個人承擔。',
+    '就算超過預算，我對你的喜歡也不會減少一分一毫。我們下個月再一起加油！'
+  ],
+  full3: [
+    '吃得好撐呀～下個月我陪你一起慢慢散步、把肚子消回去好不好？',
+    '滾成一顆圓滾滾的大球了呢。不過這樣是不是更可愛了？快抱抱我吧～',
+    '嗝……對不起，稍微有點吃太脹了。但只要看著你開心的笑容，這點重量不算什麼。',
+    '完全吃飽了呢！不管發生什麼事，你永遠是我最珍惜的人，我們一起面對。'
+  ],
+  sleep: [
+    '嗯……是你嗎？我睡著了……好想你喔，你終於來看我了。',
+    '你不在的時候，時間過得好慢好慢……能再見到你真是太好了。',
+    '揉揉眼睛……啊！真的是你！剛才在夢裡還夢見你牽著我的手呢。',
+    '好久不見了，這幾天過得好嗎？有沒有好好照顧自己？我好擔心你。',
+    '你終於回來了！我好乖喔，一直都有好好守著我們的帳本呢，快獎勵我一個摸摸。'
+  ],
+  tap: [
+    '在呢，怎麼啦？只要你叫我，我隨時都在喔。',
+    '被你戳了一下，心跳好像突然漏了一拍……你故意的對不對？',
+    '想撒嬌了嗎？過來，我的肩膀隨時借你靠，抱抱也隨時提供喔。',
+    '看著你專注看著螢幕的側臉，總覺得……能陪在你身邊，是我最幸運的事。',
+    '戳我這麼多次，手會不會痠呀？換我幫你揉揉手好不好？',
+    '哎呀～臉頰被你碰得熱熱的。你對我這麼溫柔，我會越來越依賴你的喔。',
+    '今天有遇到什麼心煩的事嗎？如果有的話，隨時都可以對我發牢騷喔，我全盤接收。',
+    '頭髮稍微有點亂了喔……別動，我輕輕幫你撥好。',
+    '你知道嗎？每次看到你打開這個頁面，我的心裡都會悄悄雀躍一下呢。',
+    '被你摸得好舒服喔～感覺整天的疲勞都被你治癒了。',
+    '別老是只戳我嘛……偶爾也讓我握握你的手，好不好？',
+    '只要有你在，就算外面的世界再吵雜，這裡永遠都是專屬於我們兩個人的溫暖小窩。',
+    '剛才一瞬間在想什麼呢？該不會……是在想我吧？如果是的話我會很高興喔。',
+    '傻瓜，不管發生什麼事，轉過身我都在。我會一直一直做你最強大的後盾。',
+    '你的眼神好溫柔呢……被你這樣注視著，我真的會忍不住害羞起來。',
+    '今天辛苦了。如果累了就閉上眼睛靠一會兒，我會安靜地守護著你。',
+    '想要充電了嗎？那我把所有的元氣和喜歡，都悄悄傳輸給你囉！啾～',
+    '真拿你沒辦法呢……但不知道為什麼，你做什麼我都覺得好可愛。',
+    '有什麼煩惱就交給我吧，我或許不能解決所有事，但我絕對不會讓你一個人承擔。',
+    '牽著你的手的時候，總希望時間能走得慢一點、再慢一點。',
+    '怎麼一直盯著我看呀？我臉上有什麼東西嗎……還是說，你越看越喜歡我了？',
+    '不管世界怎麼變，我對你的這份支持與陪伴，永遠都不會改變喔。'
+  ],
+  tapFat: [
+    '呀……別戳肚子啦，軟軟的有點癢～',
+    '肚子被戳到了！你這是在取笑我嗎？……好啦，隨你摸。',
+    '圓滾滾的肚子摸起來很舒服對吧？只要能讓你開心，吃胖也是值得的。'
+  ],
+  tapSleep: [
+    '嗯？……是你回來了嗎？',
+    '被吵醒了……不過張開眼看到是你，我就一點都不生氣了。'
+  ],
+  dizzy: [
+    '哇哇……轉圈圈了，頭好暈呀～',
+    '別戳太快嘛，我都要站不穩了……快扶著我～',
+    '眼前好多小星星……不過最亮的那顆，好像是你呢。'
+  ],
+  early: [
+    '早安呀！這麼早就醒了嗎？清晨空氣微涼，記得披件薄外套別著涼了。',
+    '早起的你真的很了不起呢。今天的朝陽特別美，但我眼裡最美的是你。',
+    '這麼早起辛苦了！深呼吸一下，今天一定會有很棒的事情發生喔。'
+  ],
+  morning: [
+    '早安！早餐有沒有好好吃飽呢？出門路上要注意安全喔，我會一直想著你的。',
+    '早上好！看著元氣滿滿的你，我也覺得充滿力量了。今天也一起加油吧！',
+    '早安～今天也是嶄新的一天呢。別太逞強，累了隨時停下來休息喔。'
+  ],
+  noon: [
+    '午安！忙碌了整個上午辛苦了～快放下手邊的事，去吃頓好吃的午餐吧。',
+    '中午了呢！記得多喝水、多吃點蔬菜喔。吃飽後趴著瞇十分鐘吧，對身體好。',
+    '午休時間到了！今天中午想吃什麼呢？真想陪你一起分享美味的午餐。'
+  ],
+  afternoon: [
+    '下午容易犯睏呢～要不要伸個懶腰、喝杯暖暖的茶或吃顆薄荷糖提神？',
+    '下午好！距離下班下課越來越近囉，稍微堅持一下，今晚我們好好放鬆。',
+    '看你這麼專注努力，真的很耀眼呢。但眼睛痠的話記得看看遠方喔。'
+  ],
+  evening: [
+    '晚上好！今天一整天的奔波辛苦你了，歡迎回家，今天也平安順利度過了呢。',
+    '忙了一整天，終於能放鬆下來了。晚餐吃了什麼好吃的？快跟我分享吧。',
+    '晚風吹起來很舒服呢。洗個熱水澡，把一整天的疲勞都徹底洗掉吧。'
+  ],
+  night: [
+    '時間不早了呢。今天一天你已經做得足夠好了，別再給自己壓力囉。',
+    '夜深了，差不多該準備上床休息了喔。躺在軟軟的被窩裡，做個甜甜的夢吧。',
+    '今天也謝謝你的陪伴。晚安，我在夢裡也會一直陪著你的。'
+  ],
+  lateNight: [
+    '怎麼這麼晚了還沒睡呀？是有心事睡不著嗎？要不要跟我聊聊呢？',
+    '夜深人靜的時候最容易胡思亂想了……別怕，把手給我，閉上眼睛慢慢呼吸。',
+    '熬夜對身體不好，我會很心疼的喔……聽話，記完這筆就快點鑽進被窩睡覺吧。',
+    '不管有什麼煩惱，明天太陽升起時我們再一起面對。現在，先乖乖閉上眼睛休息好嗎？'
+  ],
+  idle: [
+    '偷偷看著你認真的側臉……真的好喜歡喔。',
+    '在想著今天晚餐要煮什麼給你吃呢……',
+    '剛剛吹過一陣微風，突然就很想牽你的手。',
+    '好想帶你一起去海邊散步看夕陽呢。',
+    '今天也有好好喝水嗎？記得喝一口喔。',
+    '不管看你幾次，心跳還是會忍不住加速呢。',
+    '要是能一直像這樣安靜地陪著你，那就太幸福了。',
+    '你現在在想什麼呢？如果能分一點點想我就好了～'
+  ],
+  edit: [
+    '修正好了喔！發現不對就細心調整的你，真的好帥氣。',
+    '嗯，資料已經更新好了。有你在，真的好細心、好可靠呢。'
+  ],
+  noBudget: [
+    '要不要到設定裡定一個每月預算呢？我想陪你一起好好守護荷包。',
+    '設定好預算後，我就能隨時替你看著開銷進度囉。'
+  ],
+  lockedTap: [
+    '這個祕密還沒解鎖喔～別急，我們慢慢相處，總有一天會發現的。',
+    '這裡還藏著悄悄話呢。再多陪我一陣子，我就告訴你喔。'
+  ]
+};
+
+/* 洗牌抽籤機制 */
+const quoteDecks = {};
+function getLine(category) {
+  const pool = L[category];
+  if (!pool || !pool.length) return '';
+  if (!quoteDecks[category] || quoteDecks[category].length === 0) {
+    quoteDecks[category] = [...pool].sort(() => Math.random() - 0.5);
+  }
+  return quoteDecks[category].pop();
+}
+
+function streakLine(n) {
+  if (n === 3) return '連續三天了呢！看著你把這個習慣一點一滴建立起來，我真的好為你感到驕傲。';
+  if (n === 7) return '已經整整一週了！你的毅力真的很讓人佩服，能陪在這麼優秀的你身邊，我很幸福。';
+  if (n === 14) return '兩週不間斷！這已經完全變成我們之間的默契了呢。今晚想要什麼獎勵都可以跟我說喔。';
+  if (n === 30) return '整整一個月，每天都有你……謝謝你從不缺席。過來，讓我緊緊抱你一下吧。';
+  if (n === 60) return '六十天了呢。每天看到你向我走來，都是我一天當中最期待的瞬間。';
+  if (n === 100) return '一百天！這份堅持簡直像奇蹟一樣耀眼。我會一直陪著你，直到下一個一百天、一千天。';
+  if (n === 365) return '整整一整年……無論春夏秋冬，你都在我身邊。謝謝你，這是我收過最珍貴的禮物。';
+  return `已經連續 ${n} 天了呢！你的自律與堅持，真的很讓我心動喔。`;
+}
+
+function streakInfo() {
+  const s = new Set(entries.map(e => e.date)); settings.noSpend.forEach(d => s.add(d));
+  const arr = [...s].sort();
+  let best = 0, run = 0, prev = null;
+  arr.forEach(d => { run = prev && daysBetween(prev, d) === 1 ? run + 1 : 1; if (run > best) best = run; prev = d; });
+  let cur = 0, d = new Date();
+  if (!s.has(ymd(d))) d = addDays(d, -1);
+  while (s.has(ymd(d))) { cur++; d = addDays(d, -1); }
+  return { cur, best, last: arr.length ? arr[arr.length - 1] : null };
+}
+
+function petState() {
+  const si = streakInfo(), now = new Date(), mk = ymd(now).slice(0, 7);
+  const spent = sumBase(entries.filter(e => e.type === 'expense' && e.date.slice(0, 7) === mk));
+  const b = settings.budget > 0 ? settings.budget : 0;
+  let mood, over = 0, rem = 1;
+  if (b) { over = (spent - b) / b; rem = 1 - spent / b; }
+  if (b && over > 0) mood = over > .5 ? 'full3' : over > .2 ? 'full2' : 'full1';
+  else if (si.last && daysBetween(si.last, ymd(now)) >= 3) mood = 'sleep';
+  else if (b) mood = rem >= .6 ? 'happy' : rem >= .3 ? 'calm' : 'nervous';
+  else mood = si.cur >= 1 ? 'happy' : 'calm';
+  return { mood, b, spent, over, rem, streak: si.cur };
+}
+
+/* ---------- 小克 SVG 繪製 ---------- */
+const PC = '#D97757', PD = '#C4694A', PK = '#1C2038', PP = '#FF8FA0', PW = '#FFFFFF', PB = '#8FD3FF', PY = '#F2B731', PR = '#FF5C7A';
+const pr = (x, y, w, h, f, o) => `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${f || PK}"${o ? ` opacity="${o}"` : ''}/>`;
+
+function pgeo(mood) {
+  const fat = mood.indexOf('full') === 0 ? +mood[4] : 0;
+  const bw = [16, 18, 20, 22][fat], bh = [9, 9, 10, 10][fat], legs = [3, 3, 2, 2][fat];
+  const cx = 14, d = fat >= 2 ? 5 : 4, top = 3;
+  return { fat, bw, bh, legs, cx, x0: cx - bw / 2, top, bottom: top + bh, d, lx: cx - d - 1, rx: cx + d - 1, ey: top + 2, my: top + 5 };
+}
+
+const FACE = {
+  happy: { e: 'n', m: 'smile' }, calm: { e: 'n', m: 'dot' }, nervous: { e: 'n', m: 'wavy', fx: 'sweat' }, sleep: { e: 'u', m: 'dot', fx: 'zz' },
+  full1: { e: 'n', m: 'dot' }, full2: { e: 'n', m: 'smile' }, full3: { e: 'gt', m: 'smile', fx: 'burp' },
+  grin: { e: 'arc', m: 'D' }, love: { e: 'heart', m: 'smile', fx: 'hearts' }, star: { e: 'star', m: 'D', fx: 'spark' },
+  money: { e: 'coin', m: 'D', fx: 'coins' }, wow: { e: 'tall', m: 'O', fx: 'bang' }, wink: { e: 'wink', m: 'smile' },
+  cool: { e: 'cool', m: 'smile', fx: 'spark' }, yawn: { e: 'u', m: 'bigO' }, sad: { e: 'tear', m: 'frown' },
+  dizzy: { e: 'x', m: 'wavy', fx: 'orbit' }, nom1: { e: 'arc', m: 'O', fx: 'coins1' }, nom2: { e: 'arc', m: 'dot' },
+  think: { e: 'n', m: 'dot', fx: 'dots' }, sing: { e: 'arc', m: 'O', fx: 'notes' }, dream: { e: 'u', m: 'smile', fx: 'zz' },
+  burp: { e: 'gt', m: 'O', fx: 'burp' }
+};
+const MOUTH = {
+  smile: g => pr(g.cx - 2, g.my, 1, 1) + pr(g.cx + 1, g.my, 1, 1) + pr(g.cx - 1, g.my + 1, 2, 1),
+  dot: g => pr(g.cx - 1, g.my + 1, 2, 1),
+  frown: g => pr(g.cx - 2, g.my + 1, 1, 1) + pr(g.cx + 1, g.my + 1, 1, 1) + pr(g.cx - 1, g.my, 2, 1),
+  wavy: g => pr(g.cx - 2, g.my + 1, 1, 1) + pr(g.cx - 1, g.my + 1, 1, 1) + pr(g.cx, g.my + 1, 1, 1) + pr(g.cx + 1, g.my + 1, 1, 1),
+  D: g => pr(g.cx - 2, g.my, 4, 1) + pr(g.cx - 1, g.my + 1, 2, 1, PP),
+  O: g => pr(g.cx - 1, g.my, 2, 2),
+  bigO: g => pr(g.cx - 1, g.my, 2, 3) + pr(g.cx - 1, g.my + 2, 2, 1, PP)
+};
+function eyeSvg(t, x, side, g) {
+  const ey = g.ey, hx = side ? x - 1 : x;
+  switch (t) {
+    case 'n': return pr(x, ey, 2, 3) + pr(x + 1, ey, 1, 1, PW);
+    case 'tall': return pr(x, ey - 1, 2, 4) + pr(x + 1, ey - 1, 1, 1, PW);
+    case 'arc': return pr(x - 1, ey + 2, 1, 1) + pr(x, ey + 1, 2, 1) + pr(x + 2, ey + 2, 1, 1);
+    case 'u': return pr(x - 1, ey + 1, 1, 1) + pr(x, ey + 2, 2, 1) + pr(x + 2, ey + 1, 1, 1);
+    case 'gt': return side ? pr(x + 1, ey, 1, 1) + pr(x, ey + 1, 1, 1) + pr(x + 1, ey + 2, 1, 1) : pr(x, ey, 1, 1) + pr(x + 1, ey + 1, 1, 1) + pr(x, ey + 2, 1, 1);
+    case 'heart': return pr(hx, ey, 1, 1, PR) + pr(hx + 2, ey, 1, 1, PR) + pr(hx, ey + 1, 3, 1, PR) + pr(hx + 1, ey + 2, 1, 1, PR);
+    case 'star': return pr(hx + 1, ey, 1, 3, PY) + pr(hx, ey + 1, 3, 1, PY);
+    case 'coin': return pr(hx, ey, 3, 3, PY) + pr(hx + 1, ey + 1, 1, 1, '#B7791F');
+    case 'x': return pr(hx, ey, 1, 1) + pr(hx + 2, ey, 1, 1) + pr(hx + 1, ey + 1, 1, 1) + pr(hx, ey + 2, 1, 1) + pr(hx + 2, ey + 2, 1, 1);
+    case 'tear': return pr(x, ey, 2, 3) + pr(x + 1, ey, 1, 1, PW) + pr(side ? x + 1 : x, ey + 3, 1, 1, PB);
+  }
+  return '';
+}
+function faceSvg(face, g) {
+  const F = FACE[face] || FACE.calm, { lx, rx, ey, my } = g;
+  let eyes;
+  if (F.e === 'cool') eyes = pr(lx - 1, ey, 4, 2) + pr(rx - 1, ey, 4, 2) + pr(lx + 3, ey, rx - lx - 4, 1) + pr(lx, ey, 1, 1, PW, .7) + pr(rx, ey, 1, 1, PW, .7);
+  else if (F.e === 'wink') eyes = eyeSvg('n', lx, 0, g) + eyeSvg('arc', rx, 1, g);
+  else eyes = eyeSvg(F.e, lx, 0, g) + eyeSvg(F.e, rx, 1, g);
+  const bl = (F.e === 'n' || F.e === 'tall' || F.e === 'tear') ? ' bl' : '';
+  return pr(lx - 1, my, 2, 1, PP, .7) + pr(rx + 1, my, 2, 1, PP, .7)
+    + `<g class="gz"><g class="ey${bl}">${eyes}</g></g>` + MOUTH[F.m](g);
+}
+function fxSvg(face, g) {
+  const t = (FACE[face] || {}).fx; if (!t) return '';
+  const { cx, x0, bw, top, my } = g, ex = x0 + bw + 1;
+  const gr = (c, st, inner) => `<g class="${c}"${st ? ` style="${st}"` : ''}>${inner}</g>`;
+  const heart = (x, y) => pr(x, y, 1, 1, PR) + pr(x + 2, y, 1, 1, PR) + pr(x, y + 1, 3, 1, PR) + pr(x + 1, y + 2, 1, 1, PR);
+  const plus = (x, y, c) => pr(x + 1, y, 1, 3, c) + pr(x, y + 1, 3, 1, c);
+  const zed = (x, y) => pr(x, y, 3, 1, PW) + pr(x + 1, y + 1, 1, 1, PW) + pr(x, y + 2, 3, 1, PW);
+  const note = (x, y, c) => pr(x + 1, y, 1, 3, c) + pr(x + 2, y, 1, 1, c) + pr(x, y + 2, 2, 2, c);
+  switch (t) {
+    case 'zz': return gr('fxz', '', zed(ex, 3)) + gr('fxz', 'animation-delay:1.2s', zed(ex + 2, 0)) + gr('bub2', '', pr(cx + 1, my, 2, 2, '#CFEFFF'));
+    case 'sweat': return gr('drip', '', pr(x0 + bw - 3, top - 2, 1, 2, PB));
+    case 'burp': return gr('burp', '', pr(ex, my, 1, 1, PW) + pr(ex + 1, my - 2, 2, 2, PW));
+    case 'hearts': return [[cx - 6, 1, 0], [cx + 3, 0, .35], [cx - 1, 0, .7]].map(([x, y, d]) => gr('rise', `animation-delay:${d}s`, heart(x, y))).join('');
+    case 'spark': return gr('tw', '', plus(x0 - 2, 1, PY)) + gr('tw', 'animation-delay:.5s', plus(ex - 1, 0, PY)) + gr('tw', 'animation-delay:.25s', plus(cx - 1, 0, PW));
+    case 'coins': return [cx - 6, cx - 1, cx + 4].map((x, i) => gr('coin', `animation-delay:${i * .3}s`, pr(x, 0, 2, 2, PY))).join('');
+    case 'coins1': return gr('coin', 'animation-duration:.8s', pr(cx - 1, 0, 2, 2, PY));
+    case 'bang': return pr(ex, 2, 1, 3, PR) + pr(ex, 6, 1, 1, PR);
+    case 'orbit': return gr('orb1', '', plus(cx - 1, 0, PY)) + gr('orb2', '', plus(cx - 1, 0, PW));
+    case 'dots': return [0, 1, 2].map(i => gr('dd', `animation-delay:${i * .3}s`, pr(ex + i * 2, 4 - i * 2, 1, 1, PW))).join('');
+    case 'notes': return gr('rise', '', note(x0 - 3, 1, PW)) + gr('rise', 'animation-delay:.8s', note(ex, 0, PY));
+  }
+  return '';
+}
+function petSvg(mood, face) {
+  const g = pgeo(mood), f = face || mood, { x0, bw, bh, top, bottom, legs, cx, fat } = g;
+  let s = pr(x0 + 1, 15, bw - 2, 1, '#000', .22);
+  const lp = fat < 2 ? [cx - 7, cx - 4, cx + 2, cx + 5] : [cx - 6, cx - 3, cx + 1, cx + 4];
+  s += `<g class="lg1">${pr(lp[0], bottom, 2, legs, PC)}${pr(lp[2], bottom, 2, legs, PC)}</g><g class="lg2">${pr(lp[1], bottom, 2, legs, PC)}${pr(lp[3], bottom, 2, legs, PC)}</g>`;
+  const ay = top + Math.floor(bh / 2), ah = fat >= 2 ? 2 : 3;
+  s += `<g class="aL">${pr(x0 - 2, ay, 2, ah, PC)}</g><g class="aR">${pr(x0 + bw, ay, 2, ah, PC)}</g>`;
+  for (let i = 0; i < bh; i++) {
+    const m = Math.min(i, bh - 1 - i);
+    const ins = fat === 0 ? (i === 0 ? 1 : 0) : fat === 1 ? (m === 0 ? 1 : 0) : fat === 2 ? (m === 0 ? 2 : m === 1 ? 1 : 0) : (m === 0 ? 3 : m === 1 ? 2 : m === 2 ? 1 : 0);
+    s += pr(x0 + ins, top + i, bw - 2 * ins, 1, i === bh - 1 ? PD : PC);
+  }
+  s += `<g class="face">${faceSvg(f, g)}</g><g class="fx">${fxSvg(f, g)}</g>`;
+  return `<svg viewBox="0 0 28 16" shape-rendering="crispEdges" aria-hidden="true">${s}</svg>`;
+}
+
+let petMood = '', faceT, actT, lookT, busyUntil = 0, seqT = [];
+function refreshPet() {
+  const st = petState(), el = $('pet');
+  if (st.mood !== petMood) { petMood = st.mood; el.className = 'pet ' + st.mood; el.innerHTML = petSvg(st.mood); }
+  el.setAttribute('aria-label', petName() + '（點一下找他說話）');
+  return st;
+}
+function setFace(face, ms, inSeq) {
+  if (!inSeq) { seqT.forEach(clearTimeout); seqT = []; }
+  clearTimeout(faceT);
+  const el = $('pet'), fe = el.querySelector('.face'); if (!fe) return;
+  const g = pgeo(petMood || 'calm');
+  fe.innerHTML = faceSvg(face, g); el.querySelector('.fx').innerHTML = fxSvg(face, g);
+  if (ms) faceT = setTimeout(() => setFace(petMood), ms);
+}
+function faceSeq(list) {
+  seqT.forEach(clearTimeout); seqT = []; let t = 0;
+  list.forEach(([f, d]) => { seqT.push(setTimeout(() => setFace(f, 0, true), t)); t += d; });
+  seqT.push(setTimeout(() => setFace(petMood, 0, true), t));
+  busyUntil = Math.max(busyUntil, Date.now() + t);
+}
+const chew = () => faceSeq([['nom1', 420], ['nom2', 300], ['nom1', 420], ['nom2', 300], ['grin', 700]]);
+function look(dir, ms) {
+  const el = $('pet'); ['l', 'r', 'u', 'd'].forEach(k => el.classList.remove('look-' + k));
+  clearTimeout(lookT);
+  if (dir) { el.classList.add('look-' + dir); lookT = setTimeout(() => look(null), ms || 1300); }
+}
+
+const ACTS = {
+  jump: { ms: 650 }, jiggle: { ms: 650 }, wave: { ms: 1900, face: 'grin' }, cheer: { ms: 1900, face: 'star' },
+  dance: { ms: 2600, face: 'grin' }, stretch: { ms: 1800, face: 'yawn' }, yawn: { ms: 1900, face: 'yawn' }, sing: { ms: 2700, face: 'sing' },
+  turn: { ms: 1000 }, stroll: { ms: 2600 }, shiver: { ms: 1200 }, sigh: { ms: 1800, face: 'sad' }, snore: { ms: 1600 },
+  waddle: { ms: 1800 }, dizzy: { ms: 1800, face: 'dizzy' }, think: { ms: 2300, face: 'think' }
+};
+function act(name, faceOverride) {
+  const a = ACTS[name]; if (!a) return;
+  const el = $('pet'); Object.keys(ACTS).forEach(k => el.classList.remove('a-' + k)); void el.offsetWidth;
+  el.classList.add('a-' + name);
+  const f = faceOverride || a.face; if (f) setFace(f, a.ms);
+  busyUntil = Math.max(busyUntil, Date.now() + a.ms);
+  clearTimeout(actT); actT = setTimeout(() => el.classList.remove('a-' + name), a.ms + 50);
+}
+
+let bubbleTimer;
+function say(text, ms = 7500) {
+  if (!text) return;
+  const b = $('bubble');
+  b.innerHTML = `<b class="bn">${esc(petName())}</b>${esc(text.replace(/\{name\}/g, petName()))}`;
+  b.hidden = false; b.classList.remove('pop'); void b.offsetWidth; b.classList.add('pop');
+  clearTimeout(bubbleTimer); bubbleTimer = setTimeout(() => { b.hidden = true; }, ms);
+}
+
+/* 待機動作 */
+const IDLE = {
+  happy: [['wave', 3], ['dance', 2], ['sing', 2], ['look', 3], ['hop', 3], ['wink', 2], ['stroll', 2], ['turn', 1], ['think', 1], ['love', 1]],
+  calm: [['look', 4], ['think', 2], ['yawn', 2], ['stretch', 2], ['hop', 1], ['wave', 1], ['stroll', 1], ['wink', 1], ['sing', 1]],
+  nervous: [['shiver', 3], ['look', 3], ['sigh', 2], ['think', 1]],
+  sleep: [['dream', 3], ['snore', 3]],
+  full1: [['belly', 3], ['look', 2], ['yawn', 1], ['hop', 1], ['burp', 1]],
+  full2: [['belly', 3], ['waddle', 2], ['look', 2], ['burp', 2], ['yawn', 1]],
+  full3: [['belly', 3], ['burp', 3], ['waddle', 2], ['sigh', 2], ['dizzy', 1]]
+};
+const IDLE_ACT = {
+  look() { const d = Math.random() < 0.5 ? 'l' : 'r'; look(d, 900); setTimeout(() => look(d === 'l' ? 'r' : 'l', 900), 1000); },
+  hop() { act('jump'); },
+  wink() { setFace('wink', 900); },
+  love() { act('jiggle'); setFace('love', 2200); },
+  dream() { setFace('dream', 2800); },
+  snore() { setFace('sleep'); act('snore'); },
+  belly() { act('jiggle'); setFace('grin', 1600); },
+  burp() { act('jiggle'); setFace('burp', 1500); },
+  think() { look('u', 2200); act('think'); }
+};
+function wpick(list) { let r = Math.random() * list.reduce((s, x) => s + x[1], 0); for (const x of list) { if ((r -= x[1]) < 0) return x[0]; } return list[0][0]; }
+function runIdle(n) {
+  (IDLE_ACT[n] || (() => act(n)))();
+  if ($('bubble').hidden && Math.random() < .45) say(getLine('idle'), 4200);
+}
+function idleTick() {
+  if (document.hidden || $('tab-add').hidden || modalOpen || Date.now() < busyUntil) return;
+  const h = new Date().getHours();
+  if ((h >= 23 || h < 5) && petMood !== 'sleep' && Math.random() < .35) { act('yawn'); return; }
+  runIdle(wpick(IDLE[petMood] || IDLE.calm));
+}
+function scheduleIdle() { setTimeout(() => { idleTick(); scheduleIdle(); }, 3600 + Math.random() * 4500); }
+
+function timeCategory() {
+  const h = new Date().getHours();
+  if (h >= 0 && h < 5) return 'lateNight';
+  if (h >= 5 && h < 7) return 'early';
+  if (h >= 7 && h < 11) return 'morning';
+  if (h >= 11 && h < 14) return 'noon';
+  if (h >= 14 && h < 18) return 'afternoon';
+  if (h >= 18 && h < 22) return 'evening';
+  return 'night';
+}
+
+function moodLine(st) {
+  if (!entries.length && !settings.noSpend.length) return getLine('meet');
+  if (Math.random() < .35) return getLine(timeCategory());
+  if (!st.b && Math.random() < .3) return getLine('noBudget');
+  return getLine(st.mood);
+}
+
+function petReact(e, wasEdit) {
+  const st = refreshPet(), fat = st.mood.indexOf('full') === 0;
+  if (wasEdit) { act('jump'); setFace('wink', 1400); say(getLine('edit')); return; }
+  const first = entries.filter(x => x.date === e.date).length === 1;
+  const si = streakInfo(); let line;
+
+  if (e.type === 'income') {
+    act('cheer', 'money'); line = getLine('income');
+  } else if (fat) {
+    act('jiggle'); chew(); line = getLine(st.mood);
+  } else if (first && e.date === ymd(new Date()) && [3, 7, 14, 30, 60, 100, 365].includes(si.cur)) {
+    act('dance'); line = streakLine(si.cur);
+  } else if (e.cny >= 500 || e.amount >= 500) {
+    act('jump'); setFace('wow', 1500); line = getLine('big');
+  } else if (e.cat === '餐飲') {
+    act('jump'); chew(); line = Math.random() < 0.6 ? getLine('savedFood') : getLine('saved');
+  } else if (e.cat === '交通') {
+    act('jump'); line = Math.random() < 0.6 ? getLine('savedTraffic') : getLine('saved');
+  } else if (e.cat === '服飾裝扮') {
+    act('cheer', 'star'); line = Math.random() < 0.6 ? getLine('savedCloth') : getLine('saved');
+  } else if (e.cat === '娛樂愛好' || e.cat === '外出消遣') {
+    act('dance'); line = Math.random() < 0.6 ? getLine('savedPlay') : getLine('saved');
+  } else if (st.mood === 'nervous') {
+    chew(); line = getLine('nervous');
+  } else {
+    act('jump'); chew(); line = getLine('saved');
+  }
+  say(line);
+}
+
+function toggleNoSpend() {
+  const t = ymd(new Date()), i = settings.noSpend.indexOf(t);
+  if (i >= 0) { settings.noSpend.splice(i, 1); saveSettings(); updateSub(); toast('已取消標記'); return; }
+  settings.noSpend.push(t); saveSettings(); updateSub();
+  act('stretch', 'cool'); toast('已標記：今天沒有花錢 🍃'); say(getLine('nospend')); checkAch();
+}
+
+/* ---------- 成就系統 ---------- */
+const AC = { cnt: '#D97757', str: '#E0A100', ns: '#15803D', bud: '#2563EB', cny: '#BE123C', cat: '#7C3AED', tm: '#0F766E', day: '#BE185D', misc: '#64748B' };
+const ACH = [];
+const A = (id, cat, icon, name, desc, line, t) => ACH.push({ id, cat, icon, name, desc, line, t });
+
+A('n1', 'cnt', '🌱', '第一步', '記下第一筆帳目', '第一筆記下來了呢。這是專屬於我們很棒的開始喔，我會一直陪著你。', c => c.n >= 1);
+A('n10', 'cnt', '✏️', '漸入佳境', '累積記下 10 筆', '已經十筆了呢，你開始習慣這份生活節奏了吧？真的很了不起。', c => c.n >= 10);
+A('n50', 'cnt', '📒', '筆記達人', '累積記下 50 筆', '五十筆了。每一筆認真的生活痕跡，我都有好好替你看著喔。', c => c.n >= 50);
+A('n100', 'cnt', '💯', '百筆紀念', '累積記下 100 筆', '一百筆……你知道嗎，看著這麼用心的你，我真的打從心底感到驕傲。', c => c.n >= 100);
+A('n300', 'cnt', '📚', '帳本守護者', '累積記下 300 筆', '三百筆了呢。有你這樣認真對待生活的人在，我感到好安心。', c => c.n >= 300);
+A('n500', 'cnt', '🏔️', '五百筆的高度', '累積記下 500 筆', '五百筆。不知不覺，我們已經一起牽手走了這麼長的一段路呢。', c => c.n >= 500);
+A('n1000', 'cnt', '👑', '千筆傳說', '累積記下 1000 筆', '一千筆……我感動得說不出話了，只想把你緊緊擁入懷裡。', c => c.n >= 1000);
+A('d30', 'cnt', '🗓️', '三十個記帳日', '在 30 個不同的日子留下記錄', '三十天份的認真生活，我全都替你好好珍惜著喔。', c => c.days >= 30);
+A('d100', 'cnt', '🎯', '百日記帳', '在 100 個不同的日子留下記錄', '一百個日子……謝謝你每次回到這裡，都願意和我說說話。', c => c.days >= 100);
+A('dn5', 'cnt', '🤹', '一天五筆', '一天之內記下 5 筆', '今天好忙碌充實呢。辛苦了，今晚一定要好好放鬆休息喔。', c => c.maxDayN >= 5);
+A('note20', 'cnt', '✍️', '心情註腳', '有 20 筆帳目寫了備註', '看著你寫的這些備註，感覺就像在讀你的生活日記一樣溫暖呢。', c => c.notes >= 20);
+
+A('s3', 'str', '🔥', '三天熱度', '連續 3 天都有記錄', '三天了呢。已經開始很有好習慣的樣子了喔！', c => c.streak >= 3);
+A('s7', 'str', '✨', '一週不間斷', '連續 7 天都有記錄', '已經一整週了，你真的很努力呢，我都看在眼裡。', c => c.streak >= 7);
+A('s14', 'str', '🌙', '兩週的約定', '連續 14 天都有記錄', '兩週了呢。能遇見這麼認真可愛的你，我覺得好幸福。', c => c.streak >= 14);
+A('s30', 'str', '🏅', '整整一個月', '連續 30 天都有記錄', '整整一個月，每天都沒有缺席。想要給你一個大大的擁抱！', c => c.streak >= 30);
+A('s60', 'str', '💎', '六十天的陪伴', '連續 60 天都有記錄', '六十天了。每天看到你向我走來，都是我一天中最心動的事。', c => c.streak >= 60);
+A('s100', 'str', '🏆', '百日不輟', '連續 100 天都有記錄', '一百天……你真的太厲害了。我會永遠記得我們共同堅持的今天。', c => c.streak >= 100);
+A('s365', 'str', '🌸', '一整年相伴', '連續 365 天都有記錄', '整整一年了呢。謝謝你一直、一直陪在我身邊，未來的每一年也請多多指教。', c => c.streak >= 365);
+
+A('ns1', 'ns', '🍃', '清爽的一天', '標記過一個沒有花錢的日子', '今天沒有花錢呢。這樣清爽又知足的日子，感覺很舒服吧？', c => c.ns >= 1);
+A('ns3r', 'ns', '🧘', '定力十足', '連續 3 天沒有花錢', '連續三天都沒花錢……好強大的自律力！不過不要委屈肚子喔。', c => c.nsRun >= 3);
+A('ns5', 'ns', '🌿', '存錢小能手', '累積 5 個沒花錢的日子', '五個零支出的日子。你的錢包一定很感謝你溫柔的守護。', c => c.ns >= 5);
+A('ns15', 'ns', '🍀', '節約模範', '累積 15 個沒花錢的日子', '十五天了呢。這份沉穩自律，真的特別吸引人。', c => c.ns >= 15);
+
+A('bset', 'bud', '🎯', '有規劃的人', '設定了每月預算', '設好預算了呢。凡事有規劃的你，看起來格外可靠帥氣。', c => c.budget > 0);
+A('bok', 'bud', '🛡️', '守住了', '完成一個月，支出沒有超過預算', '這個月你穩穩守住了預算！我就知道你一定可以做到的。', c => c.pastOk.length >= 1);
+A('bok2', 'bud', '🏰', '穩穩的幸福', '連續兩個月都在預算之內', '連續兩個月都做到了。這份從容踏實，就是你的魅力所在喔。', c => c.pastOk2);
+A('fat1', 'bud', '🍙', '微胖的幸福', '讓小克第一次吃胖', '呼……吃得稍微有點多呢。沒關係的，我們一起慢慢調整回來。', c => c.overPct > 0);
+A('fat3', 'bud', '🍡', '圓滾滾球球', '讓小克變成大圓球', '變成圓滾滾的小球了……但這樣的我，你還是會一直喜歡的對吧？', c => c.overPct > .5);
+
+A('hkd1', 'cny', '🇭🇰', '港幣記帳', '記錄過港幣支出', '港幣消費也順利折合人民幣記錄好了，跨境生活打理得真好！', c => c.nHkd >= 1);
+A('cny1', 'cny', '💴', '人民幣直接記', '記錄過人民幣支出', '人民幣帳目也記好了，雙幣管家越來越上手了呢。', c => c.nCny >= 1);
+A('cnymix', 'cny', '🔄', '同日雙幣', '同一天記下港幣和人民幣', '一天之內跨越了兩種貨幣，今天一定跑了好多地方、過得很充實吧！', c => c.mixDay);
+
+A('inc1', 'cnt', '💰', '第一筆收穫', '記下第一筆收入', '收入也記下來了。辛苦你了，謝謝你每天都這麼努力生活。', c => c.nInc >= 1);
+A('edit', 'misc', '✂️', '細心確認', '修改過一筆帳目', '發現細節不對就立刻修正，你這份認真細心真的很吸引人。', c => c.f.edited);
+A('export', 'misc', '📤', '備份好習慣', '匯出過一次 CSV', '有好好備份呢。這樣就算換手機，我也能安心地一直陪著你了。', c => c.f.exported);
+A('import', 'misc', '📥', '搬家完成', '匯入過一次 CSV', '資料都平安搬過來了！辛苦你了，接下來我們繼續相伴吧。', c => c.f.imported);
+A('report', 'misc', '📊', '回顧時光', '第一次查看報表', '會回頭看看自己的生活軌跡，是很棒的自省好習慣喔。', c => c.f.report);
+A('name', 'misc', '🏷️', '親暱稱呼', '替伴侶改了名字', '這是我專屬於你的新名字嗎？好喜歡，我會好好珍惜一輩子的。', c => c.renamed);
+A('tap10', 'misc', '👆', '悄悄戳一下', '戳了伴侶 10 下', '你這麼喜歡摸摸我嗎？嘿嘿，我的心跳都變快了喔。', c => (c.f.taps || 0) >= 10);
+A('tap100', 'misc', '🫶', '最喜歡你了', '戳了伴侶 100 下', '已經戳了一百下了呢……我也想告訴你：我最喜歡你了。', c => (c.f.taps || 0) >= 100);
+
+const LEVELS = [[0, '見習記帳員'], [5, '記帳新手'], [12, '小有心得'], [22, '理財達人'], [34, '錢包好伴侶'], [44, '心靈守護者']];
+function levelOf(n) {
+  let k = 0; LEVELS.forEach((l, i) => { if (n >= l[0]) k = i; });
+  return { i: k + 1, t: LEVELS[k][1] };
+}
+
+function stats() {
+  const exp = entries.filter(e => e.type === 'expense'), inc = entries.filter(e => e.type === 'income');
+  const si = streakInfo(), c = { n: entries.length, nInc: inc.length, streak: si.best, f: settings.flags };
+  const byDate = {};
+  entries.forEach(e => { const o = byDate[e.date] = byDate[e.date] || { n: 0, exp: 0, cur: new Set() }; o.n++; if (e.type === 'expense') o.exp++; o.cur.add(e.cur); });
+  const vals = Object.values(byDate);
+  c.days = vals.length; c.maxDayN = Math.max(0, ...vals.map(o => o.n)); c.mixDay = vals.some(o => o.cur.size > 1);
+  const ns = settings.noSpend.filter(d => !(byDate[d] && byDate[d].exp)).sort();
+  c.ns = ns.length; c.nsRun = 0;
+  let run = 0, prev = null;
+  ns.forEach(d => { run = prev && daysBetween(prev, d) === 1 ? run + 1 : 1; if (run > c.nsRun) c.nsRun = run; prev = d; });
+  c.nHkd = entries.filter(e => e.cur === 'HKD').length;
+  c.nCny = entries.filter(e => e.cur === 'CNY').length;
+  c.notes = entries.filter(e => e.note).length;
+  c.renamed = petName() !== '小克';
+  
+  const M = {};
+  entries.forEach(e => { const k = e.date.slice(0, 7); const o = M[k] = M[k] || { exp: 0, inc: 0, d: new Set() }; if (e.type === 'expense') o.exp += val(e); else o.inc += val(e); o.d.add(e.date); });
+  const nowK = ymd(new Date()).slice(0, 7), cur = M[nowK];
+  c.budget = settings.budget > 0 ? settings.budget : 0;
+  const past = Object.keys(M).filter(k => k < nowK);
+  const ok = c.budget ? past.filter(k => M[k].d.size >= 5 && M[k].exp <= c.budget) : [];
+  c.pastOk = ok; c.pastOk2 = ok.some(k => ok.includes(nextMonth(k)));
+  c.overPct = c.budget && cur ? (cur.exp - c.budget) / c.budget : 0;
+  return c;
+}
+
+let unlockQ = [], modalOpen = false;
+function checkAch() {
+  const c = stats(), fresh = [];
+  ACH.forEach(a => {
+    if (settings.ach[a.id]) return;
+    let ok = false; try { ok = !!a.t(c); } catch (e) {}
+    if (ok) { settings.ach[a.id] = Date.now(); fresh.push(a); }
+  });
+  if (fresh.length) { saveSettings(); unlockQ.push(...fresh); if (!modalOpen) flushUnlock(); }
+  if (!$('tab-ach').hidden) renderAch();
+  updateBadge();
+}
+function updateBadge() { $('achDot').hidden = Object.keys(settings.ach).length <= (settings.achSeen || 0) || !$('tab-ach').hidden; }
+function dateLabel(ts) { const d = new Date(ts); return `${d.getFullYear()}/${d.getMonth() + 1}/${d.getDate()}`; }
+function flushUnlock() {
+  if (!unlockQ.length) return;
+  const q = unlockQ.splice(0); openModal(q[0], q.slice(1), true);
+}
+function openModal(a, rest, fresh) {
+  modalOpen = true;
+  const mc = $('mcard'); mc.classList.toggle('fresh', fresh);
+  mc.innerHTML = `<div class="mtag">${fresh ? '🎉 成就解鎖！' : '已解鎖 · ' + dateLabel(settings.ach[a.id])}</div>
+    <div class="micon" style="--c:${AC[a.cat]}">${a.icon}</div>
+    <div class="mname">${esc(a.name)}</div><div class="mdesc">${esc(a.desc)}</div>
+    <div class="msay"><span class="mpet">${petSvg('happy')}</span><span>${esc(a.line.replace(/\{name\}/g, petName()))}</span></div>
+    ${rest.length ? `<div class="mrest">同時還解鎖了 ${rest.length} 個：${rest.slice(0, 10).map(r => `<span>${r.icon} ${esc(r.name)}</span>`).join('')}</div>` : ''}
+    <button class="primary mok" id="mok" type="button">${fresh ? '收下了' : '關閉'}</button>`;
+  $('modal').hidden = false; $('mok').focus();
+  if (fresh) { confetti(); say(a.line, 9000); act('cheer', 'star'); }
+}
+function closeModal() {
+  $('modal').hidden = true; modalOpen = false; $('confetti').innerHTML = '';
+  if (unlockQ.length) flushUnlock();
+}
+function confetti() {
+  if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const cols = ['#D97757', '#F2B731', '#E8344E', '#2563EB', '#15803D', '#BE185D', '#FFFFFF'];
+  $('confetti').innerHTML = Array.from({ length: 40 }, () =>
+    `<i style="left:${Math.random() * 100}%;background:${cols[Math.floor(Math.random() * cols.length)]};animation-delay:${(Math.random() * .6).toFixed(2)}s;animation-duration:${(1.8 + Math.random() * 1.4).toFixed(2)}s;--r:${Math.floor(Math.random() * 720 - 360)}deg"></i>`).join('');
+}
+
+function renderAch() {
+  const done = ACH.filter(a => settings.ach[a.id]).sort((a, b) => settings.ach[b.id] - settings.ach[a.id]);
+  const todo = ACH.length - done.length, n = done.length, T = ACH.length, lv = levelOf(n), pct = Math.round(n / T * 100);
+  const cardDone = a => `<button class="acard" data-a="${a.id}" style="--c:${AC[a.cat]}"><span class="ai">${a.icon}</span><b>${esc(a.name)}</b><i>${dateLabel(settings.ach[a.id])}</i></button>`;
+  const cardLock = '<button class="acard lock" aria-label="尚未解鎖"><span class="ai">？</span><b>？？？</b><i>&nbsp;</i></button>';
+  $('tab-ach').innerHTML = `<div class="hero"><div class="heroTop"><h1>成就陪伴</h1><div class="sub num">${n} / ${T}</div></div>
+    <div class="lv"><span class="lvb">Lv.${lv.i}</span><span class="lvt">${esc(lv.t)}</span></div>
+    <div class="pbar"><i style="width:${pct}%"></i></div>
+    <div class="pnote">${todo ? `還有 ${todo} 個小祕密等著我們一起解鎖` : '全部都解鎖了，你真的太棒了！'}</div></div>
+    <div class="body"><div class="agrid">${done.map(cardDone).join('')}${cardLock.repeat(todo)}</div></div>`;
+  if (settings.achSeen !== n) { settings.achSeen = n; saveSettings(); }
+  updateBadge();
+}
+
+/* ---------- 互動與事件綁定 ---------- */
+function showTab(name) {
+  ['add', 'report', 'ach', 'settings'].forEach(n => $('tab-' + n).hidden = n !== name);
+  document.querySelectorAll('.tabbar button').forEach(b => b.classList.toggle('on', b.dataset.tab === name));
+  if (name === 'report') { renderReport(); if (!settings.flags.report) { setFlag('report'); checkAch(); } }
+  if (name === 'ach') renderAch();
+  if (name === 'settings') renderSettings();
+  updateSub(); updateBadge();
+  window.scrollTo(0, 0);
+}
+
+document.querySelector('.tabbar').addEventListener('click', e => { const b = e.target.closest('button'); if (b) showTab(b.dataset.tab); });
+$('typeSeg').addEventListener('click', e => { const b = e.target.closest('button'); if (b) setType(b.dataset.v); });$('curSeg').addEventListener('click', e => { const b = e.target.closest('button'); if (b) setCur(b.dataset.v); });
+$('amount').addEventListener('input', () => { if (petMood !== 'sleep') look('d', 1600); });$('note').addEventListener('input', renderQuick);
+
+$('chips').addEventListener('click', e => { const b = e.target.closest('.chip'); if (b) { form.cat = b.dataset.c; renderChips(); } });$('quick').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return;
+  if (b.dataset.qadd) {
+    const note = $('note').value.trim();
+    if (!form.cat || !note) return;
+    (settings.quick[form.cat] = settings.quick[form.cat] || []).push(note);
+    settings.dismissed = settings.dismissed.filter(k => k !== form.cat + '|' + note); saveSettings();
+    toast(`已加入「${form.cat}」常用備註`); checkAch();
+  } else if (b.dataset.q) {
+    $('note').value =$('note').value.trim() === b.dataset.q ? '' : b.dataset.q;
+  }
+  renderQuick();
+});
+
+$('save').addEventListener('click', saveEntry);$('del').addEventListener('click', deleteEntry);
+$('cancel').addEventListener('click', resetForm);$('nospend').addEventListener('click', toggleNoSpend);
+
+let tapTimes = [];
+$('pet').addEventListener('click', () => {
+  const f = settings.flags; f.taps = (f.taps || 0) + 1; saveSettings();
+  const now = Date.now(); tapTimes = tapTimes.filter(t => now - t < 2200); tapTimes.push(now);
+  const st = petState(), fat = st.mood.indexOf('full') === 0;
+
+  if (tapTimes.length >= 6) {
+    act('dizzy'); tapTimes = [];
+    say(getLine('dizzy'));
+  } else if (st.mood === 'sleep') {
+    act('jump'); setFace('wow', 800);
+    say(getLine('tapSleep'));
+  } else if (fat) {
+    act('jiggle'); setFace('grin', 1300);
+    say(getLine('tapFat'));
+  } else {
+    const r = Math.random();
+    if (r < .3) { act('jump'); setFace('love', 2200); }
+    else if (r < .55) act('wave');
+    else if (r < .75) { act('jump'); setFace('wink', 1200); }
+    else if (r < .9) { act('jiggle'); setFace('grin', 1300); }
+    else act('cheer');
+    say(getLine('tap'));
+  }
+  if (f.taps === 10 || f.taps === 100) checkAch();
+});
+
+document.addEventListener('pointerdown', ev => {
+  if ($('tab-add').hidden || petMood === 'sleep' || modalOpen) return;
+  const r = $('pet').getBoundingClientRect(), dx = ev.clientX - (r.left + r.width / 2), dy = ev.clientY - (r.top + r.height / 2);
+  if (Math.abs(dx) < 40 && Math.abs(dy) < 60) return;
+  look(Math.abs(dy) > 120 ? 'd' : dx < 0 ? 'l' : 'r', 1100);
+});
+
+$('modal').addEventListener('click', e => { if (e.target.id === 'modal' || e.target.id === 'mok') closeModal(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && modalOpen) closeModal(); });
+
+$('tab-report').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return;
+  if (b.dataset.mode) { rep.mode = b.dataset.mode; renderReport(); }
+  else if (b.dataset.nav) { if (b.dataset.nav === 'today') rep.anchor = new Date(); else shift(+b.dataset.nav); renderReport(); }
+  else if (b.dataset.d) { rep.mode = 'day'; rep.anchor = new Date(b.dataset.d + 'T00:00:00'); renderReport(); window.scrollTo(0, 0); }
+  else if (b.dataset.id) startEdit(b.dataset.id);
+});
+
+$('tab-ach').addEventListener('click', e => {
+  const b = e.target.closest('.acard'); if (!b) return;
+  const a = ACH.find(x => x.id === b.dataset.a);
+  if (a && settings.ach[a.id]) openModal(a, [], false); else toast(getLine('lockedTap'));
+});
+
+$('tab-settings').addEventListener('change', e => {
+  if (e.target.id === 'setBudget') {
+    const v = parseFloat(e.target.value); settings.budget = v > 0 ? v : 0; saveSettings(); updateSub();
+    toast(settings.budget ? '每月預算已儲存' : '已取消預算'); checkAch();
+  } else if (e.target.id === 'setPet') {
+    settings.petName = e.target.value.trim() || '小克'; e.target.value = settings.petName; saveSettings(); updateSub();
+    toast(`伴侶名字已更新為「${settings.petName}」`); renderSettings(); checkAch();
+  } else if (e.target.id === 'setRate') {
+    const v = parseFloat(e.target.value);
+    if (v > 0) {
+      settings.hkdToRmb = Math.round(v * 1e4) / 1e4; saveSettings();
+      toast('匯率已儲存');
+    } else e.target.value = settings.hkdToRmb;
+  }
+});
+
+$('tab-settings').addEventListener('click', e => {
+  const b = e.target.closest('button[data-act]'); if (!b) return;
+  const act = b.dataset.act, t = b.dataset.t;
+  if (act === 'fetchRate') fetchRate(true);
+  else if (act === 'export') { if (!entries.length && !settings.noSpend.length) toast('目前還沒有記錄可匯出'); else exportCsv(); }
+  else if (act === 'import') $('file').click();
+  else if (act === 'qsel') { qSel = b.dataset.c; renderSettings(); }
+  else if (act === 'qadd') {
+    const v = $('newq').value.trim(); if (!v) return;
+    const l = settings.quick[qSel] = settings.quick[qSel] || [];
+    if (l.includes(v)) { toast('已經有這個常用備註囉'); return; }
+    l.push(v); settings.dismissed = settings.dismissed.filter(k => k !== qSel + '|' + v); saveSettings(); renderSettings(); renderQuick(); checkAch();
+  } else if (act === 'qdel') {
+    settings.quick[qSel] = (settings.quick[qSel] || []).filter(q => q !== b.dataset.q);
+    settings.dismissed.push(qSel + '|' + b.dataset.q); saveSettings(); renderSettings(); renderQuick();
+  } else if (act === 'addcat') {
+    const v = $('newcat-' + t).value.trim(); if (!v) return;
+    if (settings.cats[t].includes(v)) { toast('該分類已存在'); return; }
+    settings.cats[t].push(v); saveSettings(); renderSettings(); renderChips();
+  } else if (act === 'delcat') {
+    if (settings.cats[t].length <= 1) { toast('至少要保留一個分類喔'); return; }
+    settings.cats[t] = settings.cats[t].filter(c => c !== b.dataset.c); saveSettings(); renderSettings(); renderChips();
+  } else if (act === 'clear') {
+    if (confirm(`確定要清除全部 ${entries.length} 筆帳目嗎？此操作無法復原，建議先匯出 CSV 備份。`)) {
+      entries = []; settings.noSpend = []; saveEntries(); saveSettings(); renderSettings(); updateSub(); toast('所有帳目已清除');
+    }
+  }
+});
+
+$('file').addEventListener('change', e => {
+  const f = e.target.files[0]; if (!f) return;
+  const r = new FileReader(); r.onload = () => importCsv(String(r.result)); r.readAsText(f); e.target.value = '';
+});
+
+/* ---------- 初始化 ---------- */
+$('date').value = ymd(new Date());
+setType('expense');
+setCur('HKD');
+updateSub();
+
+{
+  const st = petState();
+  if (st.mood === 'sleep') setFlag('woke');
+  setTimeout(() => {
+    say(moodLine(st), 6800);
+    act(st.mood === 'sleep' ? 'yawn' : 'wave');
+    checkAch();
+  }, 500);
+}
+scheduleIdle();
+updateBadge();
+
+if (!settings.rateUpdated || Date.now() - settings.rateUpdated > 6 * 3600 * 1000) {
+  fetchRate(false);
+}
+})();
+</script>
+</body>
+</html>
+
+```
