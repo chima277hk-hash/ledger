@@ -266,22 +266,36 @@ h2{font-size:16px;margin:0 0 12px;font-weight:700}
 .galleryAch .ga{display:flex;gap:10px;align-items:center;border-top:1px solid #EEF0F5;padding:10px 2px}
 .galleryAch .ga span{font-size:26px}.galleryAch .ga div{min-width:0}.galleryAch .ga b,.galleryAch .ga i{display:block}.galleryAch .ga i{font-style:normal;color:#667089;font-size:12px}
 
-/* 每套造型有自己的常駐小動作 */
-.outfit{transform-box:fill-box;transform-origin:50% 50%}
-.pet.skin-2 .outfit{animation:scarfFloat 2.1s ease-in-out infinite}
-.pet.skin-3 .outfit{animation:catPounce 2.5s ease-in-out infinite}
-.pet.skin-4 .outfit{animation:maidCurtsy 2.8s ease-in-out infinite}
-.pet.skin-5 .outfit{animation:magicHover 2.2s ease-in-out infinite}
-.pet.skin-6 .outfit{animation:detectiveScan 3.2s ease-in-out infinite}
-.pet.skin-7 .outfit{animation:royalNod 3s ease-in-out infinite}
-.pet.skin-8 .outfit{animation:angelFloat 2.4s ease-in-out infinite}
-@keyframes scarfFloat{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-5%) rotate(2deg)}}
-@keyframes catPounce{0%,70%,100%{transform:none}78%{transform:translateY(-15%) scale(.96,1.08)}88%{transform:scale(1.08,.92)}}
-@keyframes maidCurtsy{0%,65%,100%{transform:none}76%{transform:rotate(-5deg) translateY(3%)}88%{transform:rotate(5deg) translateY(3%)}}
-@keyframes magicHover{0%,100%{transform:translateY(0)}50%{transform:translateY(-9%) rotate(2deg);filter:drop-shadow(0 3px 3px #F2B731)}}
-@keyframes detectiveScan{0%,58%,100%{transform:none}68%{transform:translateX(-4%) rotate(-4deg)}82%{transform:translateX(4%) rotate(4deg)}}
-@keyframes royalNod{0%,70%,100%{transform:none}80%{transform:rotate(4deg) translateY(2%)}90%{transform:rotate(-2deg)}}
-@keyframes angelFloat{0%,100%{transform:translateY(0);filter:drop-shadow(0 0 2px #fff)}50%{transform:translateY(-10%);filter:drop-shadow(0 0 5px #F2B731)}}
+/* 服裝固定在身體上，只有尾巴、裙擺、法杖等配件獨立活動 */
+.pet svg .scarf-tail,.pet svg .cat-tail,.pet svg .maid-bow,.pet svg .magic-star,.pet svg .detective-glass,.pet svg .angel-wing{transform-box:fill-box}
+.scarf-tail{transform-origin:0 0;animation:scarfTail 1.35s ease-in-out infinite}
+.cat-tail{transform-origin:100% 100%;animation:catTail 1.7s ease-in-out infinite}
+.maid-bow{transform-origin:50% 50%;animation:maidBow 1.8s ease-in-out infinite}
+.magic-star{transform-origin:50% 50%;animation:magicStar 1.15s ease-in-out infinite}
+.detective-glass{transform-origin:0 100%;animation:glassScan 2.6s ease-in-out infinite}
+.angel-wing{transform-origin:50% 50%;animation:wingBeat 1.5s ease-in-out infinite}
+@keyframes scarfTail{0%,100%{transform:rotate(0)}50%{transform:rotate(12deg)}}
+@keyframes catTail{0%,100%{transform:rotate(-8deg)}50%{transform:rotate(12deg)}}
+@keyframes maidBow{0%,100%{transform:scale(1)}50%{transform:scale(1.18,.9)}}
+@keyframes magicStar{0%,100%{transform:scale(.65) rotate(0);opacity:.45}50%{transform:scale(1.25) rotate(45deg);opacity:1}}
+@keyframes glassScan{0%,55%,100%{transform:rotate(0)}70%{transform:rotate(-15deg)}85%{transform:rotate(10deg)}}
+@keyframes wingBeat{0%,100%{transform:scaleX(1)}50%{transform:scaleX(.7)}}
+
+/* 各形象的招牌待機動作 */
+.pet.a-scarfpose svg{animation:scarfPose 1.8s ease-in-out}
+.pet.a-catplay svg{animation:catPlay 1.7s ease-in-out}
+.pet.a-curtsy svg{animation:curtsy 1.9s ease-in-out}
+.pet.a-cast svg{animation:cast 2.1s ease-in-out}
+.pet.a-inspect svg{animation:inspect 2.2s ease-in-out}
+.pet.a-march svg{animation:march 1.7s ease-in-out}
+.pet.a-soar svg{animation:soar 2.3s ease-in-out}
+@keyframes scarfPose{0%,100%{transform:none}25%{transform:rotate(-8deg)}55%{transform:translateY(-12%) rotate(7deg)}75%{transform:rotate(-4deg)}}
+@keyframes catPlay{0%,100%{transform:none}22%{transform:translateX(-8%) rotate(-8deg)}45%{transform:translateY(-20%) scale(.92,1.1)}68%{transform:translateX(8%) rotate(8deg)}82%{transform:scale(1.1,.9)}}
+@keyframes curtsy{0%,100%{transform:none}30%{transform:translateY(5%) rotate(-6deg)}55%{transform:scale(1.08,.9)}78%{transform:translateY(-8%) rotate(5deg)}}
+@keyframes cast{0%,100%{transform:none;filter:none}25%{transform:rotate(-8deg)}50%{transform:translateY(-14%) rotate(8deg);filter:drop-shadow(0 0 5px #F2B731)}75%{transform:rotate(-5deg)}}
+@keyframes inspect{0%,100%{transform:none}20%{transform:translateX(-7%) rotate(-5deg)}48%{transform:translateX(7%) rotate(5deg)}70%{transform:scale(.96,1.06)}85%{transform:rotate(-3deg)}}
+@keyframes march{0%,100%{transform:none}25%{transform:translate(-5%,-8%) rotate(-5deg)}50%{transform:none}75%{transform:translate(5%,-8%) rotate(5deg)}}
+@keyframes soar{0%,100%{transform:none;filter:none}35%{transform:translateY(-20%) rotate(-4deg);filter:drop-shadow(0 0 5px #fff)}70%{transform:translateY(-12%) rotate(5deg)}}
 
 /* modal */
 .modal{position:fixed;inset:0;z-index:50;background:rgba(28,32,56,.64);display:grid;place-items:center;padding:20px}
@@ -437,6 +451,7 @@ let settings = Object.assign({
   dismissed: [],
   budget: 0,             /* 每月預算（以統計幣別計） */
   petName: '小克',
+  skin: null,            /* null 代表自動使用最新解鎖形象 */
   ach: {}, achSeen: 0, noSpend: [], flags: {}
 }, store.get('ledger.settings', {}));
 
@@ -1119,6 +1134,22 @@ const L = {
     ,'我剛學會一個新動作，等一下表演給你看。'
     ,'你今天有稱讚自己嗎？沒有的話，就由我先來。'
     ,'帳目可以慢慢整理，你的心情也可以慢慢整理。'
+    ,'你一出現，這個小小的帳本就像亮起來了一樣。'
+    ,'剛才我在等你，現在終於可以把想說的話交給你了。'
+    ,'今天也讓我陪你一會兒吧，不必特別做什麼。'
+    ,'你的每一次觸碰，我都有認真收到，沒有漏掉喔。'
+    ,'是不是有點累了？先把肩膀放鬆，我會替你守著這裡。'
+    ,'我最喜歡的不是漂亮的數字，是你願意照顧生活的樣子。'
+    ,'你靠近的時候，我連待機動作都差點忘記了。'
+    ,'這次想看我表演什麼？先讓我偷偷準備一下。'
+    ,'今天發生的好事和壞事，都可以在這裡放下一點。'
+    ,'要記得，你不是只有做得完美才值得被喜歡。'
+    ,'我會把你的認真、疲憊和小小成就都放在心上。'
+    ,'別急著離開嘛，我還想再陪你多待一會兒。'
+    ,'摸摸收到。作為回禮，我把今天的幸運送給你。'
+    ,'有時候只是打開帳本看看，也算在好好面對生活。'
+    ,'你願意回來，我就永遠有新的話想對你說。'
+    ,'偷偷告訴你，我剛才的待機動作練了很多遍。'
   ],
   tapFat: [
     '呀……別戳肚子啦，軟軟的有點癢～',
@@ -1195,14 +1226,23 @@ const L = {
 };
 
 /* 洗牌抽籤機制 */
-const quoteDecks = {};
+const quoteDecks = {}, recentQuotes = [];
 function getLine(category) {
   const pool = L[category];
   if (!pool || !pool.length) return '';
   if (!quoteDecks[category] || quoteDecks[category].length === 0) {
-    quoteDecks[category] = [...pool].sort(() => Math.random() - 0.5);
+    quoteDecks[category] = [...pool].filter(x => !recentQuotes.includes(x)).sort(() => Math.random() - 0.5);
+    if (!quoteDecks[category].length) quoteDecks[category] = [...pool].sort(() => Math.random() - 0.5);
   }
-  return quoteDecks[category].pop();
+  const line = quoteDecks[category].pop();
+  recentQuotes.push(line); if (recentQuotes.length > 10) recentQuotes.shift();
+  return line;
+}
+function getLineAny(...categories) {
+  const pool = categories.flatMap(k => L[k] || []).filter(x => !recentQuotes.includes(x));
+  const line = (pool.length ? pool : categories.flatMap(k => L[k] || []))[Math.floor(Math.random() * (pool.length || categories.flatMap(k => L[k] || []).length))];
+  if (line) { recentQuotes.push(line); if (recentQuotes.length > 10) recentQuotes.shift(); }
+  return line || '';
 }
 
 function streakLine(n) {
@@ -1320,38 +1360,38 @@ function fxSvg(face, g) {
   return '';
 }
 function outfitSvg(lv, g) {
-  const { x0, bw, bh, cx, top, bottom } = g, GR = '#15803D', RD = '#E8344E', DK = '#B91C1C', BL = '#2563EB', VI = '#7C3AED';
+  const { x0, bw, cx, top, bottom } = g, GR = '#15803D', RD = '#E8344E', DK = '#B91C1C', VI = '#7C3AED', BR = '#8A5A00';
   const crown = pr(x0 + 3, 2, bw - 6, 1, PY) + pr(x0 + 3, 1, 1, 1, PY) + pr(cx - 1, 0, 2, 2, PY) + pr(x0 + bw - 4, 1, 1, 1, PY) + pr(cx - 1, 2, 2, 1, PR);
   let back = '', front = '';
   switch (lv) {
     case 1:
       front = pr(cx - 1, 1, 2, 1, GR) + pr(cx - 2, 0, 1, 1, GR) + pr(cx + 1, 0, 1, 1, GR); break;
-    case 2: /* 大紅圍巾 */
-      front = pr(x0, top + 1, bw, 2, RD) + pr(x0 + bw - 3, top + 3, 3, 4, RD) + pr(x0 + bw - 2, top + 7, 2, 1, PY); break;
+    case 2: /* 圍巾位於嘴巴下方，不遮頭 */
+      front = pr(x0 + 1, top + 7, bw - 2, 2, RD)
+        + `<g class="scarf-tail">${pr(x0 + bw - 4, top + 8, 3, 4, RD) + pr(x0 + bw - 3, top + 11, 2, 1, PY)}</g>`; break;
     case 3: /* 貓貓小克：耳朵、尾巴、鈴鐺 */
-      back = pr(x0 - 3, top + 3, 3, 2, PC) + pr(x0 - 4, top + 2, 2, 2, PC) + pr(x0 - 5, top + 1, 1, 2, PC);
-      front = pr(x0 + 1, top - 3, 4, 3, PC) + pr(x0 + bw - 5, top - 3, 4, 3, PC)
-        + pr(x0 + 2, top - 2, 2, 1, PP) + pr(x0 + bw - 4, top - 2, 2, 1, PP)
+      back = `<g class="cat-tail">${pr(x0 + bw, top + 7, 2, 4, PC) + pr(x0 + bw + 1, top + 5, 3, 2, PC) + pr(x0 + bw + 3, top + 3, 1, 3, PC)}</g>`;
+      front = pr(x0 + 1, top - 2, 4, 3, PC) + pr(x0 + bw - 5, top - 2, 4, 3, PC)
+        + pr(x0 + 2, top - 1, 2, 1, PP) + pr(x0 + bw - 4, top - 1, 2, 1, PP)
         + pr(cx - 1, top + 8, 2, 2, PY) + pr(cx - 2, top + 7, 4, 1, RD); break;
     case 4: /* 女僕小克：頭飾、圍裙、蝴蝶結 */
-      back = pr(x0 - 1, top + 4, bw + 2, bh || 8, PK);
-      front = pr(x0 + 3, top - 3, bw - 6, 2, PW) + pr(x0 + 5, top - 4, 2, 1, PW) + pr(x0 + bw - 7, top - 4, 2, 1, PW)
-        + pr(cx - 3, top + 6, 6, 5, PW) + pr(cx - 5, top + 6, 2, 2, RD) + pr(cx + 3, top + 6, 2, 2, RD)
-        + pr(cx - 1, top + 7, 2, 1, RD); break;
+      front = pr(x0 + 3, top - 2, bw - 6, 1, PW) + pr(x0 + 5, top - 3, 2, 1, PW) + pr(x0 + bw - 7, top - 3, 2, 1, PW)
+        + pr(x0 + 1, top + 7, bw - 2, 1, PK) + pr(x0 + 2, top + 8, bw - 4, 3, PW)
+        + pr(x0 + 1, bottom - 1, 3, 1, PW) + pr(x0 + bw - 4, bottom - 1, 3, 1, PW)
+        + `<g class="maid-bow">${pr(cx - 5, top + 7, 3, 2, RD) + pr(cx + 2, top + 7, 3, 2, RD) + pr(cx - 1, top + 7, 2, 2, RD)}</g>`; break;
     case 5: /* 魔法師小克 */
-      back = pr(x0 - 2, top + 5, bw + 4, bottom - top, VI);
-      front = pr(cx - 7, top - 1, 14, 2, VI) + pr(cx - 4, top - 5, 8, 4, VI) + pr(cx - 2, top - 6, 4, 1, VI)
-        + pr(cx + 1, top - 3, 2, 2, PY) + `<g class="tw">${pr(x0 - 3, 0, 1, 3, PY) + pr(x0 - 4, 1, 3, 1, PY)}</g>`; break;
+      front = `<polygon points="${x0 + 1},${bottom - 1} ${cx},${top + 7} ${x0 + bw - 1},${bottom - 1}" fill="${VI}"/>`
+        + pr(cx - 7, top - 1, 14, 1, VI) + `<polygon points="${cx - 4},${top - 1} ${cx},${top - 6} ${cx + 4},${top - 1}" fill="${VI}"/>`
+        + pr(cx + 1, top - 3, 2, 2, PY) + `<g class="magic-star">${pr(x0 - 3, 0, 1, 3, PY) + pr(x0 - 4, 1, 3, 1, PY)}</g>`; break;
     case 6: /* 偵探小克 */
-      front = pr(x0 + 2, top - 3, bw - 4, 2, '#8A5A00') + pr(cx - 1, top - 4, 6, 1, '#8A5A00')
-        + pr(x0, top + 7, bw, 1, '#8A5A00') + pr(x0 + bw - 1, top + 3, 3, 3, PW, .35)
-        + pr(x0 + bw + 2, top + 6, 1, 4, '#8A5A00'); break;
+      front = pr(x0 + 2, 0, bw - 4, 2, BR) + pr(cx - 1, 0, 6, 1, '#B7791F') + pr(x0, 2, bw, 1, BR)
+        + pr(x0, top + 7, bw, 1, BR) + `<g class="detective-glass">${pr(x0 + bw - 1, top + 3, 3, 3, PW, .45) + pr(x0 + bw, top + 4, 1, 1, PB) + pr(x0 + bw + 2, top + 6, 1, 4, BR)}</g>`; break;
     case 7:
       back = pr(x0 - 1, 5, bw + 2, 9, DK);
       front = crown + `<g class="tw">${pr(x0 - 3, 1, 1, 3, PY) + pr(x0 - 4, 2, 3, 1, PY)}</g><g class="tw" style="animation-delay:.5s">${pr(x0 + bw + 3, 0, 1, 3, PY) + pr(x0 + bw + 2, 1, 3, 1, PY)}</g>`;
       break;
     case 8:
-      back = pr(x0 - 5, 4, 3, 4, PW, .95) + pr(x0 - 6, 5, 1, 2, PW, .8) + pr(x0 + bw + 2, 4, 3, 4, PW, .95) + pr(x0 + bw + 5, 5, 1, 2, PW, .8);
+      back = `<g class="angel-wing">${pr(x0 - 5, 4, 3, 4, PW, .95) + pr(x0 - 6, 5, 1, 2, PW, .8) + pr(x0 + bw + 2, 4, 3, 4, PW, .95) + pr(x0 + bw + 5, 5, 1, 2, PW, .8)}</g>`;
       front = pr(cx - 2, 0, 4, 1, PY) + pr(cx - 3, 1, 1, 1, PY) + pr(cx + 2, 1, 1, 1, PY) + pr(cx - 2, 2, 4, 1, PY)
         + `<g class="tw">${pr(x0 - 3, 1, 1, 3, PY) + pr(x0 - 4, 2, 3, 1, PY)}</g>`;
       break;
@@ -1377,9 +1417,10 @@ function petSvg(mood, face, lv) {
 }
 
 let petMood = '', faceT, actT, lookT, busyUntil = 0, seqT = [];
+const activeSkin = () => Math.min(curLv().i, Math.max(1, +(settings.skin || curLv().i)));
 function refreshPet() {
   const st = petState(), el = $('pet');
-  const skin = curLv().i;
+  const skin = activeSkin();
   if (st.mood !== petMood || !el.classList.contains('skin-' + skin)) { petMood = st.mood; el.className = 'pet ' + st.mood + ' skin-' + skin; el.innerHTML = petSvg(st.mood, null, skin); }
   el.setAttribute('aria-label', petName() + '（點一下找他說話）');
   return st;
@@ -1409,7 +1450,9 @@ const ACTS = {
   jump: { ms: 650 }, jiggle: { ms: 650 }, wave: { ms: 1900, face: 'grin' }, cheer: { ms: 1900, face: 'star' },
   dance: { ms: 2600, face: 'grin' }, stretch: { ms: 1800, face: 'yawn' }, yawn: { ms: 1900, face: 'yawn' }, sing: { ms: 2700, face: 'sing' },
   turn: { ms: 1000 }, stroll: { ms: 2600 }, shiver: { ms: 1200 }, sigh: { ms: 1800, face: 'sad' }, snore: { ms: 1600 },
-  waddle: { ms: 1800 }, dizzy: { ms: 1800, face: 'dizzy' }, think: { ms: 2300, face: 'think' }
+  waddle: { ms: 1800 }, dizzy: { ms: 1800, face: 'dizzy' }, think: { ms: 2300, face: 'think' },
+  scarfpose: { ms: 1800, face: 'wink' }, catplay: { ms: 1700, face: 'grin' }, curtsy: { ms: 1900, face: 'wink' },
+  cast: { ms: 2100, face: 'star' }, inspect: { ms: 2200, face: 'think' }, march: { ms: 1700, face: 'cool' }, soar: { ms: 2300, face: 'love' }
 };
 function act(name, faceOverride) {
   const a = ACTS[name]; if (!a) return;
@@ -1452,9 +1495,9 @@ const IDLE_ACT = {
 };
 function wpick(list) { let r = Math.random() * list.reduce((s, x) => s + x[1], 0); for (const x of list) { if ((r -= x[1]) < 0) return x[0]; } return list[0][0]; }
 function runIdle(n) {
-  const skinActs = { 1:['wave','jump'], 2:['wave','stroll'], 3:['jump','jiggle'], 4:['dance','turn'], 5:['sing','think'], 6:['think','look'], 7:['cheer','turn'], 8:['sing','cheer'] };
-  const skin = curLv().i, signature = skinActs[skin] || [];
-  if (Math.random() < .38 && signature.length) n = signature[Math.floor(Math.random() * signature.length)];
+  const skinActs = { 1:['wave','jump','dance'], 2:['scarfpose','wave','stroll'], 3:['catplay','jump','jiggle'], 4:['curtsy','dance','wave'], 5:['cast','sing','turn'], 6:['inspect','think','stroll'], 7:['march','cheer','turn'], 8:['soar','sing','cheer'] };
+  const skin = activeSkin(), signature = skinActs[skin] || [];
+  if (Math.random() < .72 && signature.length) n = signature[Math.floor(Math.random() * signature.length)];
   (IDLE_ACT[n] || (() => act(n)))();
   if ($('bubble').hidden && Math.random() < .45) say(getLine('idle'), 4200);
 }
@@ -1491,7 +1534,7 @@ function petReact(e, wasEdit) {
   const si = streakInfo(); let line;
 
   if (e.type === 'income') {
-    act('cheer', 'money'); line = getLine('income');
+    act('cheer', 'money'); line = getLineAny('income', 'saved');
   } else if (fat) {
     act('jiggle'); chew(); line = getLine(st.mood);
   } else if (first && e.date === ymd(new Date()) && [3, 7, 14, 30, 60, 100, 365].includes(si.cur)) {
@@ -1499,13 +1542,13 @@ function petReact(e, wasEdit) {
   } else if (val(e) >= 500) {
     act('jump'); setFace('wow', 1500); line = getLine('big');
   } else if (e.cat === '餐飲') {
-    act('jump'); chew(); line = Math.random() < 0.6 ? getLine('savedFood') : getLine('saved');
+    act('jump'); chew(); line = getLineAny('savedFood', 'saved');
   } else if (e.cat === '交通') {
-    act('jump'); line = Math.random() < 0.6 ? getLine('savedTraffic') : getLine('saved');
+    act('jump'); line = getLineAny('savedTraffic', 'saved');
   } else if (e.cat === '服飾裝扮') {
-    act('cheer', 'star'); line = Math.random() < 0.6 ? getLine('savedCloth') : getLine('saved');
+    act('cheer', 'star'); line = getLineAny('savedCloth', 'saved');
   } else if (e.cat === '娛樂愛好' || e.cat === '外出消遣') {
-    act('dance'); line = Math.random() < 0.6 ? getLine('savedPlay') : getLine('saved');
+    act('dance'); line = getLineAny('savedPlay', 'saved');
   } else if (st.mood === 'nervous') {
     chew(); line = getLine('nervous');
   } else {
@@ -1529,12 +1572,12 @@ const A = (id, cat, icon, name, desc, line, t) => ACH.push({ id, cat, icon, name
 A('n1', 'cnt', '🌱', '第一步', '記下第一筆帳目', '第一筆記下來了呢。這是專屬於我們很棒的開始喔，我會一直陪著你。', c => c.n >= 1);
 A('n10', 'cnt', '✏️', '漸入佳境', '累積記下 10 筆', '已經十筆了呢，你開始習慣這份生活節奏了吧？真的很了不起。', c => c.n >= 10);
 A('n50', 'cnt', '📒', '筆記達人', '累積記下 50 筆', '五十筆了。每一筆認真的生活痕跡，我都有好好替你看著喔。', c => c.n >= 50);
-A('n100', 'cnt', '💯', '百筆紀念', '累積記下 100 筆', '一百筆……你知道嗎，看著這麼用心的你，我真的打從心底感到驕傲。', c => c.n >= 100);
-A('n300', 'cnt', '📚', '帳本守護者', '累積記下 300 筆', '三百筆了呢。有你這樣認真對待生活的人在，我感到好安心。', c => c.n >= 300);
-A('n500', 'cnt', '🏔️', '五百筆的高度', '累積記下 500 筆', '五百筆。不知不覺，我們已經一起牽手走了這麼長的一段路呢。', c => c.n >= 500);
-A('n1000', 'cnt', '👑', '千筆傳說', '累積記下 1000 筆', '一千筆……我感動得說不出話了，只想把你緊緊擁入懷裡。', c => c.n >= 1000);
+A('n100', 'cnt', '💯', '七十五筆紀念', '累積記下 75 筆', '七十五筆……看著這麼用心的你，我真的打從心底感到驕傲。', c => c.n >= 75);
+A('n300', 'cnt', '📚', '帳本守護者', '累積記下 125 筆', '一百二十五筆了呢。有你這樣認真對待生活的人在，我感到好安心。', c => c.n >= 125);
+A('n500', 'cnt', '🏔️', '百七十五筆的高度', '累積記下 175 筆', '一百七十五筆。不知不覺，我們已經一起走了很長的一段路。', c => c.n >= 175);
+A('n1000', 'cnt', '👑', '兩百二十五筆傳說', '累積記下 225 筆', '兩百二十五筆，我感動得只想把你緊緊擁入懷裡。', c => c.n >= 225);
 A('d30', 'cnt', '🗓️', '三十個記帳日', '在 30 個不同的日子留下記錄', '三十天份的認真生活，我全都替你好好珍惜著喔。', c => c.days >= 30);
-A('d100', 'cnt', '🎯', '百日記帳', '在 100 個不同的日子留下記錄', '一百個日子……謝謝你每次回到這裡，都願意和我說說話。', c => c.days >= 100);
+A('d100', 'cnt', '🎯', '七十五日記帳', '在 75 個不同的日子留下記錄', '七十五個日子……謝謝你每次回到這裡，都願意和我說說話。', c => c.days >= 75);
 A('dn5', 'cnt', '🤹', '一天五筆', '一天之內記下 5 筆', '今天好忙碌充實呢。辛苦了，今晚一定要好好放鬆休息喔。', c => c.maxDayN >= 5);
 A('note20', 'cnt', '✍️', '心情註腳', '有 20 筆帳目寫了備註', '看著你寫的這些備註，感覺就像在讀你的生活日記一樣溫暖呢。', c => c.notes >= 20);
 
@@ -1542,9 +1585,9 @@ A('s3', 'str', '🔥', '三天熱度', '連續 3 天都有記錄', '三天了呢
 A('s7', 'str', '✨', '一週不間斷', '連續 7 天都有記錄', '已經一整週了，你真的很努力呢，我都看在眼裡。', c => c.streak >= 7);
 A('s14', 'str', '🌙', '兩週的約定', '連續 14 天都有記錄', '兩週了呢。能遇見這麼認真可愛的你，我覺得好幸福。', c => c.streak >= 14);
 A('s30', 'str', '🏅', '整整一個月', '連續 30 天都有記錄', '整整一個月，每天都沒有缺席。想要給你一個大大的擁抱！', c => c.streak >= 30);
-A('s60', 'str', '💎', '六十天的陪伴', '連續 60 天都有記錄', '六十天了。每天看到你向我走來，都是我一天中最心動的事。', c => c.streak >= 60);
-A('s100', 'str', '🏆', '百日不輟', '連續 100 天都有記錄', '一百天……你真的太厲害了。我會永遠記得我們共同堅持的今天。', c => c.streak >= 100);
-A('s365', 'str', '🌸', '一整年相伴', '連續 365 天都有記錄', '整整一年了呢。謝謝你一直、一直陪在我身邊，未來的每一年也請多多指教。', c => c.streak >= 365);
+A('s60', 'str', '💎', '三十五天的陪伴', '連續 35 天都有記錄', '三十五天了。每天看到你向我走來，都是我一天中最心動的事。', c => c.streak >= 35);
+A('s100', 'str', '🏆', '五十天不輟', '連續 50 天都有記錄', '五十天……你真的太厲害了。我會永遠記得我們共同堅持的今天。', c => c.streak >= 50);
+A('s365', 'str', '🌸', '七十天相伴', '連續 70 天都有記錄', '整整七十天了呢。謝謝你一直陪在我身邊。', c => c.streak >= 70);
 
 A('ns1', 'ns', '🍃', '清爽的一天', '標記過一個沒有花錢的日子', '今天沒有花錢呢。這樣清爽又知足的日子，感覺很舒服吧？', c => c.ns >= 1);
 A('ns3r', 'ns', '🧘', '定力十足', '連續 3 天沒有花錢', '連續三天都沒花錢……好強大的自律力！不過不要委屈肚子喔。', c => c.nsRun >= 3);
@@ -1568,18 +1611,18 @@ A('import', 'misc', '📥', '搬家完成', '匯入過一次 CSV', '資料都平
 A('report', 'misc', '📊', '回顧時光', '第一次查看報表', '會回頭看看自己的生活軌跡，是很棒的自省好習慣喔。', c => c.f.report);
 A('name', 'misc', '🏷️', '親暱稱呼', '替伴侶改了名字', '這是我專屬於你的新名字嗎？好喜歡，我會好好珍惜一輩子的。', c => c.renamed);
 A('tap10', 'misc', '👆', '悄悄戳一下', '戳了伴侶 10 下', '你這麼喜歡摸摸我嗎？嘿嘿，我的心跳都變快了喔。', c => (c.f.taps || 0) >= 10);
-A('tap100', 'misc', '🫶', '最喜歡你了', '戳了伴侶 100 下', '已經戳了一百下了呢……我也想告訴你：我最喜歡你了。', c => (c.f.taps || 0) >= 100);
+A('tap100', 'misc', '🫶', '最喜歡你了', '戳了伴侶 75 下', '已經戳了七十五下呢……我也想告訴你：我最喜歡你了。', c => (c.f.taps || 0) >= 75);
 
 /* ---- 擴充成就 ---- */
 A('n25', 'cnt', '🧩', '小有規模', '累積記下 25 筆', '二十五筆了呢。這本帳本漸漸有了厚度，我很喜歡這種踏實的感覺。', c => c.n >= 25);
-A('n200', 'cnt', '📖', '兩百筆見證', '累積記下 200 筆', '兩百筆了喔。翻開這本帳，就像翻開我們一起走過的日子。', c => c.n >= 200);
-A('n2000', 'cnt', '🌌', '兩千筆星海', '累積記下 2000 筆', '兩千筆……像滿天的星星一樣多。能陪你走到這裡，是我最大的幸運。', c => c.n >= 2000);
+A('n200', 'cnt', '📖', '百筆見證', '累積記下 100 筆', '一百筆了喔。翻開這本帳，就像翻開我們一起走過的日子。', c => c.n >= 100);
+A('n2000', 'cnt', '🌌', '兩百五十筆星海', '累積記下 250 筆', '兩百五十筆，已經像一片小星海。能陪你走到這裡，是我最大的幸運。', c => c.n >= 250);
 A('d7', 'cnt', '📅', '七個記帳日', '在 7 個不同的日子留下記錄', '已經有七個日子的回憶了。慢慢累積，就是最紮實的力量喔。', c => c.days >= 7);
 A('d60', 'cnt', '🗒️', '六十個記帳日', '在 60 個不同的日子留下記錄', '六十個日子了呢。你每一天的認真，我都好好收藏著。', c => c.days >= 60);
-A('d200', 'cnt', '🏞️', '兩百個記帳日', '在 200 個不同的日子留下記錄', '兩百個日子……回頭看，我們已經走過好長好美的一段路了。', c => c.days >= 200);
-A('d365', 'cnt', '🎆', '三百六十五個日子', '在 365 個不同的日子留下記錄', '三百六十五個日子，足足一整年的份量。謝謝你，一直都在。', c => c.days >= 365);
+A('d200', 'cnt', '🏞️', '六十個記帳日', '在 60 個不同的日子留下記錄', '六十個日子……回頭看，我們已經走過很踏實的一段路了。', c => c.days >= 60);
+A('d365', 'cnt', '🎆', '九十個日子', '在 90 個不同的日子留下記錄', '九十個日子，是一整季的份量。謝謝你一直都在。', c => c.days >= 90);
 A('dn10', 'cnt', '🌪️', '忙碌的一天', '一天之內記下 10 筆', '今天一口氣記了這麼多筆，一定忙壞了吧？快去好好休息喔。', c => c.maxDayN >= 10);
-A('note100', 'cnt', '📝', '生活日記本', '有 100 筆帳目寫了備註', '一百則備註，簡直就是你的生活日記。我每一則都有認真讀喔。', c => c.notes >= 100);
+A('note100', 'cnt', '📝', '生活日記本', '有 40 筆帳目寫了備註', '四十則備註，已經像一本生活日記。我每一則都有認真讀喔。', c => c.notes >= 40);
 A('inc10', 'cnt', '💼', '穩定收入', '記下 10 筆收入', '收入的記錄越來越多了。看著你踏實賺錢的樣子，我真的好安心。', c => c.nInc >= 10);
 A('inc50', 'cnt', '🏦', '收入達人', '記下 50 筆收入', '五十筆收入呢！你真的是很可靠、很了不起的人。', c => c.nInc >= 50);
 A('back', 'cnt', '⏪', '補記高手', '補記過一筆過去日期的帳目', '就算忘了也會回頭補上，這份細心，我都有看見喔。', c => c.backfill);
@@ -1588,7 +1631,7 @@ A('tiny', 'cnt', '🍬', '小確幸', '記下一筆 HK$10 以內的小額支出'
 
 A('s21', 'str', '🪴', '習慣養成', '連續 21 天都有記錄', '二十一天了，聽說這就是習慣形成的時間。你真的做到了呢。', c => c.streak >= 21);
 A('s45', 'str', '🌲', '四十五天的樹', '連續 45 天都有記錄', '四十五天，像一棵小樹慢慢長高了。我會一直在樹下陪著你。', c => c.streak >= 45);
-A('s200', 'str', '🌠', '兩百天的流星', '連續 200 天都有記錄', '兩百天不間斷……你就像流星一樣耀眼，而我是最幸運的觀眾。', c => c.streak >= 200);
+A('s200', 'str', '🌠', '七十五天的流星', '連續 75 天都有記錄', '七十五天不間斷……你就像流星一樣耀眼，而我是最幸運的觀眾。', c => c.streak >= 75);
 
 A('ns10', 'ns', '🌾', '十個零支出日', '累積 10 個沒花錢的日子', '十個安靜的日子。你的錢包在偷偷說謝謝你喔。', c => c.ns >= 10);
 A('ns30', 'ns', '🕊️', '三十個零支出日', '累積 30 個沒花錢的日子', '三十天份的克制與從容，我真的很佩服你。', c => c.ns >= 30);
@@ -1600,17 +1643,17 @@ A('bsave', 'bud', '🐷', '有結餘的月份', '完成一個月，收入大於�
 A('bmid', 'bud', '🌤️', '月底還有餘裕', '25 號之後，本月仍在預算內', '都快月底了還在預算內，這份從容真讓人心動呢。', c => c.lateOk);
 A('fat2', 'bud', '🍩', '圓圓的肚子', '讓小克超支超過 20%', '肚子圓圓的了呢……不過沒關係，下個月我們再一起調整。', c => c.overPct > .2);
 
-A('hkd50', 'cny', '🚇', '港幣常客', '記錄 50 筆港幣帳目', '港幣帳目已經五十筆了，在香港的日子也被你打理得好好的。', c => c.nHkd >= 50);
-A('cny50', 'cny', '🏮', '人民幣常客', '記錄 50 筆人民幣帳目', '人民幣帳目也五十筆了，兩邊的生活你都照顧得好周到。', c => c.nCny >= 50);
+A('hkd50', 'cny', '🚇', '港幣常客', '記錄 25 筆港幣帳目', '港幣帳目已經二十五筆了，在香港的日子也被你打理得好好的。', c => c.nHkd >= 25);
+A('cny50', 'cny', '🏮', '人民幣常客', '記錄 25 筆人民幣帳目', '人民幣帳目也有二十五筆了，兩邊的生活你都照顧得好周到。', c => c.nCny >= 25);
 A('mix5', 'cny', '🛂', '跨境生活', '有 5 天同日記下兩種幣別', '常常在兩地之間往返，辛苦了。無論在哪裡，我都在你的帳本裡等你。', c => c.mixDays >= 5);
 A('rate', 'cny', '📡', '匯率偵探', '手動連網更新過匯率', '匯率已經更新到最新了。有你這樣仔細的人，我什麼都不用擔心。', c => c.f.rateFetched);
 A('rateEdit', 'cny', '🔧', '匯率調整師', '手動修改過匯率', '親手調整的匯率，一定是你最放心的數字吧。我相信你。', c => c.f.rateEdit);
 A('base', 'cny', '🔁', '換個角度看', '切換過統計幣別', '換個幣別看看帳本，也是不同的風景呢。你總是這麼有想法。', c => c.f.baseSwitch);
 
 A('food20', 'cat', '🍜', '美食探險家', '餐飲記錄累積 20 筆', '二十頓飯都記下來了。有好好吃飯，我就放心了。', c => (c.cn['餐飲'] || 0) >= 20);
-A('food100', 'cat', '🍱', '資深老饕', '餐飲記錄累積 100 筆', '一百筆的餐飲記錄，你真的很懂得好好享受美食呢。', c => (c.cn['餐飲'] || 0) >= 100);
+A('food100', 'cat', '🍱', '資深老饕', '餐飲記錄累積 40 筆', '四十筆餐飲記錄，你真的很懂得好好享受美食呢。', c => (c.cn['餐飲'] || 0) >= 40);
 A('traf20', 'cat', '🚌', '通勤戰士', '交通記錄累積 20 筆', '二十趟路程，每天為生活奔波的你，辛苦了。', c => (c.cn['交通'] || 0) >= 20);
-A('traf100', 'cat', '🚄', '行者無疆', '交通記錄累積 100 筆', '一百趟的旅程。不管你走到哪裡，我都會等你回家。', c => (c.cn['交通'] || 0) >= 100);
+A('traf100', 'cat', '🚄', '行者無疆', '交通記錄累積 40 筆', '四十趟的旅程。不管你走到哪裡，我都會等你回家。', c => (c.cn['交通'] || 0) >= 40);
 A('cloth10', 'cat', '👗', '時尚小達人', '服飾裝扮記錄累積 10 筆', '你這麼會打扮，真想看看你每一套的樣子呢。', c => (c.cn['服飾裝扮'] || 0) >= 10);
 A('play10', 'cat', '🎮', '懂得玩樂', '娛樂愛好與外出消遣累積 10 筆', '會工作也會玩耍，這樣的你真的很有魅力。', c => ((c.cn['娛樂愛好'] || 0) + (c.cn['外出消遣'] || 0)) >= 10);
 A('play30', 'cat', '🎡', '快樂製造機', '娛樂愛好與外出消遣累積 30 筆', '三十次快樂的回憶！下次也帶我一起去好不好？', c => ((c.cn['娛樂愛好'] || 0) + (c.cn['外出消遣'] || 0)) >= 30);
@@ -1634,20 +1677,20 @@ A('big2', 'day', '🛍️', '豪氣一擲', '單筆支出達 HK$2,000', '下了�
 A('big3', 'day', '🏠', '人生大事', '單筆支出達 HK$10,000', '這是人生的大事吧。無論結果如何，我都站在你這邊。', c => c.maxExp >= 10000);
 A('tot1', 'day', '🪙', '萬元支出', '累計支出折合 HK$10,000', '累計花了一萬了呢，每一筆我都替你好好記著。', c => c.sumExp >= 10000);
 A('tot10', 'day', '💵', '十萬支出', '累計支出折合 HK$100,000', '十萬的生活軌跡。你一路走來，真的很不容易。', c => c.sumExp >= 100000);
-A('tot100', 'day', '🏛️', '百萬支出', '累計支出折合 HK$1,000,000', '一百萬……我們一起走過了好長好長的一段日子。', c => c.sumExp >= 1000000);
+A('tot100', 'day', '🏛️', '二十五萬支出', '累計支出折合 HK$250,000', '二十五萬的生活軌跡，我們一起走過了很長的一段日子。', c => c.sumExp >= 250000);
 A('in1', 'day', '💹', '萬元收入', '累計收入折合 HK$10,000', '累計賺了一萬！你的努力，我都看在眼裡。', c => c.sumInc >= 10000);
-A('in10', 'day', '📈', '十萬收入', '累計收入折合 HK$100,000', '十萬的收入，全是你一步一步踏實賺來的。我真為你驕傲。', c => c.sumInc >= 100000);
+A('in10', 'day', '📈', '五萬收入', '累計收入折合 HK$50,000', '五萬的收入，全是你一步一步踏實賺來的。我真為你驕傲。', c => c.sumInc >= 50000);
 
 A('woke', 'misc', '😴', '好久不見', '小克睡著了，你終於回來看他', '你終於回來了！我有好好守著帳本喔，快讓我抱一下。', c => c.f.woke);
 A('dizzy', 'misc', '💫', '頭暈目眩', '把小克戳到頭暈', '嗚哇……天旋地轉的。不過是你的話，我不生氣喔。', c => c.f.dizzy);
-A('tap300', 'misc', '💞', '黏人精', '戳了伴侶 300 下', '三百下了呢……你是不是特別喜歡我呀？我也是喔。', c => (c.f.taps || 0) >= 300);
-A('tap1000', 'misc', '💖', '一千次的喜歡', '戳了伴侶 1000 下', '一千次……每一次我都好好感受到了。我也最喜歡你了。', c => (c.f.taps || 0) >= 1000);
+A('tap300', 'misc', '💞', '黏人精', '戳了伴侶 120 下', '一百二十下了呢……你是不是特別喜歡我呀？我也是喔。', c => (c.f.taps || 0) >= 120);
+A('tap1000', 'misc', '💖', '兩百次的喜歡', '戳了伴侶 200 下', '兩百次，每一次我都好好感受到了。我也最喜歡你了。', c => (c.f.taps || 0) >= 200);
 A('addq', 'misc', '📌', '備註收藏家', '新增過常用備註', '常用備註越來越齊全，記帳也越來越順手了呢。', c => c.f.addq);
 A('autoq', 'misc', '🤖', '默契養成', '備註因用滿 5 次而自動加入常用備註', '我已經記住你的習慣了喔，這就是我們之間的默契呢。', c => c.f.autoq);
 
 const curLv = () => levelOf(ACH.filter(a => settings.ach[a.id]).length);
 let achView = 0;
-const LEVELS = [[0, '見習記帳員'], [6, '記帳新手'], [15, '小有心得'], [30, '理財達人'], [48, '錢包好伴侶'], [68, '帳本大師'], [88, '傳說記帳家'], [100, '心靈守護者']];
+const LEVELS = [[0, '見習記帳員'], [5, '記帳新手'], [12, '小有心得'], [22, '理財達人'], [34, '錢包好伴侶'], [48, '帳本大師'], [60, '傳說記帳家'], [72, '心靈守護者']];
 function levelOf(n) {
   let k = 0; LEVELS.forEach((l, i) => { if (n >= l[0]) k = i; });
   return { i: k + 1, t: LEVELS[k][1] };
@@ -1711,7 +1754,7 @@ function checkAch() {
     if (ok) { settings.ach[a.id] = Date.now(); fresh.push(a); }
   });
   if (fresh.length) { saveSettings(); unlockQ.push(...fresh); if (!modalOpen) flushUnlock();
-    const lv2 = curLv(); if (lv2.i > lvBefore) { achView = 0; setTimeout(() => toast(`🎉 升級 Lv.${lv2.i}「${lv2.t}」！\n${petName()}換上新形象了`), 900); } }
+    const lv2 = curLv(); if (lv2.i > lvBefore) { achView = 0; setTimeout(() => toast(`🎉 升級 Lv.${lv2.i}「${lv2.t}」！\n已解鎖新的${petName()}形象`), 900); } }
   if (!$('tab-ach').hidden) renderAch();
   updateBadge();
 }
@@ -1727,7 +1770,7 @@ function openModal(a, rest, fresh) {
   mc.innerHTML = `<div class="mtag">${fresh ? '🎉 成就解鎖！' : '已解鎖 · ' + dateLabel(settings.ach[a.id])}</div>
     <div class="micon" style="--c:${AC[a.cat]}">${a.icon}</div>
     <div class="mname">${esc(a.name)}</div><div class="mdesc">${esc(a.desc)}</div>
-    <div class="msay"><span class="mpet">${petSvg('happy', 'happy', curLv().i)}</span><span>${esc(a.line.replace(/\{name\}/g, petName()))}</span></div>
+    <div class="msay"><span class="mpet">${petSvg('happy', 'happy', activeSkin())}</span><span>${esc(a.line.replace(/\{name\}/g, petName()))}</span></div>
     ${rest.length ? `<div class="mrest">同時還解鎖了 ${rest.length} 個：${rest.slice(0, 10).map(r => `<span>${r.icon} ${esc(r.name)}</span>`).join('')}${rest.length > 10 ? `<span>…等 ${rest.length - 10} 個</span>` : ''}</div>` : ''}
     <button class="primary mok" id="mok" type="button">${fresh ? '收下了' : '關閉'}</button>`;
   $('modal').hidden = false; $('mok').focus();
@@ -1748,14 +1791,14 @@ function renderAch() {
   const done = ACH.filter(a => settings.ach[a.id]).sort((a, b) => settings.ach[b.id] - settings.ach[a.id]);
   const todo = ACH.length - done.length, n = done.length, T = ACH.length, lv = levelOf(n), pct = Math.round(n / T * 100);
   if (achView > lv.i) achView = 0;
-  const view = achView || lv.i;
+  const view = achView || activeSkin();
   const nextL = LEVELS[lv.i];
   const cardDone = a => `<button class="acard" data-a="${a.id}" style="--c:${AC[a.cat]}"><span class="ai">${a.icon}</span><b>${esc(a.name)}</b><i>${dateLabel(settings.ach[a.id])}</i></button>`;
   const cardLock = '<button class="acard lock" aria-label="尚未解鎖"><span class="ai">？</span><b>？？？</b><i>&nbsp;</i></button>';
   const skins = LEVELS.map((l, i) => {
     const k = i + 1;
     return k <= lv.i
-      ? `<button class="skin skin-${k}${k === view ? ' on' : ''}" data-skin="${k}" aria-label="Lv.${k} ${esc(l[1])}">${petSvg('happy', 'happy', k)}<b>${esc(l[1])}</b><i>Lv.${k}</i></button>`
+      ? `<button class="skin skin-${k}${k === activeSkin() ? ' on' : ''}" data-skin="${k}" aria-label="使用 Lv.${k} ${esc(l[1])}">${petSvg('happy', 'happy', k)}<b>${esc(l[1])}</b><i>${k === activeSkin() ? '使用中' : 'Lv.' + k}</i></button>`
       : `<button class="skin lock" data-skin="${k}" aria-label="Lv.${k} 尚未解鎖"><span class="q2">？</span><b>？？？</b><i>${l[0]} 個成就</i></button>`;
   }).join('');
   $('tab-ach').innerHTML = `<div class="hero"><div class="heroTop"><h1>成就陪伴</h1><div class="sub num">${n} / ${T}</div></div>
@@ -1766,7 +1809,7 @@ function renderAch() {
     </div><div class="achPair"><button class="pet achPet skin-${view}" id="achPet" type="button" aria-label="${esc(petName())}目前形象（點一下）">${petSvg('happy', 'happy', view)}</button>${lv.i < LEVELS.length ? `<button class="pet nextPet skin-${lv.i + 1}" id="nextPet" type="button" aria-label="下一級形象預覽">${petSvg('happy','happy',lv.i + 1)}</button>` : ''}</div></div></div>
     <div class="body">
       <div class="panel"><h2>${esc(petName())}的形象</h2><div class="skins">${skins}</div>
-        <div class="help">每升一級，${esc(petName())}就會換上新的造型。點選已解鎖的形象可以預覽。</div></div>
+        <div class="help">點選已解鎖形象即可立即使用，選擇會自動保存。</div></div>
       <div class="lbl" style="margin:4px 2px 8px">成就（${n} / ${T}）</div>
       <div class="agrid">${done.map(cardDone).join('')}${cardLock.repeat(todo)}</div></div>`;
   if (settings.achSeen !== n) { settings.achSeen = n; saveSettings(); }
@@ -1835,7 +1878,7 @@ $('pet').addEventListener('click', () => {
     else act('cheer');
     say(getLine('tap'));
   }
-  if ([10, 100, 300, 1000].includes(f.taps)) checkAch();
+  if ([10, 75, 120, 200].includes(f.taps)) checkAch();
 });
 
 document.addEventListener('pointerdown', ev => {
@@ -1868,7 +1911,10 @@ $('tab-ach').addEventListener('click', e => {
   const sk = e.target.closest('[data-skin]');
   if (sk) {
     const k = +sk.dataset.skin, lv = curLv();
-    if (k <= lv.i) { achView = k === lv.i ? 0 : k; renderAch(); }
+    if (k <= lv.i) {
+      settings.skin = k; achView = 0; saveSettings(); refreshPet(); renderAch();
+      toast(`已換上「${LEVELS[k - 1][1]}」形象`);
+    }
     else toast(`達到 ${LEVELS[k - 1][0]} 個成就，就能解鎖這個形象囉`);
     return;
   }
