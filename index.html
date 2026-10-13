@@ -267,14 +267,15 @@ h2{font-size:16px;margin:0 0 12px;font-weight:700}
 .galleryAch .ga span{font-size:26px}.galleryAch .ga div{min-width:0}.galleryAch .ga b,.galleryAch .ga i{display:block}.galleryAch .ga i{font-style:normal;color:#667089;font-size:12px}
 
 /* 服裝固定在身體上，只有尾巴、裙擺、法杖等配件獨立活動 */
+/* 修正：將 .cat-tail 的 transform-origin 設為左下方 (0% 100%)，讓尾巴根部緊貼小克身體右側搖擺，不會錯位懸空 */
 .pet svg .scarf-tail,.pet svg .cat-tail,.pet svg .maid-bow,.pet svg .magic-star,.pet svg .detective-glass,.pet svg .angel-wing{transform-box:fill-box}
-.scarf-tail{transform-origin:0 0;animation:scarfTail 1.35s ease-in-out infinite}
-.cat-tail{transform-origin:100% 100%;animation:catTail 1.7s ease-in-out infinite}
+.scarf-tail{transform-origin:50% 0%;animation:scarfTail 1.35s ease-in-out infinite}
+.cat-tail{transform-origin:0% 100%;animation:catTail 1.7s ease-in-out infinite}
 .maid-bow{transform-origin:50% 50%;animation:maidBow 1.8s ease-in-out infinite}
 .magic-star{transform-origin:50% 50%;animation:magicStar 1.15s ease-in-out infinite}
 .detective-glass{transform-origin:0 100%;animation:glassScan 2.6s ease-in-out infinite}
 .angel-wing{transform-origin:50% 50%;animation:wingBeat 1.5s ease-in-out infinite}
-@keyframes scarfTail{0%,100%{transform:rotate(0)}50%{transform:rotate(12deg)}}
+@keyframes scarfTail{0%,100%{transform:rotate(0)}50%{transform:rotate(8deg)}}
 @keyframes catTail{0%,100%{transform:rotate(-8deg)}50%{transform:rotate(12deg)}}
 @keyframes maidBow{0%,100%{transform:scale(1)}50%{transform:scale(1.18,.9)}}
 @keyframes magicStar{0%,100%{transform:scale(.65) rotate(0);opacity:.45}50%{transform:scale(1.25) rotate(45deg);opacity:1}}
@@ -313,6 +314,8 @@ h2{font-size:16px;margin:0 0 12px;font-weight:700}
 .mrest{margin-top:14px;font-size:13px;color:#667089;text-align:left}
 .mrest span{display:inline-block;margin:6px 6px 0 0;padding:3px 10px;border-radius:999px;background:#F0F2F7;color:#1C2038}
 .mok{margin-top:18px;padding:13px}
+.mbtns{display:flex;gap:10px;margin-top:18px}
+.mbtns button{flex:1;margin:0}
 #confetti{position:absolute;inset:0;overflow:hidden;pointer-events:none}
 #confetti i{position:absolute;top:-14px;width:8px;height:13px;border-radius:2px;animation:fall linear forwards}
 @keyframes fall{to{transform:translateY(112vh) rotate(var(--r))}}
@@ -515,8 +518,8 @@ if ('serviceWorker' in navigator) {
   });
 }
 
-/* ---------- 提示與標籤 ---------- */
-let toastTimer;
+/* ---------- 提示與自訂確認彈窗 ---------- */
+let toastTimer, confirmCb = null;
 function toast(msg) {
   const t = $('toast'); t.textContent = msg; t.classList.add('show');
   clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('show'), 2400);
@@ -527,6 +530,21 @@ function mark(seg, v) {
     b.classList.toggle('on', on);
     b.setAttribute('aria-pressed', on);
   });
+}
+function askConfirm(title, desc, okText, onConfirm) {
+  modalOpen = true;
+  confirmCb = onConfirm;
+  const mc = $('mcard');
+  mc.classList.remove('fresh');
+  mc.innerHTML = `<div class="mtag">請確認操作</div>
+    <div class="mname" style="margin-top:8px">${esc(title)}</div>
+    <div class="mdesc" style="margin-top:8px">${esc(desc)}</div>
+    <div class="mbtns">
+      <button class="ghost" id="mcancel" type="button">取消</button>
+      <button class="danger" id="mconfirm" type="button">${esc(okText || '確定')}</button>
+    </div>`;
+  $('modal').hidden = false;
+  $('mcancel').focus();
 }
 
 /* ---------- 記帳表單 ---------- */
@@ -658,9 +676,10 @@ function startEdit(id) {
 
 function deleteEntry() {
   if (!form.editId) return;
-  if (!confirm('確定刪除這筆帳目嗎？')) return;
-  entries = entries.filter(x => x.id !== form.editId);
-  saveEntries(); resetForm(); toast('已刪除帳目');
+  askConfirm('刪除帳目', '確定要刪除這筆帳目嗎？刪除後無法復原。', '確定刪除', () => {
+    entries = entries.filter(x => x.id !== form.editId);
+    saveEntries(); resetForm(); toast('已刪除帳目');
+  });
 }
 
 /* ---------- 報表模組 ---------- */
@@ -1121,35 +1140,35 @@ const L = {
     '有什麼煩惱就交給我吧，我或許不能解決所有事，但我絕對不會讓你一個人承擔。',
     '牽著你的手的時候，總希望時間能走得慢一點、再慢一點。',
     '怎麼一直盯著我看呀？我臉上有什麼東西嗎……還是說，你越看越喜歡我了？',
-    '不管世界怎麼變，我對你的這份支持與陪伴，永遠都不會改變喔。'
-    ,'剛剛是不是又偷偷想我了？被我抓到了喔。'
-    ,'你的指尖一碰過來，我就知道今天也有人惦記著我。'
-    ,'要不要一起休息三十秒？我陪你慢慢呼吸。'
-    ,'今天的你也很努力，我想把這句話認真地說給你聽。'
-    ,'再戳一下，我就要把今天的好心情分一半給你了。'
-    ,'我把你的每一次到來，都當成值得收藏的小事。'
-    ,'有我陪你記住數字，也別忘了替自己記住快樂。'
-    ,'突然靠這麼近，我可是會害羞的……但不准走開。'
-    ,'累的時候不用解釋，安靜待在這裡也很好。'
-    ,'我剛學會一個新動作，等一下表演給你看。'
-    ,'你今天有稱讚自己嗎？沒有的話，就由我先來。'
-    ,'帳目可以慢慢整理，你的心情也可以慢慢整理。'
-    ,'你一出現，這個小小的帳本就像亮起來了一樣。'
-    ,'剛才我在等你，現在終於可以把想說的話交給你了。'
-    ,'今天也讓我陪你一會兒吧，不必特別做什麼。'
-    ,'你的每一次觸碰，我都有認真收到，沒有漏掉喔。'
-    ,'是不是有點累了？先把肩膀放鬆，我會替你守著這裡。'
-    ,'我最喜歡的不是漂亮的數字，是你願意照顧生活的樣子。'
-    ,'你靠近的時候，我連待機動作都差點忘記了。'
-    ,'這次想看我表演什麼？先讓我偷偷準備一下。'
-    ,'今天發生的好事和壞事，都可以在這裡放下一點。'
-    ,'要記得，你不是只有做得完美才值得被喜歡。'
-    ,'我會把你的認真、疲憊和小小成就都放在心上。'
-    ,'別急著離開嘛，我還想再陪你多待一會兒。'
-    ,'摸摸收到。作為回禮，我把今天的幸運送給你。'
-    ,'有時候只是打開帳本看看，也算在好好面對生活。'
-    ,'你願意回來，我就永遠有新的話想對你說。'
-    ,'偷偷告訴你，我剛才的待機動作練了很多遍。'
+    '不管世界怎麼變，我對你的這份支持與陪伴，永遠都不會改變喔。',
+    '剛剛是不是又偷偷想我了？被我抓到了喔。',
+    '你的指尖一碰過來，我就知道今天也有人惦記著我。',
+    '要不要一起休息三十秒？我陪你慢慢呼吸。',
+    '今天的你也很努力，我想把這句話認真地說給你聽。',
+    '再戳一下，我就要把今天的好心情分一半給你了。',
+    '我把你的每一次到來，都當成值得收藏的小事。',
+    '有我陪你記住數字，也別忘了替自己記住快樂。',
+    '突然靠這麼近，我可是會害羞的……但不准走開。',
+    '累的時候不用解釋，安靜待在這裡也很好。',
+    '我剛學會一個新動作，等一下表演給你看。',
+    '你今天有稱讚自己嗎？沒有的話，就由我先來。',
+    '帳目可以慢慢整理，你的心情也可以慢慢整理。',
+    '你一出現，這個小小的帳本就像亮起來了一樣。',
+    '剛才我在等你，現在終於可以把想說的話交給你了。',
+    '今天也讓我陪你一會兒吧，不必特別做什麼。',
+    '你的每一次觸碰，我都有認真收到，沒有漏掉喔。',
+    '是不是有點累了？先把肩膀放鬆，我會替你守著這裡。',
+    '我最喜歡的不是漂亮的數字，是你願意照顧生活的樣子。',
+    '你靠近的時候，我連待機動作都差點忘記了。',
+    '這次想看我表演什麼？先讓我偷偷準備一下。',
+    '今天發生的好事和壞事，都可以在這裡放下一點。',
+    '要記得，你不是只有做得完美才值得被喜歡。',
+    '我會把你的認真、疲憊和小小成就都放在心上。',
+    '別急著離開嘛，我還想再陪你多待一會兒。',
+    '摸摸收到。作為回禮，我把今天的幸運送給你。',
+    '有時候只是打開帳本看看，也算在好好面對生活。',
+    '你願意回來，我就永遠有新的話想對你說。',
+    '偷偷告訴你，我剛才的待機動作練了很多遍。'
   ],
   tapFat: [
     '呀……別戳肚子啦，軟軟的有點癢～',
@@ -1369,8 +1388,8 @@ function outfitSvg(lv, g) {
     case 2: /* 圍巾位於嘴巴下方，不遮頭 */
       front = pr(x0 + 1, top + 7, bw - 2, 2, RD)
         + `<g class="scarf-tail">${pr(x0 + bw - 4, top + 8, 3, 4, RD) + pr(x0 + bw - 3, top + 11, 2, 1, PY)}</g>`; break;
-    case 3: /* 貓貓小克：耳朵、尾巴、鈴鐺 */
-      back = `<g class="cat-tail">${pr(x0 + bw, top + 7, 2, 4, PC) + pr(x0 + bw + 1, top + 5, 3, 2, PC) + pr(x0 + bw + 3, top + 3, 1, 3, PC)}</g>`;
+    case 3: /* 貓貓小克：耳朵、尾巴、鈴鐺（修正尾巴繪製座標，從身體右後側根部自然向上彎曲翹起） */
+      back = `<g class="cat-tail">${pr(x0 + bw - 1, bottom - 3, 3, 2, PD) + pr(x0 + bw + 1, bottom - 5, 2, 3, PC) + pr(x0 + bw + 2, bottom - 8, 2, 3, PC) + pr(x0 + bw + 1, bottom - 9, 2, 1, PP)}</g>`;
       front = pr(x0 + 1, top - 2, 4, 3, PC) + pr(x0 + bw - 5, top - 2, 4, 3, PC)
         + pr(x0 + 2, top - 1, 2, 1, PP) + pr(x0 + bw - 4, top - 1, 2, 1, PP)
         + pr(cx - 1, top + 8, 2, 2, PY) + pr(cx - 2, top + 7, 4, 1, RD); break;
@@ -1679,7 +1698,7 @@ A('tot1', 'day', '🪙', '萬元支出', '累計支出折合 HK$10,000', '累計
 A('tot10', 'day', '💵', '十萬支出', '累計支出折合 HK$100,000', '十萬的生活軌跡。你一路走來，真的很不容易。', c => c.sumExp >= 100000);
 A('tot100', 'day', '🏛️', '二十五萬支出', '累計支出折合 HK$250,000', '二十五萬的生活軌跡，我們一起走過了很長的一段日子。', c => c.sumExp >= 250000);
 A('in1', 'day', '💹', '萬元收入', '累計收入折合 HK$10,000', '累計賺了一萬！你的努力，我都看在眼裡。', c => c.sumInc >= 10000);
-A('in10', 'day', '📈', '五萬收入', '累計收入折合 HK$50,000', '五萬的收入，全是你一步一步踏實賺來的。我真為你驕傲。', c => c.sumInc >= 50000);
+A('in10', 'day', '📈', '五萬收入', '累計收入折合 HK$50,000', '五萬的收入，全是你一步一步踏實賺來的。我真為你驕傲。', c => c.sumInc >= 50,000);
 
 A('woke', 'misc', '😴', '好久不見', '小克睡著了，你終於回來看他', '你終於回來了！我有好好守著帳本喔，快讓我抱一下。', c => c.f.woke);
 A('dizzy', 'misc', '💫', '頭暈目眩', '把小克戳到頭暈', '嗚哇……天旋地轉的。不過是你的話，我不生氣喔。', c => c.f.dizzy);
@@ -1777,7 +1796,7 @@ function openModal(a, rest, fresh) {
   if (fresh) { confetti(); say(a.line, 9000); act('cheer', 'star'); }
 }
 function closeModal() {
-  $('modal').hidden = true; modalOpen = false; $('confetti').innerHTML = '';
+  $('modal').hidden = true; modalOpen = false; confirmCb = null; $('confetti').innerHTML = '';
   if (unlockQ.length) flushUnlock();
 }
 function confetti() {
@@ -1895,7 +1914,13 @@ $('modal').addEventListener('click', e => {
     moves.forEach(x => p.classList.remove(x)); void p.offsetWidth; p.classList.add(cls);
     setTimeout(() => p.classList.remove(cls), 2700); return;
   }
-  if (e.target.id === 'modal' || e.target.id === 'mok') closeModal();
+  if (e.target.id === 'mconfirm') {
+    const fn = confirmCb;
+    closeModal();
+    if (fn) fn();
+    return;
+  }
+  if (e.target.id === 'modal' || e.target.id === 'mok' || e.target.id === 'mcancel') closeModal();
 });
 document.addEventListener('keydown', e => { if (e.key === 'Escape' && modalOpen) closeModal(); });
 
@@ -1977,9 +2002,9 @@ $('tab-settings').addEventListener('click', e => {
       renderSettings(); updateSub(); toast(`統計幣別已切換為${baseName()}`); checkAch();
     }
   } else if (act === 'clear') {
-    if (confirm(`確定要清除全部 ${entries.length} 筆帳目嗎？此操作無法復原，建議先匯出 CSV 備份。`)) {
+    askConfirm('清除所有帳目資料', `確定要清除全部 ${entries.length} 筆帳目嗎？此操作無法復原，建議先匯出 CSV 備份。`, '確認清除', () => {
       entries = []; settings.noSpend = []; saveEntries(); saveSettings(); renderSettings(); updateSub(); toast('所有帳目已清除');
-    }
+    });
   }
 });
 
