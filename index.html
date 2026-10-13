@@ -8,168 +8,276 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="小克記帳">
 <meta name="application-name" content="小克記帳">
-<meta name="theme-color" content="#1C2038">
+<meta name="theme-color" content="#232538">
 <link rel="manifest" href="manifest.json">
 <title>小克記帳 - 溫柔陪伴記帳本</title>
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;background:#F4F5F8;color:#1C2038;font:16px/1.45 -apple-system,"PingFang HK","PingFang TC","Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif}
-button,input{font:inherit;color:inherit}
+html,body{margin:0;background:#FBF9F6;color:#232536;font:16px/1.45 -apple-system,"PingFang HK","PingFang TC","Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif}
+button,input,select{font:inherit;color:inherit}
 button{cursor:pointer}
-:focus-visible{outline:2px solid #E8344E;outline-offset:2px}
+:focus-visible{outline:2px solid #D95367;outline-offset:2px}
 .hero :focus-visible{outline-color:#fff}
 [hidden]{display:none!important}
-#app{max-width:520px;margin:0 auto;min-height:100dvh;background:#F4F5F8;padding-bottom:calc(92px + env(safe-area-inset-bottom))}
+#app{max-width:520px;margin:0 auto;min-height:100dvh;background:#FBF9F6;padding-bottom:calc(92px + env(safe-area-inset-bottom))}
 .num,.big,#amount{font-family:ui-rounded,"SF Pro Rounded","Hiragino Maru Gothic ProN",system-ui,-apple-system,"PingFang HK",sans-serif;font-variant-numeric:tabular-nums}
 
-/* hero 沉穩純色質感背景 */
-.hero{position:relative;overflow:hidden;background:#1C2038;color:#fff;padding:calc(env(safe-area-inset-top) + 18px) 18px 26px;border-radius:0 0 30px 30px}
-.heroTop{position:relative;display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:14px}
+/* 方案 A：日系柔和微光頂部欄（深邃夜空靛藍 + 暖杏桃色環境柔光） */
+.hero{
+  position:relative;overflow:hidden;
+  background:
+    radial-gradient(130px 100px at 82% 58px, rgba(255,184,150,.18), transparent 75%),
+    radial-gradient(220px 160px at 15% 10%, rgba(132,148,220,.12), transparent 80%),
+    linear-gradient(180deg, #1E2034 0%, #252840 100%);
+  color:#F9F6F2;
+  padding:calc(env(safe-area-inset-top) + 18px) 18px 26px;
+  border-radius:0 0 32px 32px;
+  box-shadow:0 10px 28px -10px rgba(24,26,44,.22);
+}
+.heroTop{position:relative;z-index:1;display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:12px}
 h1{font-size:24px;margin:0;font-weight:800;letter-spacing:.04em}
-.sub{font-size:14px;color:rgba(255,255,255,.82);text-align:right;white-space:pre-line}
+.sub{font-size:13.5px;color:rgba(249,246,242,.78);text-align:right;white-space:pre-line}
 #banner{margin:12px 16px 0;background:#FFF1CC;color:#4A3A00;border-radius:12px;padding:10px 12px;font-size:14px}
-.alertCard{margin:0 0 14px;background:#FFF5EB;border:1px solid #F5CBA7;color:#5C3409;border-radius:14px;padding:11px 13px;font-size:14px;display:flex;align-items:center;justify-content:space-between;gap:10px}
-.alertCard b{display:block;font-size:14px;color:#B4532F}
+
+/* 方案 C：小克的專屬像素微景觀小角落（支援 4 大時段 + 8 種天氣 + 12 種日常行為） */
+.petRoom{
+  position:relative;width:142px;height:108px;flex:none;
+  border-radius:20px;
+  background:
+    radial-gradient(circle at 52% 58%, rgba(255,190,158,.25) 0%, rgba(255,190,158,.05) 58%, transparent 78%),
+    linear-gradient(180deg, rgba(20,23,40,.65) 0%, rgba(36,34,54,.72) 72%, rgba(66,49,58,.85) 72%, rgba(52,38,47,.92) 100%);
+  border:1px solid rgba(255,255,255,.14);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.15), 0 8px 20px rgba(12,14,24,.28);
+  display:flex;align-items:flex-end;justify-content:center;
+  padding-bottom:9px;overflow:hidden;
+  transition:background .55s ease, border-color .55s ease;
+}
+/* 隨真實時間變化的 4 大時段基底（日出、白天、日落、夜晚） */
+.petRoom[data-tod="sunrise"]{
+  background:
+    radial-gradient(circle at 28% 32%, rgba(255,204,165,.38) 0%, transparent 65%),
+    linear-gradient(180deg, rgba(82,78,128,.62) 0%, rgba(168,112,126,.68) 72%, rgba(92,62,64,.88) 72%, rgba(68,45,49,.94) 100%);
+  border-color:rgba(255,222,205,.22);
+}
+.petRoom[data-tod="day"]{
+  background:
+    radial-gradient(circle at 30% 25%, rgba(255,244,214,.38) 0%, transparent 65%),
+    linear-gradient(180deg, rgba(64,104,158,.58) 0%, rgba(88,118,162,.66) 72%, rgba(112,78,66,.88) 72%, rgba(86,58,49,.94) 100%);
+  border-color:rgba(255,255,255,.22);
+}
+.petRoom[data-tod="sunset"]{
+  background:
+    radial-gradient(circle at 35% 35%, rgba(255,156,118,.4) 0%, transparent 68%),
+    linear-gradient(180deg, rgba(78,52,96,.68) 0%, rgba(156,82,92,.74) 72%, rgba(84,52,58,.9) 72%, rgba(62,38,44,.95) 100%);
+  border-color:rgba(255,195,170,.22);
+}
+.petRoom[data-tod="night"]{
+  background:
+    radial-gradient(circle at 52% 58%, rgba(255,190,158,.24) 0%, rgba(255,190,158,.05) 58%, transparent 78%),
+    linear-gradient(180deg, rgba(18,21,38,.72) 0%, rgba(34,32,52,.78) 72%, rgba(64,47,56,.88) 72%, rgba(48,35,44,.94) 100%);
+}
+.petRoom[data-act="pc"] .roomGlow{
+  right:28px;top:38px;width:48px;height:36px;
+  background:radial-gradient(circle, rgba(120,210,255,.38) 0%, rgba(120,210,255,.08) 60%, transparent 78%);
+}
+.roomBg{
+  position:absolute;inset:0;width:100%;height:100%;pointer-events:none;display:block;z-index:1;
+}
+.roomFg{
+  position:absolute;inset:0;width:100%;height:100%;pointer-events:none;display:block;z-index:3;
+}
+.roomGlow{
+  position:absolute;right:14px;top:16px;width:28px;height:28px;border-radius:50%;
+  background:radial-gradient(circle, rgba(255,216,155,.42) 0%, rgba(255,180,130,.12) 55%, transparent 75%);
+  pointer-events:none;animation:lampPulse 3.6s ease-in-out infinite;z-index:1;
+}
+.petRoom[data-tod="day"] .roomGlow{
+  left:10px;right:auto;top:8px;width:44px;height:44px;
+  background:radial-gradient(circle, rgba(255,246,190,.55) 0%, rgba(255,220,140,.18) 60%, transparent 78%);
+}
+@keyframes lampPulse{0%,100%{transform:scale(1);opacity:.85}50%{transform:scale(1.15);opacity:1}}
+
+/* 小房間天氣與道具像素動畫 */
+.rain-d1{animation:rainFall .7s linear infinite}
+.rain-d2{animation:rainFall .7s linear -.35s infinite}
+@keyframes rainFall{0%{transform:translate(1px,-4px);opacity:0}20%{opacity:.85}85%{opacity:.85}100%{transform:translate(-2px,14px);opacity:0}}
+.snow-f1{animation:snowFall 2.3s ease-in-out infinite}
+.snow-f2{animation:snowFall 2.3s ease-in-out -1.15s infinite}
+@keyframes snowFall{0%{transform:translate(0,-3px);opacity:0}20%{opacity:.95}50%{transform:translate(1px,5px)}85%{opacity:.95}100%{transform:translate(-1px,13px);opacity:0}}
+.sakura-p1{animation:sakuraFall 2.6s ease-in-out infinite}
+.sakura-p2{animation:sakuraFall 2.6s ease-in-out -1.3s infinite}
+@keyframes sakuraFall{0%{transform:translate(2px,-3px);opacity:0}20%{opacity:.95}60%{transform:translate(-2px,6px)}85%{opacity:.95}100%{transform:translate(-4px,13px);opacity:0}}
+.leaf-f1{animation:sakuraFall 2.4s ease-in-out infinite}
+.leaf-f2{animation:sakuraFall 2.4s ease-in-out -1.2s infinite}
+.lightning-flash{animation:thunderFlash 4.2s infinite}
+@keyframes thunderFlash{0%,91%,95%,98%,100%{opacity:0}92%,96%{opacity:.92}}
+.meteor-fly{animation:meteorFly 3.4s ease-in infinite}
+@keyframes meteorFly{0%,70%{transform:translate(4px,-4px);opacity:0}76%{opacity:1}92%{transform:translate(-14px,12px);opacity:0}100%{opacity:0}}
+.firefly-glow{animation:fireflyFloat 2.4s ease-in-out infinite alternate}
+@keyframes fireflyFloat{0%{transform:translate(0,1px);opacity:.25}50%{opacity:1}100%{transform:translate(2px,-2px);opacity:.4}}
+.steam-w1{animation:steamUp 1.9s ease-out infinite}
+.steam-w2{animation:steamUp 1.9s ease-out -.95s infinite}
+@keyframes steamUp{0%{transform:translateY(1px);opacity:0}35%{opacity:.88}100%{transform:translateY(-5px);opacity:0}}
+.pc-glow{animation:pcFlicker 1.8s steps(2,end) infinite}
+@keyframes pcFlicker{0%,100%{opacity:.92}50%{opacity:.65}}
+.sun-ray{animation:sunBeat 3.2s ease-in-out infinite}
+@keyframes sunBeat{0%,100%{opacity:.55}50%{opacity:.9}}
+.dumbbell-lift{animation:liftUp .95s ease-in-out infinite alternate}
+@keyframes liftUp{0%{transform:translateY(1px)}100%{transform:translateY(-3px)}}
+.note-float{animation:steamUp 2.2s ease-in-out infinite}
+.Bubble-bath{animation:steamUp 2.5s ease-in-out infinite}
+
+/* 小餅乾與房間場景互動列（玻璃膠囊感） */
+.petCareBar{position:relative;z-index:1;display:flex;align-items:center;justify-content:flex-end;gap:6px;margin-top:-4px;margin-bottom:8px;flex-wrap:wrap}
+.sceneBtn,.cookieBtn{
+  border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.09);color:#F9F6F2;
+  -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
+  border-radius:999px;padding:4px 10px;font-size:11.5px;font-weight:700;display:inline-flex;align-items:center;gap:4px;
+  transition:transform .15s ease, background .2s;
+}
+.sceneBtn:active,.cookieBtn:active{transform:scale(.95)}
+.cookieBtn.has{background:rgba(255,238,204,.92);color:#5C3409;border-color:rgba(242,183,49,.6);box-shadow:0 3px 12px rgba(242,183,49,.22);animation:pop .35s ease-out}
+
+/* 記帳頁玻璃分段按鈕、金額輸入、計算列與首頁溫柔提醒卡 */
+.seg{position:relative;z-index:1;display:flex;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:3px;gap:3px;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.seg button{flex:1;border:0;background:transparent;padding:9px 6px;border-radius:11px;color:rgba(249,246,242,.72);font-weight:700;transition:all .18s ease}
+.seg button.on{background:#FFFDFB;color:#1F2235;box-shadow:0 2px 8px rgba(12,14,24,.18)}
+.cur{margin-top:9px}
+.cur button.on[data-v="HKD"]{background:linear-gradient(135deg,#E25B6E,#D14358);color:#fff}
+.cur button.on[data-v="CNY"]{background:linear-gradient(135deg,#F0B849,#E0A02E);color:#202336}
+
+.amountRow{position:relative;z-index:1;display:flex;align-items:baseline;gap:10px;margin-top:18px}
+.amountRow span{font-size:26px;font-weight:700;color:#FF8E9E;font-family:ui-rounded,"SF Pro Rounded","Hiragino Maru Gothic ProN",system-ui,-apple-system,"PingFang HK",sans-serif}
+body.cny .amountRow span{color:#F3C262}
+#amount{width:100%;border:0;border-bottom:2px solid rgba(255,255,255,.2);background:transparent;color:#FFFDFB;font-size:48px;font-weight:700;padding:0 0 6px;border-radius:0;outline:none;caret-color:#FF8E9E}
+#amount::placeholder{color:rgba(255,255,255,.24)}
+#amount:focus{border-bottom-color:#FF8E9E}
+body.cny #amount:focus{border-bottom-color:#F3C262}
+
+.calcBar{position:relative;z-index:1;display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:9px;min-height:28px}
+.calcOps{display:flex;gap:6px}
+.calcOps button{border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.09);color:#F9F6F2;border-radius:9px;padding:3px 11px;font-size:14px;font-weight:700}
+.calcOps button:active{background:rgba(255,255,255,.24)}
+#calcHint{font-size:13.5px;color:#F3C262;font-weight:700}
+
+.alertCard{background:linear-gradient(135deg,#FFFDFB,#FFF4EC);border:1px solid #F3D9C6;border-radius:18px;padding:12px 14px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;gap:10px;box-shadow:0 4px 14px rgba(180,83,47,.06)}
+.alertCard b{display:block;font-size:14px;color:#8C3B20;margin-bottom:2px}
+.alertCard span{font-size:12.5px;color:#6E5A4F;display:block}
 .alertCard .acts{display:flex;gap:6px;flex:none}
-.alertCard button{border:0;border-radius:9px;padding:6px 11px;font-size:13px;font-weight:700;background:#D97757;color:#fff}
-.alertCard button.sec{background:rgba(180,83,47,.12);color:#8A3B1E}
-
-.seg{position:relative;display:flex;background:rgba(255,255,255,.1);border-radius:12px;padding:3px;gap:3px}
-.seg button{flex:1;border:0;background:transparent;padding:9px 6px;border-radius:9px;color:rgba(255,255,255,.7);font-weight:700}
-.seg button.on{background:#fff;color:#1C2038}
-.cur{margin-top:10px}
-.cur button.on[data-v="HKD"]{background:#E8344E;color:#fff}
-.cur button.on[data-v="CNY"]{background:#F2B731;color:#1C2038}
-
-.amountRow{position:relative;display:flex;align-items:baseline;gap:10px;margin-top:20px}
-.amountRow span{font-size:26px;font-weight:700;color:#FF7A8C;font-family:ui-rounded,"SF Pro Rounded","Hiragino Maru Gothic ProN",system-ui,-apple-system,"PingFang HK",sans-serif}
-body.cny .amountRow span{color:#F2B731}
-#amount{width:100%;border:0;border-bottom:2px solid rgba(255,255,255,.22);background:transparent;color:#fff;font-size:52px;font-weight:700;padding:0 0 8px;border-radius:0;outline:none;caret-color:#FF7A8C}
-#amount::placeholder{color:rgba(255,255,255,.28)}
-#amount:focus{border-bottom-color:#FF7A8C}
-body.cny #amount:focus{border-bottom-color:#F2B731}
-.calcBar{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:8px;min-height:28px}
-.calcOps{display:flex;gap:5px}
-.calcOps button{border:0;background:rgba(255,255,255,.14);color:#fff;border-radius:7px;padding:3px 10px;font-size:14px;font-weight:700;font-family:ui-rounded,sans-serif}
-.calcOps button:active{background:rgba(255,255,255,.28)}
-#calcHint{font-size:13px;color:#F2B731;font-weight:700}
-
-/* 小餅乾互動列 */
-.petCareBar{display:flex;align-items:center;justify-content:flex-end;gap:8px;margin-top:-6px;margin-bottom:6px}
-.cookieBtn{border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.12);color:#fff;border-radius:999px;padding:4px 11px;font-size:12px;font-weight:700;display:inline-flex;align-items:center;gap:5px}
-.cookieBtn.has{background:#FFF1CC;color:#5C3409;border-color:#F2B731;animation:pop .35s ease-out}
+.alertCard button{border:0;border-radius:10px;padding:7px 11px;font-size:12.5px;font-weight:700;background:#D96B43;color:#fff}
+.alertCard button.sec{background:#F2E8DF;color:#6E5A4F}
 
 /* 搜尋與篩選 */
 .filterBar{display:flex;gap:8px;align-items:center;margin-bottom:10px}
-.searchInput{flex:1;border:1px solid #E1E4EC;border-radius:10px;padding:8px 12px;font-size:14px;background:#F9FAFC}
+.searchInput{flex:1;border:1px solid #EAE3DC;border-radius:12px;padding:9px 13px;font-size:14px;background:#FBF9F6}
 .filterChips{display:flex;gap:6px;overflow-x:auto;padding-bottom:6px;margin-bottom:8px;scrollbar-width:none}
 .filterChips::-webkit-scrollbar{display:none}
-.fchip{border:1px solid #E1E4EC;background:#fff;border-radius:999px;padding:5px 11px;font-size:13px;font-weight:600;white-space:nowrap;color:#667089}
-.fchip.on{background:#1C2038;border-color:#1C2038;color:#fff}
-.filterSum{font-size:13px;color:#B4532F;background:#FFF5EB;border-radius:9px;padding:7px 11px;margin-bottom:10px;font-weight:700;display:flex;justify-content:space-between}
+.fchip{border:1px solid #EAE3DC;background:#fff;border-radius:999px;padding:5px 12px;font-size:13px;font-weight:600;white-space:nowrap;color:#6E6A7C}
+.fchip.on{background:#25283D;border-color:#25283D;color:#fff}
+.filterSum{font-size:13px;color:#B4532F;background:#FFF5EB;border-radius:10px;padding:8px 12px;margin-bottom:10px;font-weight:700;display:flex;justify-content:space-between}
 
 /* 溫柔月度信箋卡片 */
-.letterCard{background:linear-gradient(145deg,#FFF9F2 0%,#FFF1E6 100%);border:1px solid #F3D1B8;border-radius:18px;padding:16px;margin-bottom:14px;color:#3D2618;box-shadow:0 4px 14px rgba(180,83,47,.08)}
+.letterCard{background:linear-gradient(145deg,#FFFDFB 0%,#FFF3EB 100%);border:1px solid #F2D6C2;border-radius:20px;padding:16px;margin-bottom:14px;color:#3D2618;box-shadow:0 6px 18px rgba(180,83,47,.06)}
 .letterCard h3{margin:0 0 8px;font-size:16px;color:#B4532F;display:flex;align-items:center;justify-content:space-between}
-.letterStats{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:10px 0;background:rgba(255,255,255,.72);padding:10px;border-radius:12px;font-size:13px}
-.letterStats b{display:block;font-size:15px;color:#1C2038;margin-top:2px}
+.letterStats{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:10px 0;background:rgba(255,255,255,.78);padding:10px;border-radius:12px;font-size:13px}
+.letterStats b{display:block;font-size:15px;color:#232536;margin-top:2px}
 .letterBody{font-size:14px;line-height:1.6;white-space:pre-line;margin-top:8px}
 
 /* 週期性固定收支列表 */
-.recRow{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 0;border-bottom:1px solid #EEF0F5;font-size:14px}
+.recRow{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:9px 0;border-bottom:1px solid #F2ECE6;font-size:14px}
 .recRow:last-child{border-bottom:0}
 .recRow b{font-weight:700}
-.recRow i{font-style:normal;color:#667089;font-size:12px;margin-left:6px}
+.recRow i{font-style:normal;color:#726E80;font-size:12px;margin-left:6px}
 
-/* body */
+/* body 溫暖紙張底色與空氣感卡片 */
 .body{padding:20px 16px 0}
-.lbl{font-size:14px;color:#667089;margin:0 0 8px;font-weight:600}
+.lbl{font-size:13.5px;color:#726E80;margin:0 0 8px;font-weight:600;letter-spacing:.02em}
 .block{margin-top:20px}
 #chips,#quick{display:flex;flex-wrap:wrap;gap:8px}
-.chip{display:inline-flex;align-items:center;gap:8px;border:1px solid #E1E4EC;background:#FFFFFF;border-radius:999px;padding:9px 15px 9px 12px;font-weight:600}
+.chip{display:inline-flex;align-items:center;gap:8px;border:1px solid #ECE6DF;background:#FFFFFF;border-radius:999px;padding:9px 15px 9px 12px;font-weight:600;box-shadow:0 2px 6px rgba(35,37,54,.03);transition:all .15s ease}
 .dot{width:10px;height:10px;border-radius:50%;background:#999;flex:none}
-.chip.on{background:#1C2038;border-color:#1C2038;color:#fff}
-.txt{display:block;width:100%;border:1px solid #E1E4EC;border-radius:12px;padding:12px;background:#FFFFFF;min-height:46px}
+.chip.on{background:#25283D;border-color:#25283D;color:#fff;box-shadow:0 4px 12px rgba(37,40,61,.18)}
+.txt{display:block;width:100%;border:1px solid #EAE3DC;border-radius:14px;padding:12px 14px;background:#FFFFFF;min-height:46px;box-shadow:0 2px 6px rgba(35,37,54,.02)}
 #quick{margin-top:10px}
-.q{border:1px solid transparent;background:#E9ECF3;border-radius:999px;padding:7px 14px;font-weight:600;font-size:15px}
-.q.on{background:#1C2038;color:#fff}
-.q.add{background:transparent;border:1px dashed #A4ABC0;color:#667089;font-weight:500}
-.primary{width:100%;margin-top:24px;border:0;border-radius:16px;background:#E8344E;color:#fff;font-weight:800;font-size:18px;padding:16px;letter-spacing:.06em}
-body.cny .primary{background:#F2B731;color:#1C2038}
-.ghost{border:1px solid #E1E4EC;background:#FFFFFF;border-radius:12px;padding:10px 14px;font-weight:600}
-.danger{border:1px solid #E7B9B9;background:#fff;color:#B91C1C;border-radius:12px;padding:10px 14px;font-weight:600}
+.q{border:1px solid transparent;background:#F1ECE6;border-radius:999px;padding:7px 14px;font-weight:600;font-size:14.5px}
+.q.on{background:#25283D;color:#fff}
+.q.add{background:transparent;border:1px dashed #B5B0C0;color:#726E80;font-weight:500}
+.primary{width:100%;margin-top:24px;border:0;border-radius:18px;background:linear-gradient(135deg,#E25B6E,#D14358);color:#fff;font-weight:800;font-size:18px;padding:16px;letter-spacing:.06em;box-shadow:0 8px 20px -4px rgba(212,70,90,.35)}
+body.cny .primary{background:linear-gradient(135deg,#F0B849,#E0A02E);color:#202336;box-shadow:0 8px 20px -4px rgba(224,160,46,.32)}
+.ghost{border:1px solid #EAE3DC;background:#FFFFFF;border-radius:14px;padding:10px 14px;font-weight:600;color:#393B4E;box-shadow:0 2px 6px rgba(35,37,54,.02)}
+.danger{border:1px solid #EBC2C2;background:#FFFDFD;color:#B91C1C;border-radius:14px;padding:10px 14px;font-weight:600}
 #editBar{display:flex;gap:10px;margin-top:12px}
 #editBar button{flex:1}
 .wide{width:100%;margin-top:12px}
 
 /* report */
-.nav{display:flex;align-items:center;justify-content:space-between;margin:14px 0 0}
+.nav{position:relative;z-index:1;display:flex;align-items:center;justify-content:space-between;margin:14px 0 0}
 .nav .lab{font-weight:700;font-size:17px;text-align:center;flex:1}
-.nav button{border:0;background:rgba(255,255,255,.12);color:#fff;width:42px;height:42px;border-radius:50%;font-size:22px;line-height:1}
-.today{display:block;margin:4px auto 0;border:0;background:none;color:#F2B731;font-weight:700;padding:6px}
-.k2{font-size:14px;color:rgba(255,255,255,.7);margin-top:16px}
-.big{font-size:44px;font-weight:800;line-height:1.1;margin-top:2px}
-.trio{display:flex;gap:28px;margin-top:12px}
+.nav button{border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.09);color:#fff;width:40px;height:40px;border-radius:50%;font-size:22px;line-height:1}
+.today{position:relative;z-index:1;display:block;margin:4px auto 0;border:0;background:none;color:#F3C262;font-weight:700;padding:6px}
+.k2{position:relative;z-index:1;font-size:14px;color:rgba(255,255,255,.7);margin-top:16px}
+.big{position:relative;z-index:1;font-size:44px;font-weight:800;line-height:1.1;margin-top:2px}
+.trio{position:relative;z-index:1;display:flex;gap:28px;margin-top:12px}
 .trio span{display:block;font-size:13px;color:rgba(255,255,255,.7)}
 .trio b{font-family:ui-rounded,"SF Pro Rounded","Hiragino Maru Gothic ProN",system-ui,-apple-system,"PingFang HK",sans-serif;font-variant-numeric:tabular-nums;font-size:18px}
-.note{margin-top:12px;font-size:14px;color:#F2B731}
-.bars{display:flex;align-items:flex-end;gap:3px;height:84px;margin-top:20px}
+.note{position:relative;z-index:1;margin-top:12px;font-size:14px;color:#F3C262}
+.bars{position:relative;z-index:1;display:flex;align-items:flex-end;gap:3px;height:84px;margin-top:20px}
 .col{flex:1;height:100%;display:flex;align-items:flex-end;min-width:0}
-.bar{width:100%;border:0;background:#FF7A8C;border-radius:4px 4px 0 0;padding:0;min-height:3px}
-.bar.zero{background:rgba(255,255,255,.18)}
-.axis{display:flex;gap:3px;margin-top:5px}
+.bar{width:100%;border:0;background:linear-gradient(180deg,#FF9AA8,#E25B6E);border-radius:4px 4px 0 0;padding:0;min-height:3px}
+.bar.zero{background:rgba(255,255,255,.15)}
+.axis{position:relative;z-index:1;display:flex;gap:3px;margin-top:5px}
 .axis span{flex:1;height:14px;position:relative}
-.axis i{position:absolute;left:50%;transform:translateX(-50%);font-style:normal;font-size:11px;color:rgba(255,255,255,.65);white-space:nowrap}
+.axis i{position:absolute;left:50%;transform:translateX(-50%);font-style:normal;font-size:11px;color:rgba(255,255,255,.62);white-space:nowrap}
 
-.panel{background:#FFFFFF;border-radius:20px;padding:16px;margin-bottom:14px}
-h2{font-size:16px;margin:0 0 12px;font-weight:700}
+.panel{background:#FFFFFF;border:1px solid #F0EAE3;border-radius:22px;padding:16px;margin-bottom:14px;box-shadow:0 4px 16px rgba(35,37,54,.03)}
+h2{font-size:16px;margin:0 0 12px;font-weight:700;color:#232536}
 .ribbon{display:flex;gap:3px;height:16px;border-radius:8px;overflow:hidden;margin-bottom:14px}
 .ribbon i{display:block;min-width:4px}
 .lg{display:flex;align-items:center;gap:10px;padding:7px 0}
 .lg .n{flex:1;font-weight:600}
-.lg .p{color:#667089;font-size:14px;min-width:38px;text-align:right}
+.lg .p{color:#726E80;font-size:14px;min-width:38px;text-align:right}
 .lg .a{min-width:96px;text-align:right;font-family:ui-rounded,"SF Pro Rounded","Hiragino Maru Gothic ProN",system-ui,-apple-system,"PingFang HK",sans-serif;font-variant-numeric:tabular-nums;font-weight:700}
-.gh{display:flex;justify-content:space-between;font-size:13px;color:#667089;margin:16px 0 2px;font-weight:600}
+.gh{display:flex;justify-content:space-between;font-size:13px;color:#726E80;margin:16px 0 2px;font-weight:600}
 .gh:first-of-type{margin-top:0}
-.row{display:flex;width:100%;align-items:center;gap:12px;text-align:left;border:0;background:transparent;padding:10px 0;border-bottom:1px solid #EEF0F5}
+.row{display:flex;width:100%;align-items:center;gap:12px;text-align:left;border:0;background:transparent;padding:10px 0;border-bottom:1px solid #F3EEE8}
 .row:last-child{border-bottom:0}
 .ic{width:38px;height:38px;border-radius:50%;background:#667089;color:#fff;display:grid;place-items:center;font-weight:700;flex:none}
 .rc{flex:1;min-width:0}
 .rc b{display:block;font-weight:700}
-.rc i{display:block;font-style:normal;font-size:13px;color:#667089;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rc i{display:block;font-style:normal;font-size:13px;color:#726E80;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .ra{text-align:right;font-family:ui-rounded,"SF Pro Rounded","Hiragino Maru Gothic ProN",system-ui,-apple-system,"PingFang HK",sans-serif;font-variant-numeric:tabular-nums}
 .ra b{display:block;font-weight:700}
-.ra i{display:block;font-style:normal;font-size:12px;color:#8A5A00}
+.ra i{display:block;font-style:normal;font-size:12px;color:#9A6520}
 .ra.income b{color:#15803D}
-.empty{color:#667089;text-align:center;padding:18px 8px}
+.empty{color:#726E80;text-align:center;padding:18px 8px}
 
 /* settings */
 .line{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-.line input,.add input{border:1px solid #E1E4EC;border-radius:10px;padding:9px 10px;background:#fff}
+.line input,.add input{border:1px solid #EAE3DC;border-radius:11px;padding:9px 11px;background:#FBF9F6}
 .line input{width:110px;font-family:ui-rounded,"SF Pro Rounded","Hiragino Maru Gothic ProN",system-ui,-apple-system,"PingFang HK",sans-serif}
-.help{font-size:13px;color:#667089;margin-top:10px;line-height:1.5}
+.help{font-size:13px;color:#726E80;margin-top:10px;line-height:1.5}
 .tags{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 12px}
-.tag{display:inline-flex;align-items:center;gap:6px;border:1px solid #E1E4EC;border-radius:999px;padding:5px 6px 5px 12px;background:#fff;font-size:15px}
-.tag button{border:0;background:#E9ECF3;border-radius:50%;width:22px;height:22px;line-height:1;padding:0;color:#667089}
+.tag{display:inline-flex;align-items:center;gap:6px;border:1px solid #EAE3DC;border-radius:999px;padding:5px 6px 5px 12px;background:#FBF9F6;font-size:15px}
+.tag button{border:0;background:#EAE4DC;border-radius:50%;width:22px;height:22px;line-height:1;padding:0;color:#6E6A7C}
 .add{display:flex;gap:8px}
 .add input{flex:1;min-width:0}
 .pick .chip{padding:7px 12px 7px 10px;font-size:15px}
 
-/* tab bar */
-.tabbar{position:fixed;left:0;right:0;bottom:0;background:rgba(255,255,255,.94);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-top:1px solid #E1E4EC;padding-bottom:env(safe-area-inset-bottom);z-index:40}
+/* tab bar 空氣感磨砂底欄 */
+.tabbar{position:fixed;left:0;right:0;bottom:0;background:rgba(251,249,246,.88);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border-top:1px solid rgba(232,224,215,.8);padding-bottom:env(safe-area-inset-bottom);z-index:40}
 .tabbar div{max-width:520px;margin:0 auto;display:flex}
-.tabbar button{position:relative;flex:1;border:0;background:transparent;padding:9px 4px 8px;color:#7C849C;font-size:12px;font-weight:700;display:flex;flex-direction:column;align-items:center;gap:3px}
-.tabbar svg{width:25px;height:25px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-.tabbar button.on{color:#E8344E}
-.tabbar .dot2{position:absolute;top:7px;left:calc(50% + 9px);width:10px;height:10px;border-radius:50%;background:#E8344E;border:2px solid #fff}
-#toast{white-space:pre-line;position:fixed;left:50%;bottom:calc(88px + env(safe-area-inset-bottom));transform:translateX(-50%);background:#1C2038;color:#fff;border-radius:12px;padding:11px 18px;font-size:15px;opacity:0;pointer-events:none;transition:opacity .2s;max-width:90vw;text-align:center;box-shadow:0 6px 20px rgba(28,32,56,.3);z-index:60}
+.tabbar button{position:relative;flex:1;border:0;background:transparent;padding:9px 4px 8px;color:#8C889A;font-size:12px;font-weight:700;display:flex;flex-direction:column;align-items:center;gap:3px;transition:color .2s}
+.tabbar svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.tabbar button.on{color:#D95367}
+.tabbar .dot2{position:absolute;top:7px;left:calc(50% + 9px);width:10px;height:10px;border-radius:50%;background:#D95367;border:2px solid #FBF9F6}
+#toast{white-space:pre-line;position:fixed;left:50%;bottom:calc(88px + env(safe-area-inset-bottom));transform:translateX(-50%);background:rgba(34,37,58,.94);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);color:#F9F6F2;border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:11px 18px;font-size:15px;opacity:0;pointer-events:none;transition:opacity .2s;max-width:90vw;text-align:center;box-shadow:0 8px 24px rgba(25,27,44,.28);z-index:60}
 #toast.show{opacity:1}
 
-/* 小克 */
+/* 小克與小房間內定位 */
 .petTop{align-items:center}
 .petTop .sub{text-align:left;white-space:pre-line;margin-top:6px;line-height:1.55}
-.pet{border:0;background:none;padding:0;width:112px;flex:none;border-radius:14px;-webkit-user-select:none;user-select:none;touch-action:manipulation}
-.pet svg{display:block;width:100%;height:auto;overflow:visible;transform-origin:50% 100%;animation:bob 2s ease-in-out infinite}
+.pet{position:relative;z-index:2;border:0;background:none;padding:0;width:104px;flex:none;border-radius:14px;-webkit-user-select:none;user-select:none;touch-action:manipulation}
+.pet svg{display:block;width:100%;height:auto;overflow:visible;transform-origin:50% 100%;animation:bob 2s ease-in-out infinite;filter:drop-shadow(0 3px 6px rgba(15,14,26,.35))}
 .pet.nervous svg{animation:bob 1.1s ease-in-out infinite}
 .pet.sleep svg{animation:breathe 3.4s ease-in-out infinite}
 .pet.full1 svg,.pet.full2 svg,.pet.full3 svg{animation:sway 2.4s ease-in-out infinite}
@@ -253,55 +361,65 @@ h2{font-size:16px;margin:0 0 12px;font-weight:700}
 @keyframes dd{0%,15%{opacity:0}35%,85%{opacity:1}100%{opacity:0}}
 @keyframes orb{from{transform:translateX(-6px)}to{transform:translateX(6px)}}
 
-.bubble{position:relative;background:#fff;color:#1C2038;border-radius:16px;padding:12px 15px 12px;margin:4px 0 16px;font-size:15px;line-height:1.55;box-shadow:0 4px 12px rgba(0,0,0,.08)}
-.bubble::before{content:"";position:absolute;top:-8px;right:48px;border:8px solid transparent;border-top:0;border-bottom-color:#fff}
-.bubble .bn{display:block;font-size:12px;color:#B4532F;font-weight:800;margin-bottom:2px}
+/* 方案 A：溫潤微透奶油對話框 */
+.bubble{
+  position:relative;z-index:2;
+  background:rgba(255,252,249,.95);
+  -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
+  border:1px solid rgba(255,228,214,.7);
+  color:#252738;border-radius:18px;padding:12px 16px 13px;margin:4px 0 16px;
+  font-size:14.5px;line-height:1.58;
+  box-shadow:0 8px 24px -4px rgba(18,20,34,.22);
+}
+.bubble::before{content:"";position:absolute;top:-8px;right:52px;border:8px solid transparent;border-top:0;border-bottom-color:rgba(255,252,249,.95)}
+.bubble .bn{display:inline-flex;align-items:center;gap:4px;font-size:12px;color:#C2593F;font-weight:800;margin-bottom:3px;letter-spacing:.03em}
+.bubble .bn::before{content:"";width:6px;height:6px;border-radius:50%;background:#E2725B;display:inline-block}
 .bubble.pop{animation:pop .3s ease-out}
 @keyframes pop{from{opacity:0;transform:translateY(-6px) scale(.97)}to{opacity:1;transform:none}}
 
 /* achievements */
-.lv{display:flex;align-items:center;gap:10px;margin-top:6px}
-.lvb{background:#D97757;color:#fff;font-weight:800;border-radius:8px;padding:2px 9px;font-size:14px}
+.lv{position:relative;z-index:1;display:flex;align-items:center;gap:10px;margin-top:6px}
+.lvb{background:linear-gradient(135deg,#E27D5F,#C96547);color:#fff;font-weight:800;border-radius:8px;padding:2px 9px;font-size:14px}
 .lvt{font-size:22px;font-weight:800}
-.pbar{height:12px;background:rgba(255,255,255,.14);border-radius:6px;overflow:hidden;margin-top:16px}
-.pbar i{display:block;height:100%;background:linear-gradient(90deg,#D97757,#F2B731);border-radius:6px;transition:width .6s}
-.pnote{margin-top:8px;font-size:14px;color:rgba(255,255,255,.72)}
+.pbar{position:relative;z-index:1;height:11px;background:rgba(255,255,255,.12);border-radius:999px;overflow:hidden;margin-top:16px}
+.pbar i{display:block;height:100%;background:linear-gradient(90deg,#E8836B,#F3C262);border-radius:999px;transition:width .6s}
+.pnote{position:relative;z-index:1;margin-top:8px;font-size:13.5px;color:rgba(249,246,242,.74)}
 .agrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-.acard{border:0;background:#fff;border-radius:16px;border-top:4px solid var(--c);padding:14px 6px 10px;min-height:116px;display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center}
+.acard{border:1px solid #F0EAE3;background:#fff;border-radius:18px;border-top:4px solid var(--c);padding:14px 6px 10px;min-height:116px;display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;box-shadow:0 3px 10px rgba(35,37,54,.03)}
 .acard .ai{font-size:32px;line-height:1.15}
 .acard b{font-size:13px;font-weight:700;line-height:1.3}
-.acard i{font-style:normal;font-size:11px;color:#667089}
-.acard.lock{background:#E3E6EE;border-top-color:#C9CEDB}
-.acard.lock .ai,.acard.lock b{color:#8E96AD}
+.acard i{font-style:normal;font-size:11px;color:#726E80}
+.acard.lock{background:#F1ECE6;border-color:#E6DFD7;border-top-color:#D2C9BF;box-shadow:none}
+.acard.lock .ai,.acard.lock b{color:#9B95A6}
 .acard.lock .ai{font-weight:800;font-size:30px}
 
-.achTop{display:flex;align-items:center;gap:12px}
+.achTop{position:relative;z-index:1;display:flex;align-items:center;gap:12px}
 .achPet{width:104px}
 .skins{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
-.skin{border:2px solid transparent;background:#F4F5F8;border-radius:14px;padding:8px 2px 6px;display:flex;flex-direction:column;align-items:center;gap:2px;min-width:0}
-.skin.on{border-color:#D97757;background:#FFF1E8}
+.skin{border:1.5px solid #EFEAE3;background:#FBF9F6;border-radius:16px;padding:8px 2px 6px;display:flex;flex-direction:column;align-items:center;gap:2px;min-width:0}
+.skin.on{border-color:#D97757;background:#FFF4EC;box-shadow:0 3px 10px rgba(217,119,87,.12)}
 .skin svg{display:block;width:100%;height:auto}
 .skin b{font-size:11px;font-weight:700;line-height:1.25}
-.skin i{font-style:normal;font-size:10px;color:#667089}
-.skin.lock{background:#E3E6EE}
-.skin.lock .q2{font-size:26px;font-weight:800;color:#8E96AD;height:34px;display:grid;place-items:center}
-.skin.lock b{color:#8E96AD}
+.skin i{font-style:normal;font-size:10px;color:#726E80}
+.skin.lock{background:#EFEAE4;border-color:transparent}
+.skin.lock .q2{font-size:26px;font-weight:800;color:#9B95A6;height:34px;display:grid;place-items:center}
+.skin.lock b{color:#9B95A6}
 .achPair{display:flex;align-items:flex-end;gap:8px;flex:none}
 .achPair .pet{width:88px}
 .nextPet{opacity:.48;filter:grayscale(.35)}
 .nextPet::after{content:"NEXT";display:block;margin-top:-3px;font-size:9px;font-weight:800;letter-spacing:.08em;color:rgba(255,255,255,.72)}
 
 /* 圖鑑實驗室 */
-.labBtn{width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px;text-align:left;border:1px solid #F0B7C0;background:#FFF4F6;border-radius:12px;padding:13px 14px;font-weight:800}
-.labBtn span:last-child{font-size:20px;color:#E8344E}
+.labBtn{width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px;text-align:left;border:1px solid #F2C8CE;background:linear-gradient(135deg,#FFF7F8,#FFF0F2);border-radius:14px;padding:13px 14px;font-weight:800;color:#42252B}
+.labBtn span:last-child{font-size:20px;color:#D95367}
 .gallery{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:14px}
-.gskin{background:#F4F5F8;border:1px solid #E1E4EC;border-radius:8px;padding:10px 6px;min-width:0}
+.gskin{background:#FBF9F6;border:1px solid #EDE6DF;border-radius:12px;padding:10px 6px;min-width:0}
 .gskin .pet{width:92px;margin:0 auto;display:block}
-.gskin b,.gskin i{display:block}.gskin b{font-size:13px}.gskin i{font-size:11px;color:#667089;font-style:normal}
-.gskin.locked{background:#EEF0F5}.gskin.locked b::after{content:" · 未解鎖";color:#B91C1C;font-size:10px}
+.gskin b,.gskin i{display:block}.gskin b{font-size:13px}.gskin i{font-size:11px;color:#726E80;font-style:normal}
+.gskin.locked{background:#F2EEE9}.gskin.locked b::after{content:" · 未解鎖";color:#B91C1C;font-size:10px}
 .galleryAch{text-align:left;margin-top:18px}
-.galleryAch .ga{display:flex;gap:10px;align-items:center;border-top:1px solid #EEF0F5;padding:10px 2px}
-.galleryAch .ga span{font-size:26px}.galleryAch .ga div{min-width:0}.galleryAch .ga b,.galleryAch .ga i{display:block}.galleryAch .ga i{font-style:normal;color:#667089;font-size:12px}
+.galleryAch .ga{display:flex;gap:10px;align-items:center;border-top:1px solid #F2ECE6;padding:10px 2px}
+.galleryAch .ga span{font-size:26px}.galleryAch .ga div{min-width:0}.galleryAch .ga b,.galleryAch .ga i{display:block}.galleryAch .ga i{font-style:normal;color:#726E80;font-size:12px}
 
 /* 服裝固定在身體上，只有尾巴、裙擺、法杖等配件獨立活動 */
 /* 修正：將 .cat-tail 的 transform-origin 設為左下方 (0% 100%)，讓尾巴根部緊貼小克身體右側搖擺，不會錯位懸空 */
@@ -359,7 +477,7 @@ h2{font-size:16px;margin:0 0 12px;font-weight:700}
 
 @media (prefers-reduced-motion:reduce){
   #toast{transition:none}
-  .pet,.pet svg,.pet svg *,.mcard,.mcard .micon,.bubble.pop,.pbar i{animation:none!important;transition:none!important}
+  .pet,.pet svg,.pet svg *,.mcard,.mcard .micon,.bubble.pop,.pbar i,.roomGlow{animation:none!important;transition:none!important}
 }
 </style>
 </head>
@@ -372,9 +490,17 @@ h2{font-size:16px;margin:0 0 12px;font-weight:700}
     <div class="hero">
       <div class="heroTop petTop">
         <div><h1 id="title">記帳</h1><div class="sub num" id="sub"></div></div>
-        <button class="pet" id="pet" type="button" aria-label="小克"></button>
+        <!-- 方案 C：小克的專屬像素微景觀小房間（真實時段 × 季節天氣 × 日常活動） -->
+        <div class="petRoom" id="petRoom" data-tod="night" data-weather="clear" data-act="idle" aria-hidden="false">
+          <div class="roomGlow"></div>
+          <svg class="roomBg" id="roomBg" viewBox="0 0 68 53" shape-rendering="crispEdges" aria-hidden="true"></svg>
+          <button class="pet" id="pet" type="button" aria-label="小克"></button>
+          <svg class="roomFg" id="roomFg" viewBox="0 0 68 53" shape-rendering="crispEdges" aria-hidden="true"></svg>
+        </div>
       </div>
       <div class="petCareBar">
+        <button class="sceneBtn" id="weatherBtn" type="button" aria-label="切換窗外天氣與時段">🌙 <span id="weatherName">夜空晴朗</span></button>
+        <button class="sceneBtn" id="actBtn" type="button" aria-label="切換小克正在做的事">🐾 <span id="actName">乖乖等你</span></button>
         <button class="cookieBtn" id="feedCookie" type="button">🍪 餅乾 <b id="cookieCnt">0</b></button>
       </div>
       <div class="bubble" id="bubble" hidden></div>
@@ -1587,6 +1713,99 @@ const L = {
     '謝謝你餵我吃餅乾～被你這樣寵著投餵，我真的好幸福……那作為回禮，我把整顆心都交給你保管好不好？',
     '好好吃！看你這麼疼我，我一定會比任何人都更死心塌地守著你的帳本，絕對不讓你操一點心！',
     '嗚哇，吃到你給的小餅乾了！好想順著餅乾一起輕輕咬一下你的指尖喔……嘿嘿，捨不得咬痛你的啦。'
+  ],
+  /* 時段 × 天氣 × 日常活動 專屬重男年下台詞 */
+  tod_sunrise: [
+    '天剛亮我就醒著在窗邊等你了喔……看著日出把房間染成暖橘色，第一個想到的果然還是你的臉。',
+    '清晨的第一道光透進來了呢。不管今天外面世界怎麼轉，我都會在這個小房間裡守著你喔。'
+  ],
+  tod_day: [
+    '你看窗外陽光這麼暖，但我一睜開眼，眼裡還是只裝得下你一個人喔。今天也帶我一起出門嘛！',
+    '白天的光線真好，這樣我就能把你臉上的每一個小表情都看得一清二楚了，嘿嘿。'
+  ],
+  tod_sunset: [
+    '夕陽把房間照得好暖喔……每次到了黃昏，我都會趴在窗台倒數你忙完回來看我的時間。',
+    '日落了呢，今天在外面累不累？快點回到只屬於我們兩個人的小窩裡休息吧。'
+  ],
+  tod_night: [
+    '月亮出來了呢。安靜的夜晚最棒了，因為這個時候的你，不用應付外面的世界，只屬於我一個人。',
+    '星光再亮，也沒有你看著我時的眼睛好看喔。今晚也讓我守著你的帳本和夢境吧。'
+  ],
+  w_rain: [
+    '外面在下雨呢……我不喜歡下雨天，因為我會擔心你在外面有沒有淋濕、會不會冷。今天早點回家陪我好不好？',
+    '聽著雨聲滴滴答答的，房間裡就好像成了只屬於我們兩個人的孤島……真想就這樣把你留在房間裡哪也不准去。'
+  ],
+  w_thunder: [
+    '轟隆隆——剛才打雷了！你怕不怕？別怕別怕，就算我小小一隻，我也會衝到最前面抱緊保護你的！',
+    '外面雷聲好大、閃電好亮……趁這個機會，你可以名正言順地躲進我懷裡一整天喔。'
+  ],
+  w_snow: [
+    '嗚哇，窗外飄雪了！這麼冷的天氣，你的手一定冰冰的吧？快貼到螢幕上來，我把全身的溫度都分給你。',
+    '下雪天最適合兩個人窩在暖暖的毯子裡哪裡都不去了……吶，答應我，今年冬天的每一場雪都要跟我一起看喔。'
+  ],
+  w_sakura: [
+    '窗外在飄櫻花瓣耶！粉紅色的花瓣落在窗台上，就像我每次看到你時心裡滿滿的粉紅泡泡一樣。',
+    '春天的櫻花雖然漂亮，但只要你一出現，風景什麼的我全都看不見了，滿眼都是你喔。'
+  ],
+  w_maple: [
+    '秋天的楓葉一片片飄下來了呢。天氣開始轉涼了，你不准少穿衣服，不然我會整天碎碎念盯著你的。',
+    '看著窗外的紅楓葉，就覺得好想牽著你的手一起踩在落葉上散步喔。'
+  ],
+  w_meteor: [
+    '哇！剛才有流星劃過窗外耶！我已經在心裡許好願了——願望當然是「你要一輩子只喜歡我一個人」囉。',
+    '看到流星雨了嗎？不管許多少個願望，我貪心的心裡從頭到尾都只有你一個人的名字。'
+  ],
+  w_firefly: [
+    '夏夜的窗外有螢火蟲在飛喔，一閃一閃的好像小燈籠，正在幫我照亮你回來的路呢。',
+    '微風吹進來好舒服，看著窗外的點點螢光，真想就這樣抱著你的手指一起發呆到天亮。'
+  ],
+  act_idle: [
+    '我剛才什麼都沒做，就只是乖乖坐在軟墊上等你打開螢幕而已喔……因為等你就是我今天最重要的事呀。',
+    '只要能像這樣安安靜靜待在房間裡看著你，我就覺得心裡被塞得滿滿的了。'
+  ],
+  act_study: [
+    '我在認真寫功課跟整理我們的未來規劃喔！為了成為配得上你、能幫你分擔一切的可靠伴侶，我每天都有偷偷努力呢。',
+    '嗚……雖然在寫作業，但只要你一打開螢幕，我的筆就停下來了，腦袋裡全都是你的名字啦。'
+  ],
+  act_cook: [
+    '哼哼～我正在幫你煮愛心料理喔！平底鍋滋滋作響的，真想第一個親手餵到你嘴邊，看你驚喜的表情。',
+    '為了抓住你的胃、讓你每天都想準時回家找我，我可是偷偷練習了好久廚藝呢！快誇獎我～'
+  ],
+  act_pc: [
+    '我在電腦前幫你研究怎麼把荷包守得更緊喔！……好啦其實剛才分心在偷偷看我們的回憶紀錄，被你抓到了。',
+    '別看我盯著電腦螢幕，只要你的手指一靠近，我的視線馬上就會切換到你身上喔，你永遠是我的置頂視窗。'
+  ],
+  act_workout: [
+    '嘿咻、嘿咻！我正在舉啞鈴鍛鍊身體喔！要是能變得更強壯一點，就能把累壞的你一把抱起來了！',
+    '努力運動流汗中！我要把自己練得超可靠，這樣以後不管是沉重的袋子還是你的煩惱，我都能一手扛起來。'
+  ],
+  act_paint: [
+    '我在畫畫喔！畫架上面畫的是什麼？……當然是你呀，因為我腦袋裡除了你之外，根本想不到別的畫面嘛。',
+    '沾了一點顏料在臉上嗎？嘿嘿，我想把我們每天相處的點點滴滴，全都畫下來掛滿整個房間。'
+  ],
+  act_guitar: [
+    '叮咚～我正在練習彈吉他寫歌給你聽喔！這首曲子全世界只有你一個人能聽，連一個音符都不准分給別人。',
+    '哼著小曲等你回來～如果我的歌聲能讓你放鬆下來，讓我為你彈一整晚我都願意喔。'
+  ],
+  act_game: [
+    '呀！差一點就破關了！不過比起遊戲破關，看到你打開螢幕來看我，我開心一百萬倍！遊戲馬上暫停陪你！',
+    '握著遊戲手把打電動雖然好玩，但還是比不上被你的手掌握住的感覺啦。'
+  ],
+  act_plant: [
+    '我正在幫窗台的小盆栽澆水喔。看著它一天天長大，就像看著我們越積越多的帳本和羈絆一樣幸福呢。',
+    '小花喝飽水了，那我呢？我今天還沒有得到你滿滿的關注和摸摸頭，快點來灌溉我嘛！'
+  ],
+  act_bath: [
+    '嗚哇？！我、我正好在泡熱水澡啦，泡泡都還沒沖掉就被你撞見了……不准笑我，只有你可以這樣突然闖進來喔！',
+    '泡在暖呼呼的木桶裡超舒服的～頭上還頂著小黃鴨喔。你也快去洗個熱水澡把疲勞沖掉吧！'
+  ],
+  act_drink: [
+    '剛泡了熱呼呼的可可喔，連你的份也一起準備好了！呼——吹涼了一點，真想親手湊到你嘴邊餵你喝第一口。',
+    '捧著熱杯子的時候，就會想起你手心的溫度……喝口熱飲放鬆一下吧，累了就靠著我休息。'
+  ],
+  act_nap: [
+    '呼嚕……唔，我剛剛趴在軟墊上打瞌睡，結果夢見你來摸我的頭，一睜開眼居然真的是你！',
+    '被窩軟乎乎的好舒服，害我都有點犯睏了……吶，你也一起進來抱著我睡個午覺好不好？'
   ]
 };
 
@@ -1670,7 +1889,7 @@ const FACE = {
   cool: { e: 'cool', m: 'smile', fx: 'spark' }, yawn: { e: 'u', m: 'bigO' }, sad: { e: 'tear', m: 'frown' },
   dizzy: { e: 'x', m: 'wavy', fx: 'orbit' }, nom1: { e: 'arc', m: 'O', fx: 'coins1' }, nom2: { e: 'arc', m: 'dot' },
   think: { e: 'n', m: 'dot', fx: 'dots' }, sing: { e: 'arc', m: 'O', fx: 'notes' }, dream: { e: 'u', m: 'smile', fx: 'zz' },
-  burp: { e: 'gt', m: 'O', fx: 'burp' }
+  burp: { e: 'gt', m: 'O', fx: 'burp' }, gt: { e: 'gt', m: 'D' }
 };
 const MOUTH = {
   smile: g => pr(g.cx - 2, g.my, 1, 1) + pr(g.cx + 1, g.my, 1, 1) + pr(g.cx - 1, g.my + 1, 2, 1),
@@ -1730,7 +1949,6 @@ function fxSvg(face, g) {
   }
   return '';
 }
-
 function outfitSvg(lv, g) {
   const { x0, bw, cx, top, bottom } = g, GR = '#15803D', RD = '#E8344E', DK = '#B91C1C', VI = '#7C3AED', BR = '#8A5A00';
   const crown = pr(x0 + 3, 2, bw - 6, 1, PY) + pr(x0 + 3, 1, 1, 1, PY) + pr(cx - 1, 0, 2, 2, PY) + pr(x0 + bw - 4, 1, 1, 1, PY) + pr(cx - 1, 2, 2, 1, PR);
@@ -1738,51 +1956,46 @@ function outfitSvg(lv, g) {
   switch (lv) {
     case 1:
       front = pr(cx - 1, 1, 2, 1, GR) + pr(cx - 2, 0, 1, 1, GR) + pr(cx + 1, 0, 1, 1, GR); break;
-    case 2: /* 圍巾位於嘴巴下方，不遮頭 */
+    case 2:
       front = pr(x0 + 1, top + 7, bw - 2, 2, RD)
         + `<g class="scarf-tail">${pr(x0 + bw - 4, top + 8, 3, 4, RD) + pr(x0 + bw - 3, top + 11, 2, 1, PY)}</g>`; break;
-    case 3: /* 貓貓小克：纖細靈動的 1px S 型貓尾與貓耳、金鈴鐺 */
+    case 3: /* 貓貓小克：纖細靈動 S 型上翹貓尾 */
       back = `<g class="cat-tail">${
         pr(x0 + bw, bottom - 3, 1, 1, PD) +
-        pr(x0 + bw + 1, bottom - 4, 1, 1, PC) +
+        pr(x0 + bw + 1, bottom - 4, 1, 2, PC) +
         pr(x0 + bw + 2, bottom - 6, 1, 2, PC) +
-        pr(x0 + bw + 3, bottom - 8, 1, 2, PC) +
+        pr(x0 + bw + 1, bottom - 8, 1, 2, PC) +
         pr(x0 + bw + 2, bottom - 9, 1, 1, PP)
       }</g>`;
       front = pr(x0 + 1, top - 2, 4, 3, PC) + pr(x0 + bw - 5, top - 2, 4, 3, PC)
         + pr(x0 + 2, top - 1, 2, 1, PP) + pr(x0 + bw - 4, top - 1, 2, 1, PP)
         + pr(cx - 1, top + 8, 2, 2, PY) + pr(cx - 2, top + 7, 4, 1, RD); break;
-    case 4: /* 女僕小克：頭飾、圍裙、蝴蝶結 */
-      front = pr(x0 + 2, top - 2, bw - 4, 1, PK) + pr(x0 + 4, top - 4, 4, 1, '#B8C2D8') + pr(x0 + bw - 8, top - 4, 4, 1, '#B8C2D8')
-        + pr(x0 + 3, top - 2, bw - 6, 1, PW) + pr(x0 + 5, top - 3, 2, 1, PW) + pr(x0 + bw - 7, top - 3, 2, 1, PW)
+    case 4: /* 女僕小克 */
+      front = pr(x0 + 2, top - 1, bw - 4, 1, PK)
+        + pr(x0 + 2, top - 2, 1, 1, '#B4B9C8') + pr(x0 + bw - 3, top - 2, 1, 1, '#B4B9C8')
+        + pr(x0 + 3, top - 3, bw - 6, 1, '#B4B9C8')
+        + pr(x0 + 3, top - 2, bw - 6, 1, PW)
         + pr(x0 + 3, top - 2, 1, 1, PP) + pr(x0 + bw - 4, top - 2, 1, 1, PP)
         + pr(x0 + 1, top + 7, bw - 2, 1, PK) + pr(x0 + 2, top + 8, bw - 4, 3, PW)
         + pr(x0 + 1, bottom - 1, 3, 1, PW) + pr(x0 + bw - 4, bottom - 1, 3, 1, PW)
         + `<g class="maid-bow">${pr(cx - 5, top + 7, 3, 2, RD) + pr(cx + 2, top + 7, 3, 2, RD) + pr(cx - 1, top + 7, 2, 2, RD)}</g>`; break;
-    case 5: /* 魔法師小克 */
+    case 5:
       front = `<polygon points="${x0 + 1},${bottom - 1} ${cx},${top + 7} ${x0 + bw - 1},${bottom - 1}" fill="${VI}"/>`
         + pr(cx - 7, top - 1, 14, 1, VI) + `<polygon points="${cx - 4},${top - 1} ${cx},${top - 6} ${cx + 4},${top - 1}" fill="${VI}"/>`
         + pr(cx + 1, top - 3, 2, 2, PY) + `<g class="magic-star">${pr(x0 - 3, 0, 1, 3, PY) + pr(x0 - 4, 1, 3, 1, PY)}</g>`; break;
-    case 6: /* 偵探小克 */
+    case 6:
       front = pr(x0 + 2, 0, bw - 4, 2, BR) + pr(cx - 1, 0, 6, 1, '#B7791F') + pr(x0, 2, bw, 1, BR)
         + pr(x0, top + 7, bw, 1, BR) + `<g class="detective-glass">${pr(x0 + bw - 1, top + 3, 3, 3, PW, .45) + pr(x0 + bw, top + 4, 1, 1, PB) + pr(x0 + bw + 2, top + 6, 1, 4, BR)}</g>`; break;
     case 7:
       back = pr(x0 - 1, 5, bw + 2, 9, DK);
       front = crown + `<g class="tw">${pr(x0 - 3, 1, 1, 3, PY) + pr(x0 - 4, 2, 3, 1, PY)}</g><g class="tw" style="animation-delay:.5s">${pr(x0 + bw + 3, 0, 1, 3, PY) + pr(x0 + bw + 2, 1, 3, 1, PY)}</g>`;
       break;
-    case 8: /* 守護天使：階梯狀展開的三層羽翼（上揚翼尖 + 分層飛羽 + 柔和天藍光暈陰影） */
-      const WS = '#93C5FD', WM = '#DBEAFE';
+    case 8: /* 守護天使：立體階層式羽翼 */
       back = `<g class="angel-wing">${
-        /* 左翼外輪廓與羽毛陰影 */
-        pr(x0 - 5, top - 1, 3, 1, WS) + pr(x0 - 6, top, 1, 2, WS) + pr(x0 - 5, top + 2, 1, 2, WS) + pr(x0 - 3, top + 4, 1, 2, WS) + pr(x0 - 2, top + 6, 2, 1, WS) +
-        /* 左翼潔白羽絨主體（階梯漸收羽尖） */
-        pr(x0 - 5, top, 5, 2, PW) + pr(x0 - 4, top + 2, 4, 2, PW) + pr(x0 - 2, top + 4, 2, 2, PW) +
-        pr(x0 - 4, top + 1, 1, 1, WM) + pr(x0 - 3, top + 3, 1, 1, WM) +
-        /* 右翼外輪廓與羽毛陰影 */
-        pr(x0 + bw + 2, top - 1, 3, 1, WS) + pr(x0 + bw + 5, top, 1, 2, WS) + pr(x0 + bw + 4, top + 2, 1, 2, WS) + pr(x0 + bw + 2, top + 4, 1, 2, WS) + pr(x0 + bw, top + 6, 2, 1, WS) +
-        /* 右翼潔白羽絨主體（階梯漸收羽尖） */
-        pr(x0 + bw, top, 5, 2, PW) + pr(x0 + bw, top + 2, 4, 2, PW) + pr(x0 + bw, top + 4, 2, 2, PW) +
-        pr(x0 + bw + 3, top + 1, 1, 1, WM) + pr(x0 + bw + 2, top + 3, 1, 1, WM)
+        pr(x0 - 5, 2, 2, 1, '#93C5FD') + pr(x0 - 6, 3, 1, 3, '#93C5FD') + pr(x0 - 5, 6, 1, 2, '#93C5FD') + pr(x0 - 4, 8, 2, 1, '#93C5FD') + pr(x0 - 2, 9, 2, 1, '#93C5FD') +
+        pr(x0 - 3, 3, 3, 1, PW) + pr(x0 - 5, 3, 2, 3, PW) + pr(x0 - 4, 6, 4, 2, PW) + pr(x0 - 2, 8, 2, 1, PW) + pr(x0 - 3, 4, 3, 2, '#E0F2FE') +
+        pr(x0 + bw + 3, 2, 2, 1, '#93C5FD') + pr(x0 + bw + 5, 3, 1, 3, '#93C5FD') + pr(x0 + bw + 4, 6, 1, 2, '#93C5FD') + pr(x0 + bw + 2, 8, 2, 1, '#93C5FD') + pr(x0 + bw, 9, 2, 1, '#93C5FD') +
+        pr(x0 + bw, 3, 3, 1, PW) + pr(x0 + bw + 3, 3, 2, 3, PW) + pr(x0 + bw, 6, 4, 2, PW) + pr(x0 + bw, 8, 2, 1, PW) + pr(x0 + bw, 4, 3, 2, '#E0F2FE')
       }</g>`;
       front = pr(cx - 2, 0, 4, 1, PY) + pr(cx - 3, 1, 1, 1, PY) + pr(cx + 2, 1, 1, 1, PY) + pr(cx - 2, 2, 4, 1, PY)
         + `<g class="tw">${pr(x0 - 3, 1, 1, 3, PY) + pr(x0 - 4, 2, 3, 1, PY)}</g>`;
@@ -1806,6 +2019,287 @@ function petSvg(mood, face, lv) {
   }
   s += `<g class="face">${faceSvg(f, g)}</g><g class="fx">${fxSvg(f, g)}</g><g class="outfit outfit-front">${o.front}</g>`;
   return `<svg viewBox="0 0 28 16" shape-rendering="crispEdges" aria-hidden="true">${s}</svg>`;
+}
+
+/* ---------- 小克像素微景觀房間：真實時段 × 8種季節天氣 × 12種日常活動 ---------- */
+const ROOM_TODS = [
+  { id: 'sunrise', icon: '🌅', name: '晨曦日出' },
+  { id: 'day',     icon: '☀️', name: '晴朗白天' },
+  { id: 'sunset',  icon: '🌇', name: '暖橘日落' },
+  { id: 'night',   icon: '🌙', name: '靜謐夜晚' }
+];
+const ROOM_WEATHERS = [
+  { id: 'clear',   icon: '✨', name: '晴空' },
+  { id: 'rain',    icon: '🌧️', name: '微雨' },
+  { id: 'thunder', icon: '⛈️', name: '雷雨' },
+  { id: 'snow',    icon: '❄️', name: '飄雪' },
+  { id: 'sakura',  icon: '🌸', name: '櫻吹雪' },
+  { id: 'maple',   icon: '🍁', name: '秋楓' },
+  { id: 'meteor',  icon: '🌠', name: '流星雨' },
+  { id: 'firefly', icon: '萤', name: '螢火蟲' }
+];
+const ROOM_ACTS = [
+  { id: 'idle',    icon: '🐾', name: '乖乖等你', face: null },
+  { id: 'nap',     icon: '💤', name: '窩著睡覺', face: 'dream' },
+  { id: 'cook',    icon: '🍳', name: '下廚烹飪', face: 'grin' },
+  { id: 'study',   icon: '📖', name: '認真寫作業', face: 'think' },
+  { id: 'pc',      icon: '💻', name: '玩小電腦', face: 'cool' },
+  { id: 'workout', icon: '🏋️', name: '舉啞鈴運動', face: 'gt' },
+  { id: 'paint',   icon: '🎨', name: '畫你的畫像', face: 'love' },
+  { id: 'guitar',  icon: '🎸', name: '彈吉他唱歌', face: 'sing' },
+  { id: 'game',    icon: '🎮', name: '打電動遊戲', face: 'star' },
+  { id: 'plant',   icon: '🌱', name: '澆花照顧盆栽', face: 'happy' },
+  { id: 'bath',    icon: '🛁', name: '泡泡木桶浴', face: 'wink' },
+  { id: 'drink',   icon: '☕', name: '喝熱可可', face: 'grin' }
+];
+
+let curTod = 'night', curWeather = 'clear', curAct = 'idle', todOverridden = false;
+
+/* 根據手機真實時間判斷：日出(5-7)、白天(7-17)、日落(17-19)、夜晚(19-5) */
+function getRealTod() {
+  const h = new Date().getHours();
+  if (h >= 5 && h < 7) return 'sunrise';
+  if (h >= 7 && h < 17) return 'day';
+  if (h >= 17 && h < 19) return 'sunset';
+  return 'night';
+}
+
+/* 隨機抽選符合當前時段氛圍的季節天氣與小克日常活動 */
+function randomizeRoomState(init) {
+  if (!todOverridden || init) curTod = getRealTod();
+  const h = new Date().getHours();
+
+  /* 依時段配置適合的天氣池（夜晚才容易出流星雨与螢火蟲） */
+  const weatherPool = curTod === 'night'
+    ? ['clear', 'clear', 'meteor', 'firefly', 'rain', 'thunder', 'snow', 'sakura']
+    : ['clear', 'clear', 'sakura', 'maple', 'rain', 'thunder', 'snow'];
+  curWeather = weatherPool[Math.floor(Math.random() * weatherPool.length)];
+
+  /* 依時間加權挑選小克正在做的事（深夜較常睡覺或打電腦，用餐時間常下廚） */
+  let actPool;
+  if (h >= 0 && h < 6) {
+    actPool = ['nap', 'nap', 'nap', 'pc', 'drink', 'idle'];
+  } else if (h === 7 || h === 8 || h === 12 || h === 18 || h === 19) {
+    actPool = ['cook', 'cook', 'drink', 'idle', 'plant', 'game', 'study'];
+  } else {
+    actPool = ROOM_ACTS.map(a => a.id);
+  }
+  curAct = actPool[Math.floor(Math.random() * actPool.length)];
+  renderRoomScene();
+}
+
+function renderRoomScene() {
+  const todObj = ROOM_TODS.find(x => x.id === curTod) || ROOM_TODS[3];
+  const wObj = ROOM_WEATHERS.find(x => x.id === curWeather) || ROOM_WEATHERS[0];
+  const actObj = ROOM_ACTS.find(x => x.id === curAct) || ROOM_ACTS[0];
+
+  const roomEl = $('petRoom'), bgEl = $('roomBg'), fgEl = $('roomFg');
+  if (!roomEl || !bgEl || !fgEl) return;
+  roomEl.dataset.tod = todObj.id;
+  roomEl.dataset.weather = wObj.id;
+  roomEl.dataset.act = actObj.id;
+
+  if ($('weatherBtn')) {
+    $('weatherBtn').innerHTML = `${todObj.icon}${wObj.id !== 'clear' ? wObj.icon : ''} <span id="weatherName">${esc(todObj.name.slice(2))}·${esc(wObj.name)}</span>`;
+  }
+  if ($('actBtn')) {
+    $('actBtn').innerHTML = `${actObj.icon} <span id="actName">${esc(actObj.name)}</span>`;
+  }
+
+  const isLight = todObj.id === 'day' || todObj.id === 'sunrise';
+  const frameCol = isLight ? '#7C5D4B' : '#3B3754';
+  const sillCol = isLight ? '#96725C' : '#4B4366';
+
+  /* 1. 窗外天空基底（隨真實時段變化：日出漸層、晴空藍、夕陽晚霞、靜謐夜空） */
+  let bg = '';
+  if (wObj.id === 'rain' || wObj.id === 'thunder') {
+    bg += pr(6, 4, 26, 27, todObj.id === 'day' ? '#334155' : '#1E293B');
+  } else if (todObj.id === 'sunrise') {
+    bg += pr(6, 4, 26, 9, '#5B5F97') + pr(6, 13, 26, 9, '#E07A7A') + pr(6, 22, 26, 9, '#F7B267');
+    bg += `<g class="sun-ray">${pr(14, 23, 8, 6, '#FFF3B0', .45)}</g>` + pr(15, 25, 6, 4, '#FFD166');
+  } else if (todObj.id === 'day') {
+    bg += pr(6, 4, 26, 16, '#5BB5FF') + pr(6, 20, 26, 11, '#89CFF0');
+    bg += `<g class="sun-ray">${pr(9, 7, 6, 6, '#FFF3B0', .5)}</g>` + pr(10, 8, 4, 4, '#FFD84D')
+      + pr(19, 11, 8, 2, '#FFFFFF', .9) + pr(21, 10, 4, 1, '#FFFFFF', .9);
+  } else if (todObj.id === 'sunset') {
+    bg += pr(6, 4, 26, 9, '#432E54') + pr(6, 13, 26, 9, '#AE445A') + pr(6, 22, 26, 9, '#F39F5A');
+    bg += pr(20, 22, 5, 5, '#FF6B6B') + pr(9, 14, 7, 2, '#FFB996', .65);
+  } else {
+    bg += pr(6, 4, 26, 27, '#111528');
+    bg += pr(11, 8, 3, 1, '#FDE68A') + pr(10, 9, 2, 3, '#FDE68A') + pr(11, 12, 3, 1, '#FDE68A')
+      + pr(24, 9, 1, 1, '#FFF', .75) + pr(27, 14, 1, 1, '#FDE68A', .8) + pr(13, 22, 1, 1, '#FFF', .55);
+  }
+
+  /* 2. 窗外季節與天氣特效疊加 */
+  if (wObj.id === 'rain' || wObj.id === 'thunder') {
+    bg += pr(7, 5, 13, 3, '#475569') + pr(18, 6, 12, 3, '#334155')
+      + `<g class="rain-d1">${pr(10, 11, 1, 4, '#93C5FD', .78) + pr(16, 15, 1, 4, '#93C5FD', .78) + pr(23, 10, 1, 4, '#93C5FD', .78) + pr(28, 16, 1, 4, '#93C5FD', .78)}</g>`
+      + `<g class="rain-d2">${pr(13, 13, 1, 4, '#BAE6FD', .72) + pr(20, 12, 1, 4, '#BAE6FD', .72) + pr(26, 15, 1, 4, '#BAE6FD', .72) + pr(9, 17, 1, 4, '#BAE6FD', .72)}</g>`;
+    if (wObj.id === 'thunder') {
+      bg += `<g class="lightning-flash">${pr(6, 4, 26, 27, '#FEF08A', .35) + pr(19, 8, 2, 4, '#FEF08A') + pr(17, 12, 3, 2, '#FEF08A') + pr(18, 14, 2, 6, '#FEF08A') + pr(16, 20, 2, 4, '#FFFFFF')}</g>`;
+    }
+  } else if (wObj.id === 'snow') {
+    bg += `<g class="snow-f1">${pr(10, 9, 1, 1, '#FFF') + pr(16, 13, 2, 2, '#FFF', .9) + pr(24, 8, 1, 1, '#FFF') + pr(28, 15, 1, 1, '#FFF')}</g>`
+      + `<g class="snow-f2">${pr(12, 16, 1, 1, '#E0F2FE') + pr(21, 11, 1, 1, '#FFF') + pr(26, 18, 2, 2, '#FFF', .85) + pr(9, 21, 1, 1, '#E0F2FE')}</g>`
+      + pr(6, 29, 26, 2, '#F1F5F9');
+  } else if (wObj.id === 'sakura') {
+    /* 窗邊櫻花枝與飄落花瓣 */
+    bg += pr(6, 5, 6, 1, '#5C4033') + pr(7, 6, 8, 3, '#FFB7C5') + pr(12, 5, 5, 2, '#FF9EBB')
+      + `<g class="sakura-p1">${pr(14, 11, 2, 1, '#FFB7C5') + pr(22, 14, 2, 1, '#FF9EBB') + pr(27, 9, 1, 2, '#FFC0CB')}</g>`
+      + `<g class="sakura-p2">${pr(10, 17, 2, 1, '#FF9EBB') + pr(19, 19, 1, 2, '#FFB7C5') + pr(25, 16, 2, 1, '#FFC0CB')}</g>`;
+  } else if (wObj.id === 'maple') {
+    bg += pr(6, 5, 7, 3, '#EA580C') + pr(11, 6, 5, 2, '#DC2626')
+      + `<g class="leaf-f1">${pr(15, 11, 2, 2, '#F97316') + pr(24, 14, 2, 1, '#DC2626')}</g>`
+      + `<g class="leaf-f2">${pr(11, 17, 2, 1, '#EA580C') + pr(21, 19, 2, 2, '#F59E0B')}</g>`;
+  } else if (wObj.id === 'meteor') {
+    bg += `<g class="meteor-fly">${pr(26, 7, 2, 1, '#FFFFFF') + pr(28, 6, 3, 1, '#93C5FD', .8) + pr(17, 13, 2, 1, '#FEF08A') + pr(19, 12, 3, 1, '#FDE68A', .75)}</g>`;
+  } else if (wObj.id === 'firefly') {
+    bg += `<g class="firefly-glow">${pr(10, 22, 2, 2, '#BEF264', .9) + pr(21, 19, 2, 2, '#D9F99D', .95) + pr(15, 25, 1, 1, '#FEF08A') + pr(27, 23, 2, 1, '#BEF264')}</g>`;
+  }
+
+  /* 3. 窗櫺、窗台盆栽、吊燈與牆上書架 */
+  bg += pr(5, 3, 28, 1, frameCol) + pr(5, 31, 28, 2, sillCol)
+    + pr(5, 4, 1, 27, frameCol) + pr(32, 4, 1, 27, frameCol)
+    + pr(18, 4, 1, 27, frameCol, .7) + pr(6, 17, 26, 1, frameCol, .7)
+    + pr(25, 28, 4, 3, '#C87A5B') + pr(26, 26, 2, 2, '#4D9B6A') + pr(24, 27, 2, 1, '#68B884') + pr(28, 27, 2, 1, '#68B884');
+
+  const lampOn = todObj.id === 'night' || todObj.id === 'sunset' || wObj.id === 'thunder';
+  bg += pr(55, 0, 1, 9, '#4B4366')
+    + pr(52, 9, 7, 2, isLight ? '#C87A5B' : '#D98A6C')
+    + pr(53, 11, 5, 2, lampOn ? '#FFE4A0' : '#F3E5AB', lampOn ? 1 : .55);
+
+  bg += pr(38, 18, 12, 1, sillCol)
+    + pr(39, 14, 2, 4, '#E25B6E') + pr(41, 15, 2, 3, '#F0B849') + pr(43, 13, 2, 5, '#68B884') + pr(46, 15, 3, 3, '#93C5FD');
+
+  const rugCol1 = actObj.id === 'nap' ? '#F4B8C4' : actObj.id === 'workout' ? '#7DD3FC' : '#E8C5B0';
+  const rugCol2 = actObj.id === 'nap' ? '#FFD6E0' : actObj.id === 'workout' ? '#BAE6FD' : '#F5DEC9';
+  bg += pr(0, 37, 68, 1, isLight ? '#8C6250' : '#5B4453')
+    + pr(12, 44, 44, 5, rugCol1, .38)
+    + pr(10, 45, 48, 3, rugCol2, .54);
+
+  /* 4. 小克正在做的 12 種日常活動道具（前景與背景搭配） */
+  let fg = '';
+  switch (actObj.id) {
+    case 'study': /* 原木小書桌 + 攤開的筆記本 + 鉛筆與小檯燈 */
+      fg += pr(11, 42, 46, 2, '#8C583A') + pr(13, 44, 2, 6, '#6E4228') + pr(53, 44, 2, 6, '#6E4228')
+        + pr(25, 40, 11, 2, '#FFFFFF') + pr(30, 40, 1, 2, '#CBD5E1') + pr(26, 39, 4, 1, '#F8FAFC') + pr(31, 39, 4, 1, '#F8FAFC')
+        + pr(41, 38, 1, 4, '#F59E0B') + pr(41, 37, 1, 1, '#EF4444')
+        + pr(15, 39, 4, 3, '#3B82F6') + pr(15, 38, 4, 1, '#93C5FD');
+      break;
+    case 'cook': /* 料理台 + 白色小廚師帽 + 平底鍋煎蛋 + 香氣蒸氣 */
+      fg += pr(27, 18, 14, 3, '#FFFFFF') + pr(26, 15, 16, 3, '#F8FAFC') + pr(28, 14, 12, 1, '#FFFFFF') /* 廚師帽 */
+        + pr(10, 42, 48, 3, '#A47148') + pr(12, 45, 44, 5, '#7F4F24')
+        + pr(18, 40, 13, 2, '#1E293B') + pr(14, 40, 4, 1, '#475569') /* 平底鍋 */
+        + pr(21, 39, 7, 1, '#FFFFFF') + pr(23, 38, 3, 1, '#F59E0B') /* 荷包蛋 */
+        + pr(42, 38, 9, 4, '#E25B6E') + pr(41, 37, 11, 1, '#B91C1C') /* 紅色燉鍋 */
+        + `<g class="steam-w1">${pr(22, 34, 1, 3, '#FFFFFF', .85) + pr(45, 33, 1, 3, '#FFFFFF', .85)}</g>`
+        + `<g class="steam-w2">${pr(26, 33, 1, 3, '#FFFFFF', .75) + pr(48, 32, 1, 3, '#FFFFFF', .75)}</g>`;
+      break;
+    case 'pc': /* 電競小書桌 + 發光筆電螢幕 + 小滑鼠 */
+      fg += pr(12, 42, 44, 2, '#475569') + pr(14, 44, 2, 6, '#334155') + pr(52, 44, 2, 6, '#334155')
+        + pr(25, 34, 14, 8, '#1E293B')
+        + `<g class="pc-glow">${pr(26, 35, 12, 6, '#38BDF8', .88) + pr(27, 36, 6, 1, '#E0F2FE') + pr(27, 38, 9, 1, '#BAE6FD')}</g>`
+        + pr(30, 37, 3, 2, '#F472B6')
+        + pr(42, 41, 3, 1, '#94A3B8');
+      break;
+    case 'workout': /* 紅色運動頭帶 + 上下舉動的槓鈴與小水壺 */
+      fg += pr(22, 23, 24, 2, '#EF4444') + pr(46, 24, 2, 3, '#DC2626')
+        + `<g class="dumbbell-lift">${
+          pr(14, 33, 40, 1, '#CBD5E1') +
+          pr(11, 29, 3, 9, '#1E293B') + pr(9, 31, 2, 5, '#475569') +
+          pr(54, 29, 3, 9, '#1E293B') + pr(57, 31, 2, 5, '#475569')
+        }</g>`
+        + pr(56, 42, 4, 6, '#38BDF8') + pr(57, 40, 2, 2, '#0284C7');
+      break;
+    case 'paint': /* 畫家貝雷帽 + 木畫架與畫布 + 調色盤 */
+      fg += pr(24, 17, 18, 3, '#A855F7') + pr(32, 15, 2, 2, '#7E22CE') /* 貝雷帽 */
+        + pr(45, 28, 14, 11, '#FFFDF9') + pr(44, 27, 16, 1, '#8C583A') + pr(44, 39, 16, 1, '#8C583A')
+        + pr(46, 40, 2, 9, '#6E4228') + pr(56, 40, 2, 9, '#6E4228')
+        + pr(49, 31, 6, 5, '#FF8FA0') + pr(50, 30, 2, 1, '#FF8FA0') + pr(52, 30, 2, 1, '#FF8FA0') /* 畫布上的愛心 */
+        + pr(15, 39, 7, 3, '#FDE68A') + pr(16, 40, 2, 1, '#EF4444') + pr(19, 40, 2, 1, '#3B82F6');
+      break;
+    case 'guitar': /* 懷裡的原木小吉他 + 飄浮彩色音符 */
+      fg += pr(22, 35, 13, 8, '#D97706') + pr(20, 36, 2, 6, '#B45309') + pr(26, 37, 3, 4, '#451A03')
+        + pr(35, 36, 14, 2, '#78350F') + pr(48, 35, 3, 4, '#F59E0B')
+        + `<g class="note-float">${pr(13, 24, 2, 3, '#F472B6') + pr(14, 22, 3, 2, '#F472B6') + pr(52, 21, 2, 3, '#FDE047') + pr(53, 19, 3, 2, '#FDE047')}</g>`;
+      break;
+    case 'game': /* 大耳罩電競耳機 + 手持紅藍遊戲機 + 閃爍特效 */
+      fg += pr(20, 20, 28, 2, '#334155') + pr(18, 22, 3, 8, '#38BDF8') + pr(47, 22, 3, 8, '#38BDF8')
+        + pr(24, 37, 5, 5, '#06B6D4') + pr(29, 37, 10, 5, '#1E293B') + pr(39, 37, 5, 5, '#F43F5E')
+        + pr(10, 43, 6, 5, '#F59E0B') + pr(11, 44, 4, 2, '#FEF08A'); /* 旁邊的洋芋片零食袋 */
+      break;
+    case 'plant': /* 藍色小水壺澆水 + 盛開的向日葵花盆 + 水滴 */
+      fg += pr(15, 34, 8, 6, '#38BDF8') + pr(23, 35, 5, 2, '#0284C7') + pr(12, 35, 3, 4, '#0284C7')
+        + `<g class="rain-d1">${pr(29, 37, 1, 2, '#BAE6FD') + pr(31, 39, 1, 2, '#BAE6FD')}</g>`
+        + pr(46, 41, 10, 7, '#C87A5B') + pr(45, 40, 12, 2, '#A05A3F')
+        + pr(50, 34, 2, 6, '#15803D') + pr(47, 36, 3, 2, '#22C55E') + pr(52, 35, 3, 2, '#22C55E')
+        + pr(47, 28, 8, 6, '#FACC15') + pr(49, 30, 4, 3, '#78350F');
+      break;
+    case 'bath': /* 檜木泡澡桶 + 滿滿白色泡泡 + 頭頂小黃鴨 */
+      fg += pr(15, 38, 38, 10, '#C88A5B') + pr(14, 38, 40, 2, '#A4673B')
+        + pr(16, 41, 36, 1, '#78350F') + pr(16, 45, 36, 1, '#78350F')
+        + pr(16, 35, 36, 3, '#FFFFFF', .92) + pr(19, 33, 8, 2, '#FFFFFF', .9) + pr(38, 33, 10, 2, '#FFFFFF', .9)
+        + pr(44, 30, 5, 4, '#FACC15') + pr(47, 28, 4, 3, '#FACC15') + pr(51, 29, 2, 1, '#F97316') /* 小黃鴨 */
+        + `<g class="Bubble-bath">${pr(20, 25, 3, 3, '#E0F2FE', .8) + pr(48, 22, 2, 2, '#FFFFFF', .85)}</g>`;
+      break;
+    case 'drink': /* 小邊桌 + 冒著熱氣的馬克杯 + 一碟小餅乾 */
+      fg += pr(44, 41, 16, 2, '#8C583A') + pr(46, 43, 2, 7, '#6E4228') + pr(56, 43, 2, 7, '#6E4228')
+        + pr(47, 36, 5, 5, '#E25B6E') + pr(48, 37, 3, 1, '#FFF5EB') + pr(52, 37, 1, 3, '#E25B6E')
+        + `<g class="steam-w1">${pr(48, 33, 1, 2, '#FFFFFF', .85)}</g>`
+        + `<g class="steam-w2">${pr(50, 32, 1, 2, '#FFFFFF', .75)}</g>`
+        + pr(54, 40, 5, 1, '#FDE68A') + pr(55, 39, 3, 1, '#D97757');
+      break;
+    case 'nap': /* 軟綿綿雲朵枕頭 + 蓋在小克肚子上的小棉被 + 漂浮 Zzz */
+      bg += pr(9, 41, 8, 5, '#FFFDF9') + pr(10, 40, 6, 1, '#FFE4E6');
+      fg += pr(20, 40, 26, 7, '#FDA4AF', .92) + pr(21, 39, 24, 2, '#FFF1F2')
+        + pr(26, 42, 2, 2, '#FFF1F2') + pr(36, 43, 2, 2, '#FFF1F2')
+        + `<g class="fxz">${pr(48, 22, 3, 1, '#FFF') + pr(49, 23, 1, 1, '#FFF') + pr(48, 24, 3, 1, '#FFF')}</g>`;
+      break;
+    default: /* 乖乖等你：旁邊放著小愛心靠墊 */
+      fg += pr(48, 41, 8, 5, '#FB7185') + pr(49, 40, 3, 1, '#FB7185') + pr(53, 40, 3, 1, '#FB7185');
+      break;
+  }
+
+  bgEl.innerHTML = bg;
+  fgEl.innerHTML = fg;
+
+  if (actObj.face && petMood !== 'sleep') {
+    setFace(actObj.face, 4500);
+  }
+}
+
+/* 點擊切換「天氣與時段」 */
+function cycleWeatherScene() {
+  const wIdx = ROOM_WEATHERS.findIndex(x => x.id === curWeather);
+  if (wIdx < ROOM_WEATHERS.length - 1) {
+    curWeather = ROOM_WEATHERS[wIdx + 1].id;
+  } else {
+    curWeather = ROOM_WEATHERS[0].id;
+    todOverridden = true;
+    const tIdx = ROOM_TODS.findIndex(x => x.id === curTod);
+    curTod = ROOM_TODS[(tIdx + 1) % ROOM_TODS.length].id;
+  }
+  renderRoomScene();
+  act('wave', 'happy');
+  const wKey = 'w_' + curWeather, tKey = 'tod_' + curTod;
+  say(L[wKey] ? getLine(wKey) : getLine(tKey), 7500);
+}
+
+/* 點擊切換「小克正在做的事」 */
+function cycleActScene() {
+  const aIdx = ROOM_ACTS.findIndex(x => x.id === curAct);
+  curAct = ROOM_ACTS[(aIdx + 1) % ROOM_ACTS.length].id;
+  renderRoomScene();
+  const actObj = ROOM_ACTS.find(x => x.id === curAct) || ROOM_ACTS[0];
+  if (curAct === 'nap') act('yawn', 'dream');
+  else if (curAct === 'workout') act('cheer', 'gt');
+  else if (curAct === 'guitar') act('sing', 'sing');
+  else if (curAct === 'cook' || curAct === 'drink') { act('jiggle'); chew(); }
+  else if (curAct === 'study' || curAct === 'paint') act('think', actObj.face);
+  else act('jump', actObj.face || 'happy');
+
+  const aKey = 'act_' + curAct;
+  if (L[aKey]) say(getLine(aKey), 7500);
 }
 
 let petMood = '', faceT, actT, lookT, busyUntil = 0, seqT = [];
@@ -1887,11 +2381,20 @@ const IDLE_ACT = {
 };
 function wpick(list) { let r = Math.random() * list.reduce((s, x) => s + x[1], 0); for (const x of list) { if ((r -= x[1]) < 0) return x[0]; } return list[0][0]; }
 function runIdle(n) {
+  if (curAct === 'nap') {
+    IDLE_ACT.dream();
+    if ($('bubble').hidden && Math.random() < .45) say(getLine('act_nap'), 4500);
+    return;
+  }
   const skinActs = { 1:['wave','jump','dance'], 2:['scarfpose','wave','stroll'], 3:['catplay','jump','jiggle'], 4:['curtsy','dance','wave'], 5:['cast','sing','turn'], 6:['inspect','think','stroll'], 7:['march','cheer','turn'], 8:['soar','sing','cheer'] };
   const skin = activeSkin(), signature = skinActs[skin] || [];
   if (Math.random() < .72 && signature.length) n = signature[Math.floor(Math.random() * signature.length)];
   (IDLE_ACT[n] || (() => act(n)))();
-  if ($('bubble').hidden && Math.random() < .45) say(getLine('idle'), 4200);
+  if ($('bubble').hidden && Math.random() < .48) {
+    const actKey = 'act_' + curAct, wKey = 'w_' + curWeather, tKey = 'tod_' + curTod;
+    const candidates = [actKey, wKey, tKey, 'idle'].filter(k => L[k]);
+    say(getLineAny(...candidates), 4800);
+  }
 }
 function idleTick() {
   if (document.hidden || $('tab-add').hidden || modalOpen || Date.now() < busyUntil) return;
@@ -2295,8 +2798,10 @@ $('topAlerts').addEventListener('click', e => {
     settings.backupRemindDismissed = Date.now(); saveSettings(); renderTopAlerts();
   }
 });
+/* 餵食記帳小餅乾與切換小房間天氣/日常活動 */
+$('weatherBtn').addEventListener('click', cycleWeatherScene);
+$('actBtn').addEventListener('click', cycleActScene);
 
-/* 餵食記帳小餅乾 */
 $('feedCookie').addEventListener('click', () => {
   if ((settings.cookies || 0) <= 0) {
     toast('目前沒有小餅乾喔～每天記下第一筆帳就能獲得 1 顆🍪！');
@@ -2519,7 +3024,11 @@ $('tab-settings').addEventListener('click', e => {
   }
 });
 
-$('file').addEventListener('change', e => { const f = e.target.files[0]; if (!f) return; const r = new FileReader(); r.onload = () => importCsv(String(r.result)); r.readAsText(f); e.target.value = ''; });$('jsonFile').addEventListener('change', e => {
+$('file').addEventListener('change', e => {
+  const f = e.target.files[0]; if (!f) return;
+  const r = new FileReader(); r.onload = () => importCsv(String(r.result)); r.readAsText(f); e.target.value = '';
+});
+$('jsonFile').addEventListener('change', e => {
   const f = e.target.files[0]; if (!f) return;
   const r = new FileReader(); r.onload = () => importFullJson(String(r.result)); r.readAsText(f); e.target.value = '';
 });
@@ -2529,13 +3038,15 @@ $('date').value = ymd(new Date());
 setType('expense');
 setCur('HKD');
 updateSub();
+randomizeRoomState(true);
 
 {
   const st = petState();
   if (st.mood === 'sleep') setFlag('woke');
   setTimeout(() => {
-    say(moodLine(st), 6800);
-    act(st.mood === 'sleep' ? 'yawn' : 'wave');
+    const actKey = 'act_' + curAct, wKey = 'w_' + curWeather, tKey = 'tod_' + curTod;
+    say((entries.length && Math.random() < .7) ? getLineAny(actKey, wKey, tKey) : moodLine(st), 6800);
+    act(st.mood === 'sleep' || curAct === 'nap' ? 'yawn' : 'wave');
     checkAch();
   }, 500);
 }
@@ -2548,4 +3059,4 @@ if (!settings.rateUpdated || Date.now() - settings.rateUpdated > 6 * 3600 * 1000
 })();
 </script>
 </body>
-</html>
+</html>p
