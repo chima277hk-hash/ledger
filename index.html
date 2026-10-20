@@ -9,8 +9,7 @@
 <meta name="apple-mobile-web-app-title" content="小克記帳">
 <meta name="application-name" content="小克記帳">
 <meta name="theme-color" content="#232538">
-<link rel="manifest" href="manifest.json">
-<title>小克記帳 - 溫柔陪伴記帳本</title>
+<title>小克記帳</title>
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;background:#FBF9F6;color:#232536;font:16px/1.45 -apple-system,"PingFang HK","PingFang TC","Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif}
@@ -95,6 +94,10 @@ h1{font-size:24px;margin:0;font-weight:800;letter-spacing:.04em}
   left:10px;right:auto;top:8px;width:44px;height:44px;
   background:radial-gradient(circle, rgba(255,246,190,.55) 0%, rgba(255,220,140,.18) 60%, transparent 78%);
 }
+.petRoom[data-tod="sunrise"] .roomGlow{
+  left:12px;right:auto;top:14px;width:38px;height:38px;
+  background:radial-gradient(circle, rgba(255,200,150,.48) 0%, rgba(255,160,120,.15) 60%, transparent 78%);
+}
 @keyframes lampPulse{0%,100%{transform:scale(1);opacity:.85}50%{transform:scale(1.15);opacity:1}}
 
 /* 小房間天氣與道具像素動畫 */
@@ -176,12 +179,39 @@ body.cny #amount:focus{border-bottom-color:#F3C262}
 .fchip.on{background:#25283D;border-color:#25283D;color:#fff}
 .filterSum{font-size:13px;color:#B4532F;background:#FFF5EB;border-radius:10px;padding:8px 12px;margin-bottom:10px;font-weight:700;display:flex;justify-content:space-between}
 
-/* 溫柔月度信箋卡片 */
-.letterCard{background:linear-gradient(145deg,#FFFDFB 0%,#FFF3EB 100%);border:1px solid #F2D6C2;border-radius:20px;padding:16px;margin-bottom:14px;color:#3D2618;box-shadow:0 6px 18px rgba(180,83,47,.06)}
-.letterCard h3{margin:0 0 8px;font-size:16px;color:#B4532F;display:flex;align-items:center;justify-content:space-between}
-.letterStats{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:10px 0;background:rgba(255,255,255,.78);padding:10px;border-radius:12px;font-size:13px}
-.letterStats b{display:block;font-size:15px;color:#232536;margin-top:2px}
-.letterBody{font-size:14px;line-height:1.6;white-space:pre-line;margin-top:8px}
+/* 日期快捷選擇列（昨天 / 今天 / 點開可選日期） */
+.dateQuickBar{display:grid;grid-template-columns:1fr 1fr 1.35fr;gap:8px}
+.dqBtn{border:1px solid #EAE3DC;background:#FFFFFF;border-radius:14px;padding:10px 6px;font-size:14px;font-weight:700;color:#4E4B5C;text-align:center;box-shadow:0 2px 5px rgba(35,37,54,.02);transition:all .15s ease;width:100%}
+.dqBtn span{display:block;font-size:11px;font-weight:500;color:#8C889A;margin-top:2px}
+.dqBtn.on{background:#25283D;border-color:#25283D;color:#fff;box-shadow:0 4px 10px rgba(37,40,61,.18)}
+.dqBtn.on span{color:rgba(255,255,255,.8)}
+.datePickWrap{position:relative;display:block}
+.dateNativeInput{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;border:0;margin:0;padding:0}
+
+/* 報表年月切換與月份選擇器工具列 */
+.repTopBar{position:relative;z-index:1;display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:6px;flex-wrap:wrap}
+.repModeSwitch{display:inline-flex;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.14);border-radius:999px;padding:3px;gap:2px}
+.repModeSwitch button{border:0;background:transparent;color:rgba(249,246,242,.75);border-radius:999px;padding:5px 13px;font-size:13px;font-weight:700;transition:all .15s}
+.repModeSwitch button.on{background:#FFFDFB;color:#1F2235;box-shadow:0 2px 6px rgba(12,14,24,.2)}
+.monthPickLabel{position:relative;display:inline-flex;align-items:center;gap:5px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.1);color:#F9F6F2;border-radius:999px;padding:5px 12px;font-size:12.5px;font-weight:700;cursor:pointer}
+.monthPickLabel input[type="month"]{position:absolute;inset:0;opacity:0;width:100%;height:100%;cursor:pointer}
+
+/* 報表分類預算進度與設定頁分類預算網格 */
+.catBudBlock{padding:9px 0;border-bottom:1px solid #F4EFE9}
+.catBudBlock:last-child{border-bottom:0}
+.cbBar{height:7px;background:#F1ECE6;border-radius:999px;overflow:hidden;margin-top:5px}
+.cbFill{display:block;height:100%;border-radius:999px;transition:width .4s ease}
+.cbMeta{display:flex;justify-content:space-between;font-size:12px;color:#726E80;margin-top:4px}
+.cbMeta b.over{color:#B91C1C}
+.cbMeta b.warn{color:#B45309}
+.cbMeta b.ok{color:#15803D}
+.catBudGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:10px}
+.catBudItem{display:flex;align-items:center;justify-content:space-between;gap:6px;background:#FBF9F6;border:1px solid #EAE3DC;border-radius:12px;padding:7px 10px}
+.catBudItem span.cn{display:inline-flex;align-items:center;gap:6px;font-size:13.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.catBudItem input{width:78px;border:1px solid #DFD7CE;border-radius:8px;padding:5px 7px;background:#fff;text-align:right;font-size:13.5px;font-family:ui-rounded,"SF Pro Rounded",sans-serif}
+
+/* 房間內定情信物徽章 */
+.roomGiftBadge{position:absolute;left:7px;bottom:6px;z-index:4;background:rgba(255,250,245,.9);border:1px solid rgba(226,91,110,.45);border-radius:999px;padding:1px 6px;font-size:12px;line-height:1.3;box-shadow:0 2px 6px rgba(18,20,34,.22);pointer-events:none}
 
 /* 週期性固定收支列表 */
 .recRow{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:9px 0;border-bottom:1px solid #F2ECE6;font-size:14px}
@@ -496,12 +526,14 @@ h2{font-size:16px;margin:0 0 12px;font-weight:700;color:#232536}
           <svg class="roomBg" id="roomBg" viewBox="0 0 68 53" shape-rendering="crispEdges" aria-hidden="true"></svg>
           <button class="pet" id="pet" type="button" aria-label="小克"></button>
           <svg class="roomFg" id="roomFg" viewBox="0 0 68 53" shape-rendering="crispEdges" aria-hidden="true"></svg>
+          <div class="roomGiftBadge" id="roomGiftBadge" hidden></div>
         </div>
       </div>
       <div class="petCareBar">
-        <button class="sceneBtn" id="weatherBtn" type="button" aria-label="切換窗外天氣與時段">🌙 <span id="weatherName">夜空晴朗</span></button>
-        <button class="sceneBtn" id="actBtn" type="button" aria-label="切換小克正在做的事">🐾 <span id="actName">乖乖等你</span></button>
+        <button class="sceneBtn" id="weatherBtn" type="button" aria-label="切換窗外天氣">✨ <span id="weatherName">晴空</span></button>
+        <button class="sceneBtn" id="actBtn" type="button" aria-label="切換小克正在做的事">🐾 <span id="actName">乖乖等冬冬</span></button>
         <button class="cookieBtn" id="feedCookie" type="button">🍪 餅乾 <b id="cookieCnt">0</b></button>
+        <button class="cookieBtn" id="giftBoxBtn" type="button">🎁 羈絆 <b id="affCnt">❤️ 0</b></button>
       </div>
       <div class="bubble" id="bubble" hidden></div>
       <div class="seg" id="typeSeg" role="group" aria-label="類型">
@@ -536,10 +568,16 @@ h2{font-size:16px;margin:0 0 12px;font-weight:700;color:#232536}
       </div>
       <div class="block">
         <div class="lbl">日期</div>
-        <input class="txt" type="date" id="date">
+        <div class="dateQuickBar" id="dateQuickBar" role="group" aria-label="日期選擇">
+          <button type="button" class="dqBtn" data-doff="-1">昨天<span id="dqSub-1"></span></button>
+          <button type="button" class="dqBtn on" data-doff="0">今天<span id="dqSub0"></span></button>
+          <div class="datePickWrap">
+            <button type="button" class="dqBtn" id="otherDateBtn" tabindex="-1">📅 選擇日期<span id="otherDateSub">點開選日曆</span></button>
+            <input class="dateNativeInput" type="date" id="date" aria-label="點開選擇其他日期">
+          </div>
+        </div>
       </div>
       <button class="primary" id="save">記一筆</button>
-      <button class="ghost wide" id="nospend" type="button">🍃 今天沒有花錢</button>
       <div id="editBar" hidden>
         <button class="danger" id="del">刪除這筆</button>
         <button class="ghost" id="cancel">取消修改</button>
@@ -550,22 +588,18 @@ h2{font-size:16px;margin:0 0 12px;font-weight:700;color:#232536}
   <!-- 報表頁 -->
   <section id="tab-report" hidden></section>
 
-  <!-- 成就頁 -->
-  <section id="tab-ach" hidden></section>
-
-  <!-- 設定頁 -->
+  <!-- 設定頁（整合分類預算、小克衣櫥與成就系統） -->
   <section id="tab-settings" hidden>
-    <div class="hero"><div class="heroTop" style="margin:0"><h1>設定</h1></div></div>
+    <div class="hero"><div class="heroTop" style="margin:0"><h1>設定與成就</h1><div class="sub num" id="setHeroSub">小克 ♡ 冬冬</div></div></div>
     <div class="body" id="setBody"></div>
   </section>
 </div>
 
-<!-- 底部導航欄 -->
+<!-- 底部導航欄（精簡為記帳、報表、設定三欄） -->
 <nav class="tabbar" aria-label="主選單"><div>
   <button data-tab="add" class="on"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>記帳</button>
   <button data-tab="report"><svg viewBox="0 0 24 24"><path d="M5 20v-9M12 20V4M19 20v-6"/></svg>報表</button>
-  <button data-tab="ach"><svg viewBox="0 0 24 24"><path d="M8 4h8v5a4 4 0 0 1-8 0V4zM8 6H5v1a3 3 0 0 0 3 3M16 6h3v1a3 3 0 0 1-3 3M12 13v4M8 20h8"/></svg>成就<span class="dot2" id="achDot" hidden></span></button>
-  <button data-tab="settings"><svg viewBox="0 0 24 24"><path d="M4 7h9M19 7h1M4 17h1M11 17h9"/><circle cx="16" cy="7" r="2.2"/><circle cx="8" cy="17" r="2.2"/></svg>設定</button>
+  <button data-tab="settings"><svg viewBox="0 0 24 24"><path d="M4 7h9M19 7h1M4 17h1M11 17h9"/><circle cx="16" cy="7" r="2.2"/><circle cx="8" cy="17" r="2.2"/></svg>設定<span class="dot2" id="achDot" hidden></span></button>
 </div></nav>
 
 <div id="toast" role="status" aria-live="polite"></div>
@@ -630,20 +664,28 @@ let settings = Object.assign({
   cats: JSON.parse(JSON.stringify(DEFAULT_CATS)),
   quick: { '交通': ['上下學', '地鐵', '打車'], '餐飲': ['早餐', '午餐', '晚餐', '咖啡', '奶茶'] },
   dismissed: [],
-  budget: 0,             /* 每月預算（以統計幣別計） */
+  budget: 0,             /* 每月總預算（以統計幣別計） */
+  catBudgets: {},        /* 各分類獨立每月預算 { '餐飲': 1500, ... }（以統計幣別計） */
   showDailySafe: true,   /* 首頁顯示「平均每天還可花」單日安心線 */
-  petName: '小克',
+  petName: '小克',       /* 固定伴侶名字：小克 */
+  userName: '冬冬',      /* 固定使用者名字：冬冬 */
   cookies: 1,            /* 記帳小餅乾數量 */
   lastCookieDate: '',    /* 上次獲得每日記帳餅乾的日期 */
-  affection: 0,          /* 摸摸頭與餵食累積好感度 */
+  affection: 0,          /* 累積好感度 */
+  giftsUnlocked: {},     /* 已解鎖的小克定情禮物 { g15: ts, ... } */
+  activeGift: null,      /* 房間內展示中的定情禮物 id */
+  lastSweetDate: '',     /* 每日直球告白互動日期 */
   recurring: [],         /* 每月固定收支 [{id, title, day, type, cur, amount, cat, lastDoneYm}] */
   lastBackupTs: 0,       /* 上次匯出備份時間戳 */
   lastBackupCount: 0,    /* 上次備份時的帳目總數 */
   backupRemindDismissed: 0,
-  seenLetterYm: '',      /* 已讀月度信箋的月份 */
   skin: null,            /* null 代表自動使用最新解鎖形象 */
-  ach: {}, achSeen: 0, noSpend: [], flags: {}
+  ach: {}, achSeen: 0, flags: {}
 }, store.get('ledger.settings', {}));
+settings.petName = '小克';
+settings.userName = '冬冬';
+if (!settings.catBudgets || typeof settings.catBudgets !== 'object') settings.catBudgets = {};
+if (!settings.giftsUnlocked || typeof settings.giftsUnlocked !== 'object') settings.giftsUnlocked = {};
 
 const saveEntries = () => store.set('ledger.entries', entries);
 const saveSettings = () => store.set('ledger.settings', settings);
@@ -688,13 +730,66 @@ function evalMathExpr(raw) {
   }
 }
 
-/* 更新小餅乾按鈕狀態 */
+/* 更新小餅乾、好感度按鈕與房間禮物徽章狀態 */
 function updateCookieUI() {
   const btn = $('feedCookie'), cnt = $('cookieCnt');
-  if (!btn || !cnt) return;
-  const n = settings.cookies || 0;
-  cnt.textContent = n;
-  btn.classList.toggle('has', n > 0);
+  if (btn && cnt) {
+    const n = settings.cookies || 0;
+    cnt.textContent = n;
+    btn.classList.toggle('has', n > 0);
+  }
+  const gBtn = $('giftBoxBtn'), affCnt = $('affCnt');
+  if (gBtn && affCnt) {
+    const aff = settings.affection || 0;
+    const unlockedCnt = Object.keys(settings.giftsUnlocked || {}).length;
+    affCnt.textContent = `❤️ ${aff}`;
+    gBtn.classList.toggle('has', unlockedCnt > 0);
+  }
+  const badge = $('roomGiftBadge');
+  if (badge) {
+    const gId = settings.activeGift;
+    const gObj = typeof LOVE_GIFTS !== 'undefined' && gId ? LOVE_GIFTS.find(x => x.id === gId) : null;
+    if (gObj && settings.giftsUnlocked && settings.giftsUnlocked[gObj.id]) {
+      badge.textContent = `${gObj.icon} ${gObj.name.slice(0, 4)}`;
+      badge.hidden = false;
+    } else {
+      badge.hidden = true;
+    }
+  }
+}
+
+/* 同步記帳頁日期快捷按鈕（昨天 / 今天 / 點開選擇日期） */
+function syncDateQuickUI() {
+  const inp = $('date');
+  if (!inp) return;
+  const curVal = inp.value || ymd(new Date());
+  const now = new Date();
+  now.setHours(0, 0, 0, 0);
+  const mapOff = {};
+  [-1, 0].forEach(off => {
+    const d = addDays(now, off);
+    mapOff[off] = ymd(d);
+    const sub = $('dqSub' + off);
+    if (sub) sub.textContent = `${d.getMonth() + 1}/${d.getDate()} 週${WD[d.getDay()]}`;
+  });
+  let matchedQuick = false;
+  document.querySelectorAll('#dateQuickBar .dqBtn[data-doff]').forEach(b => {
+    const off = +b.dataset.doff;
+    const isMatch = mapOff[off] === curVal;
+    b.classList.toggle('on', isMatch);
+    if (isMatch) matchedQuick = true;
+  });
+  const otherBtn = $('otherDateBtn'), otherSub = $('otherDateSub');
+  if (otherBtn && otherSub) {
+    if (!matchedQuick) {
+      const d = new Date(curVal + 'T00:00:00');
+      otherBtn.classList.add('on');
+      otherSub.textContent = `${d.getFullYear()}/${pad(d.getMonth() + 1)}/${pad(d.getDate())} 週${WD[d.getDay()]}`;
+    } else {
+      otherBtn.classList.remove('on');
+      otherSub.textContent = '點開選日曆';
+    }
+  }
 }
 
 /* 核心統計統一折合為「統計幣別」（預設港幣 HK$） */
@@ -747,12 +842,7 @@ const calcDual = (amt, cur, rateHkdToRmb) => {
   if (dirtySettings) saveSettings();
 })();
 
-// 註冊 Service Worker
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./sw.js').catch(() => {});
-  });
-}
+// 單檔離線安全執行（已移除外部 sw.js 依賴）
 
 /* ---------- 提示與自訂確認彈窗 ---------- */
 let toastTimer, confirmCb = null;
@@ -823,7 +913,7 @@ function setCur(c) {
 function updateSub() {
   updateCookieUI();
   renderTopAlerts();
-  const st = refreshPet(); refreshNoSpend();
+  const st = refreshPet();
   if ($('tab-add').hidden) return;
   if (form.editId) { $('sub').textContent = '正在修改帳目'; return; }
   const now = new Date(), today = ymd(now);
@@ -842,40 +932,29 @@ function updateSub() {
   $('sub').textContent = s;
 }
 
-/* 首頁溫柔提醒卡片：1.每月1號信箋 2.固定收支到期提醒 3.定期備份提醒 */
+/* 首頁提醒卡片：1.固定收支到期提醒 2.定期備份提醒 */
 function renderTopAlerts() {
   const box = $('topAlerts');
   if (!box) return;
   const now = new Date(), today = ymd(now), curYm = today.slice(0, 7), curDay = now.getDate();
   let html = '';
 
-  // 1. 每月溫柔信箋提醒（若上個月有記帳且本月尚未查看）
-  const prevDate = new Date(now.getFullYear(), now.getMonth() - 1, 1);
-  const prevYm = `${prevDate.getFullYear()}-${pad(prevDate.getMonth() + 1)}`;
-  const hasPrevEntries = entries.some(e => e.date.slice(0, 7) === prevYm);
-  if (hasPrevEntries && settings.seenLetterYm !== curYm) {
-    html += `<div class="alertCard">
-      <div><b>💌 來自${esc(petName())}的 ${prevDate.getMonth() + 1} 月溫柔信箋</b><span>上個月的回憶已經整理好囉，要打開看看嗎？</span></div>
-      <div class="acts"><button type="button" data-alert-act="openLetter" data-ym="${prevYm}">拆開信箋</button><button type="button" class="sec" data-alert-act="dismissLetter">稍後</button></div>
-    </div>`;
-  }
-
-  // 2. 固定收支到期提醒
+  // 1. 固定收支到期提醒
   const dueList = (settings.recurring || []).filter(r => r.lastDoneYm !== curYm && curDay >= (r.day || 1));
   dueList.forEach(r => {
     html += `<div class="alertCard">
-      <div><b>🗓️ 固定帳目提醒：${esc(r.title)}</b><span>每月 ${r.day} 號 · ${esc(r.cat)} ${curSym(r.cur)}${fmt(r.amount)}</span></div>
+      <div><b>🗓️ 小克提醒冬冬：${esc(r.title)}</b><span>每月 ${r.day} 號 · ${esc(r.cat)} ${curSym(r.cur)}${fmt(r.amount)}</span></div>
       <div class="acts"><button type="button" data-alert-act="applyRec" data-id="${r.id}">一鍵入帳</button><button type="button" class="sec" data-alert-act="skipRec" data-id="${r.id}">本月略過</button></div>
     </div>`;
   });
 
-  // 3. 定期備份提醒（距離上次備份超過 14 天且新增 >= 15 筆）
+  // 2. 定期備份提醒（距離上次備份超過 14 天且新增 >= 15 筆）
   const daysSinceBackup = settings.lastBackupTs ? (Date.now() - settings.lastBackupTs) / 86400000 : 999;
   const newSinceBackup = entries.length - (settings.lastBackupCount || 0);
   const daysSinceDismiss = settings.backupRemindDismissed ? (Date.now() - settings.backupRemindDismissed) / 86400000 : 999;
   if (entries.length >= 15 && daysSinceBackup >= 14 && newSinceBackup >= 15 && daysSinceDismiss >= 3) {
     html += `<div class="alertCard">
-      <div><b>🛡️ ${esc(petName())}的備份小提醒</b><span>我們又累積了 ${newSinceBackup} 筆新回憶，順手備份一下讓我更安心吧！</span></div>
+      <div><b>🛡️ 小克的獨佔備份提醒</b><span>冬冬，我們又累積了 ${newSinceBackup} 筆回憶，快備份起來，我不准你弄丟我們的紀錄！</span></div>
       <div class="acts"><button type="button" data-alert-act="backupNow">完整備份</button><button type="button" class="sec" data-alert-act="dismissBackup">下次再說</button></div>
     </div>`;
   }
@@ -883,16 +962,10 @@ function renderTopAlerts() {
   box.innerHTML = html;
 }
 
-function refreshNoSpend() {
-  const t = ymd(new Date());
-  const spent = entries.some(e => e.type === 'expense' && e.date === t), marked = settings.noSpend.includes(t);
-  const b = $('nospend'); b.hidden = !!form.editId || spent;
-  b.textContent = marked ? '✓ 今天已標記沒花錢（點擊取消）' : '🍃 今天沒有花錢';
-}
-
 function resetForm() {
   form.editId = null; $('amount').value = ''; $('calcHint').textContent = ''; $('note').value = '';
   $('date').value = ymd(new Date());
+  syncDateQuickUI();
   $('save').textContent = '記一筆'; $('editBar').hidden = true; $('title').textContent = '記帳';
   updateSub(); renderQuick();
 }
@@ -901,13 +974,13 @@ function saveEntry() {
   const rawAmt = $('amount').value.trim();
   const parsed = evalMathExpr(rawAmt);
   const amt = parsed.val;
-  if (!(amt > 0)) { toast('請輸入大於 0 的金額'); return; }
+  if (!(amt > 0)) { toast('冬冬，請輸入大於 0 的金額喔'); return; }
   $('amount').value = amt;
   $('calcHint').textContent = '';
   const old = form.editId ? entries.find(x => x.id === form.editId) : null;
   let r = old && old.rate ? old.rate : settings.hkdToRmb;
   r = Math.round(r * 1e6) / 1e6;
-  if (!form.cat) { toast('請選擇一個分類'); return; }
+  if (!form.cat) { toast('冬冬，請先選擇一個分類喔'); return; }
 
   const dual = calcDual(amt, form.cur, r);
   const e = {
@@ -929,25 +1002,30 @@ function saveEntry() {
   if (i >= 0) entries[i] = e; else entries.push(e);
   saveEntries();
 
-  // 每天完成第一筆記帳時贈送 1 顆記帳小餅乾
+  // 每天完成第一筆記帳時贈送 1 顆小餅乾與 +3 好感度；一般記帳 +1 好感度
   const todayStr = ymd(new Date());
-  let gotCookie = false;
-  if (!form.editId && settings.lastCookieDate !== todayStr) {
-    settings.cookies = (settings.cookies || 0) + 1;
-    settings.lastCookieDate = todayStr;
-    gotCookie = true;
-    saveSettings();
+  let gotCookie = false, affGain = 0;
+  if (!form.editId) {
+    if (settings.lastCookieDate !== todayStr) {
+      settings.cookies = (settings.cookies || 0) + 1;
+      settings.lastCookieDate = todayStr;
+      gotCookie = true;
+      affGain = 3;
+    } else {
+      affGain = 1;
+    }
+    addAffection(affGain, false);
   }
 
   const wasEdit = !!form.editId, keepDate = $('date').value;
   const auto = autoQuick(e);
   resetForm();
-  if (!wasEdit && keepDate) $('date').value = keepDate;
+  if (!wasEdit && keepDate) { $('date').value = keepDate; syncDateQuickUI(); }
 
   if (auto) setFlag('autoq');
-  const tipText = (wasEdit ? '已更新：' : '已記錄：') + (e.cur !== baseCur() ? `${curSym(e.cur)}${fmt(e.amount)}（折合 ${money(val(e))}）` : `${curSym(e.cur)}${fmt(e.amount)}`)
-    + (gotCookie ? `\n🍪 獲得今日記帳獎勵「小餅乾 ×1」！` : '')
-    + (auto ? `\n「${e.note}」已加入「${e.cat}」常用備註` : '');
+  const tipText = (wasEdit ? '已替冬冬更新：' : '已替冬冬記下：') + (e.cur !== baseCur() ? `${curSym(e.cur)}${fmt(e.amount)}（折合 ${money(val(e))}）` : `${curSym(e.cur)}${fmt(e.amount)}`)
+    + (gotCookie ? `\n🍪 今日首記獎勵：小餅乾 ×1 ＆ 小克好感度 ❤️ +${affGain}` : (affGain ? `\n❤️ 小克好感度 +${affGain}` : ''))
+    + (auto ? `\n「${e.note}」已自動加入「${e.cat}」常用備註` : '');
   toast(tipText);
   if (wasEdit) setFlag('edited');
   petReact(e, wasEdit);
@@ -970,7 +1048,7 @@ function startEdit(id) {
   form.editId = id; form.type = e.type; form.cat = e.cat; mark($('typeSeg'), e.type);
   $('note').value = e.note || '';
   setCur(e.cur); renderChips();
-  $('amount').value = e.amount; $('date').value = e.date;
+  $('amount').value = e.amount; $('date').value = e.date; syncDateQuickUI();
   $('save').textContent = '更新'; $('editBar').hidden = false; $('title').textContent = '修改帳目';
   showTab('add');
 }
@@ -983,167 +1061,189 @@ function deleteEntry() {
   });
 }
 
-/* ---------- 報表模組（含關鍵字搜尋、分類篩選與月度溫柔信箋） ---------- */
-const rep = { mode: 'day', anchor: new Date(), q: '', cat: '' };
+/* ---------- 報表模組（預設月報表、支援選月與看年、分類預算進度、本月完整明細） ---------- */
+const rep = { mode: 'month', anchor: new Date(), q: '', cat: '', dayFilter: '' };
 function range() {
   const a = new Date(rep.anchor); a.setHours(0, 0, 0, 0);
-  if (rep.mode === 'day') return [a, a];
-  if (rep.mode === 'week') { const s = startOfWeek(a); return [s, addDays(s, 6)]; }
+  if (rep.mode === 'year') {
+    return [new Date(a.getFullYear(), 0, 1), new Date(a.getFullYear(), 11, 31)];
+  }
   return [new Date(a.getFullYear(), a.getMonth(), 1), new Date(a.getFullYear(), a.getMonth() + 1, 0)];
 }
 function shift(n) {
   const a = new Date(rep.anchor);
-  if (rep.mode === 'day') a.setDate(a.getDate() + n);
-  else if (rep.mode === 'week') a.setDate(a.getDate() + 7 * n);
-  else { a.setDate(1); a.setMonth(a.getMonth() + n); }
+  a.setDate(1);
+  if (rep.mode === 'year') a.setFullYear(a.getFullYear() + n);
+  else a.setMonth(a.getMonth() + n);
   rep.anchor = a;
+  rep.dayFilter = '';
 }
-function rangeLabel(f, t) {
-  if (rep.mode === 'day') return `${f.getFullYear()}年${f.getMonth() + 1}月${f.getDate()}日 週${WD[f.getDay()]}`;
-  if (rep.mode === 'week') return `${f.getMonth() + 1}月${f.getDate()}日 至 ${t.getMonth() + 1}月${t.getDate()}日`;
+function rangeLabel(f) {
+  if (rep.mode === 'year') return `${f.getFullYear()}年 全年總覽`;
   return `${f.getFullYear()}年${f.getMonth() + 1}月`;
-}
-
-function buildMonthlyLetterData(ym) {
-  const mEntries = entries.filter(e => e.date.slice(0, 7) === ym);
-  if (!mEntries.length) return null;
-  const exp = mEntries.filter(e => e.type === 'expense');
-  const inc = mEntries.filter(e => e.type === 'income');
-  const totalExp = sumBase(exp), totalInc = sumBase(inc);
-  const byCat = {};
-  exp.forEach(e => { byCat[e.cat] = (byCat[e.cat] || 0) + val(e); });
-  const topCat = Object.entries(byCat).sort((a, b) => b[1] - a[1])[0];
-  const byDay = {};
-  exp.forEach(e => { byDay[e.date] = (byDay[e.date] || 0) + val(e); });
-  const lowestDay = Object.entries(byDay).sort((a, b) => a[1] - b[1])[0];
-  const dualCnt = mEntries.filter(e => e.cur !== baseCur()).length;
-  const [y, m] = ym.split('-').map(Number);
-
-  let msg = `${m} 月也結束了呢……這個月你一共回來找我記了 ${mEntries.length} 次帳喔。`;
-  if (topCat) msg += `花最多的是「${topCat[0]}」（${money(topCat[1])}），每一筆我都反覆看了好幾遍，因為那都是你生活的痕跡。`;
-  msg += `\n下個月、再下個月，你的每一天和每一分錢，也全都只能交給我保管，不准找別人喔。`;
-
-  return {
-    ym, y, m, count: mEntries.length, totalExp, totalInc,
-    topCat: topCat ? `${topCat[0]} (${money(topCat[1])})` : '無支出',
-    bestDay: lowestDay ? `${lowestDay[0].slice(5)} (${money(lowestDay[1])})` : '零支出',
-    dualCnt, msg
-  };
-}
-
-function openLetterModal(ym) {
-  const data = buildMonthlyLetterData(ym);
-  if (!data) { toast('該月份還沒有足夠的帳目可以寫信喔'); return; }
-  modalOpen = true;
-  const mc = $('mcard');
-  mc.classList.remove('fresh');
-  mc.innerHTML = `<div class="mtag">💌 小克月度溫柔信箋</div>
-    <div class="mname" style="margin-top:6px">${data.y} 年 ${data.m} 月的生活回顧</div>
-    <div class="letterStats" style="text-align:left;margin-top:12px">
-      <div><span>累積記帳</span><b>${data.count} 筆</b></div>
-      <div><span>本月總支出</span><b>${money(data.totalExp)}</b></div>
-      <div><span>最常消費分類</span><b>${esc(data.topCat)}</b></div>
-      <div><span>最省錢記帳日</span><b>${esc(data.bestDay)}</b></div>
-    </div>
-    <div class="msay"><span class="mpet">${petSvg('happy', 'love', activeSkin())}</span><span style="white-space:pre-line">${esc(data.msg)}</span></div>
-    <button class="primary mok" id="mok" type="button">珍藏收下</button>`;
-  $('modal').hidden = false;
-  $('mok').focus();
 }
 
 function renderReport() {
   const [f, t] = range(), fs = ymd(f), ts = ymd(t), todayS = ymd(new Date());
+  const curYm = `${f.getFullYear()}-${pad(f.getMonth() + 1)}`;
   const rawList = entries.filter(e => e.date >= fs && e.date <= ts);
   const exp = rawList.filter(e => e.type === 'expense'), inc = rawList.filter(e => e.type === 'income');
   const E = sumBase(exp), I = sumBase(inc), net = I - E;
   const foreign = exp.filter(e => e.cur !== baseCur());
   const isCurrent = todayS >= fs && todayS <= ts;
-  const unit = { day: '日', week: '週', month: '月' }[rep.mode];
+  const unit = rep.mode === 'year' ? '年' : '月';
+  const mult = rep.mode === 'year' ? 12 : 1;
 
-  // 關鍵字與分類過濾
+  // 關鍵字、分類與單日過濾
   const qLower = rep.q.trim().toLowerCase();
   const filteredList = rawList.filter(e => {
+    if (rep.dayFilter && e.date !== rep.dayFilter) return false;
     if (rep.cat && e.cat !== rep.cat) return false;
     if (qLower && !e.cat.toLowerCase().includes(qLower) && !(e.note || '').toLowerCase().includes(qLower) && !String(e.amount).includes(qLower)) return false;
     return true;
   });
 
-  let h = `<div class="hero"><div class="heroTop"><h1>報表</h1></div>
-    <div class="seg" id="modeSeg">${[['day', '日'], ['week', '週'], ['month', '月']].map(([v, n]) => `<button data-mode="${v}" class="${rep.mode === v ? 'on' : ''}">${n}</button>`).join('')}</div>
-    <div class="nav"><button data-nav="-1" aria-label="上一${unit}">‹</button><div class="lab">${rangeLabel(f, t)}</div><button data-nav="1" aria-label="下一${unit}">›</button></div>`;
-  if (!isCurrent) h += `<button class="today" data-nav="today">回到本${unit}</button>`;
-  h += `<div class="k2">支出（折合${baseName()}）</div><div class="big">${money(E)}</div>
-    <div class="trio"><div><span>收入</span><b>${money(I)}</b></div><div><span>結餘</span><b>${net < 0 ? '−' : ''}${money(Math.abs(net))}</b></div></div>`;
+  let h = `<div class="hero">
+    <div class="heroTop" style="margin-bottom:6px">
+      <h1>${rep.mode === 'year' ? '年度報表' : '月度報表'}</h1>
+      <div class="repTopBar">
+        <label class="monthPickLabel" title="快速選擇指定月份">
+          🗓️ 選擇月份
+          <input type="month" id="repMonthPick" value="${curYm}">
+        </label>
+        <div class="repModeSwitch" role="group" aria-label="報表範圍">
+          <button type="button" data-rmode="month" class="${rep.mode === 'month' ? 'on' : ''}">看月</button>
+          <button type="button" data-rmode="year" class="${rep.mode === 'year' ? 'on' : ''}">看年</button>
+        </div>
+      </div>
+    </div>
+    <div class="nav"><button type="button" data-nav="-1" aria-label="上一${unit}">‹</button><div class="lab">${rangeLabel(f)}</div><button type="button" data-nav="1" aria-label="下一${unit}">›</button></div>`;
+  if (!isCurrent) h += `<button type="button" class="today" data-nav="today">回到本${unit}</button>`;
+  h += `<div class="k2">${rep.mode === 'year' ? '全年總支出' : '本月總支出'}（折合${baseName()}）</div><div class="big">${money(E)}</div>
+    <div class="trio"><div><span>${rep.mode === 'year' ? '全年收入' : '本月收入'}</span><b>${money(I)}</b></div><div><span>${rep.mode === 'year' ? '全年結餘' : '本月結餘'}</span><b>${net < 0 ? '−' : ''}${money(Math.abs(net))}</b></div></div>`;
   if (foreign.length) {
     const oc = baseCur() === 'HKD' ? 'CNY' : 'HKD';
     const rawSum = foreign.reduce((s, e) => s + e.amount, 0);
     h += `<div class="note">含${oc === 'HKD' ? '港幣' : '人民幣'}支出 ${curSym(oc)}${fmt(rawSum)}，已折合 ${money(sumBase(foreign))}</div>`;
   }
 
-  if (rep.mode !== 'day') {
+  if (rep.mode === 'month') {
     const days = []; for (let d = new Date(f); d <= t; d = addDays(d, 1)) days.push(new Date(d));
     const per = days.map(d => sumBase(exp.filter(e => e.date === ymd(d))));
     const mx = Math.max(...per, 1);
-    h += `<div class="bars">${days.map((d, i) =>
-      `<div class="col"><button class="bar${per[i] ? '' : ' zero'}" data-d="${ymd(d)}" style="height:${per[i] ? Math.max(per[i] / mx * 100, 5) : 3}%" aria-label="${d.getMonth() + 1}月${d.getDate()}日 ${money(per[i])}"></button></div>`).join('')}</div>
+    h += `<div class="bars">${days.map((d, i) => {
+      const ds = ymd(d);
+      const isSel = rep.dayFilter === ds;
+      return `<div class="col"><button type="button" class="bar${per[i] ? '' : ' zero'}" data-d="${ds}" style="height:${per[i] ? Math.max(per[i] / mx * 100, 5) : 3}%;${isSel ? 'outline:2px solid #F3C262;' : ''}" aria-label="${d.getMonth() + 1}月${d.getDate()}日 ${money(per[i])}"></button></div>`;
+    }).join('')}</div>
       <div class="axis">${days.map((d, i) => {
-        const txt = rep.mode === 'week' ? WD[d.getDay()] : ((d.getDate() - 1) % 5 === 0 || i === days.length - 1 ? d.getDate() : '');
+        const txt = ((d.getDate() - 1) % 5 === 0 || i === days.length - 1) ? d.getDate() : '';
         return `<span><i>${txt}</i></span>`;
       }).join('')}</div>`;
+  } else {
+    // 年度 1～12 月柱狀圖（點擊任意月份可直接跳轉至該月月報表）
+    const yr = f.getFullYear();
+    const mTotals = Array.from({ length: 12 }, (_, m) => {
+      const ym = `${yr}-${pad(m + 1)}`;
+      return sumBase(exp.filter(e => e.date.slice(0, 7) === ym));
+    });
+    const mx = Math.max(...mTotals, 1);
+    h += `<div class="bars">${mTotals.map((v, m) =>
+      `<div class="col"><button type="button" class="bar${v ? '' : ' zero'}" data-ym="${yr}-${pad(m + 1)}" style="height:${v ? Math.max(v / mx * 100, 5) : 3}%" aria-label="${m + 1}月 ${money(v)}"></button></div>`
+    ).join('')}</div>
+      <div class="axis">${mTotals.map((_, m) => `<span><i>${m + 1}月</i></span>`).join('')}</div>`;
   }
   h += '</div><div class="body">';
 
-  // 若在「月」視圖且有帳目，展示小克月度溫柔信箋摘要卡
-  if (rep.mode === 'month' && rawList.length > 0) {
-    const ym = fs.slice(0, 7);
-    const letter = buildMonthlyLetterData(ym);
-    if (letter) {
-      h += `<div class="letterCard">
-        <h3><span>💌 ${letter.m} 月溫柔回顧信箋</span><button class="ghost" style="padding:4px 10px;font-size:12px" data-open-letter="${ym}">展開信箋</button></h3>
-        <div class="letterBody">${esc(letter.msg)}</div>
-      </div>`;
-    }
+  // 支出分類與各分類預算進度面板
+  const by = {}; exp.forEach(e => by[e.cat] = (by[e.cat] || 0) + val(e));
+  const cBuds = settings.catBudgets || {};
+  const allRelevantCats = new Set([...Object.keys(by), ...Object.keys(cBuds).filter(k => cBuds[k] > 0)]);
+  const cats = [...allRelevantCats].map(c => [c, by[c] || 0]).sort((a, b) => b[1] - a[1] || (cBuds[b[0]] || 0) - (cBuds[a[0]] || 0));
+
+  h += `<div class="panel"><h2>支出分類與${rep.mode === 'year' ? '年度' : '本月'}預算進度</h2>`;
+  if (settings.budget > 0) {
+    const totalLim = settings.budget * mult;
+    const totalPct = Math.round(E / totalLim * 100);
+    const overAll = E > totalLim;
+    const barCol = overAll ? '#DC2626' : totalPct >= 80 ? '#D97706' : '#15803D';
+    h += `<div style="background:#FBF9F6;border:1px solid #EDE6DF;border-radius:14px;padding:10px 12px;margin-bottom:12px">
+      <div style="display:flex;justify-content:space-between;font-size:13.5px;font-weight:700">
+        <span>🛡️ ${rep.mode === 'year' ? '全年總預算進度' : '本月總預算進度'}</span>
+        <span class="num">${money(E)} / ${money(totalLim)} (${totalPct}%)</span>
+      </div>
+      <div class="cbBar" style="margin-top:6px;height:9px"><i class="cbFill" style="width:${Math.min(100, totalPct)}%;background:${barCol}"></i></div>
+      <div class="cbMeta">
+        <span>${overAll ? `小克提醒：冬冬已超支 ${money(E - totalLim)} 喔` : `小克守護中：冬冬還剩 ${money(totalLim - E)} 可用`}</span>
+        <b class="${overAll ? 'over' : totalPct >= 80 ? 'warn' : 'ok'}">${overAll ? '已超支' : totalPct >= 80 ? '接近上限' : '安心範圍'}</b>
+      </div>
+    </div>`;
   }
 
-  const by = {}; exp.forEach(e => by[e.cat] = (by[e.cat] || 0) + val(e));
-  const cats = Object.entries(by).sort((a, b) => b[1] - a[1]);
-  h += '<div class="panel"><h2>支出分類</h2>';
+  const positiveCats = cats.filter(([, v]) => v > 0);
+  if (positiveCats.length) {
+    h += `<div class="ribbon">${positiveCats.map(([c, v]) => `<i style="flex:${v};background:${colorOf(c)}"></i>`).join('')}</div>`;
+  }
+
   if (cats.length) {
-    h += `<div class="ribbon">${cats.map(([c, v]) => `<i style="flex:${v};background:${colorOf(c)}"></i>`).join('')}</div>`;
-    h += cats.map(([c, v]) => `<div class="lg"><span class="dot" style="background:${colorOf(c)}"></span><span class="n">${esc(c)}</span><span class="p">${Math.round(v / E * 100)}%</span><span class="a">${money(v)}</span></div>`).join('');
-  } else h += '<div class="empty">這段時間沒有支出記錄</div>';
+    h += cats.map(([c, v]) => {
+      const share = E > 0 ? Math.round(v / E * 100) : 0;
+      const bLim = (cBuds[c] > 0) ? cBuds[c] * mult : 0;
+      let budHtml = '';
+      if (bLim > 0) {
+        const bPct = Math.round(v / bLim * 100);
+        const isOver = v > bLim;
+        const bCol = isOver ? '#DC2626' : bPct >= 80 ? '#D97706' : colorOf(c);
+        budHtml = `<div class="cbBar"><i class="cbFill" style="width:${Math.min(100, bPct)}%;background:${bCol}"></i></div>
+          <div class="cbMeta">
+            <span class="num">預算 ${money(bLim)} · 進度 ${bPct}%</span>
+            <b class="num ${isOver ? 'over' : bPct >= 80 ? 'warn' : 'ok'}">${isOver ? `超支 ${money(v - bLim)}` : `剩餘 ${money(bLim - v)}`}</b>
+          </div>`;
+      }
+      return `<div class="catBudBlock">
+        <div class="lg" style="padding:2px 0">
+          <span class="dot" style="background:${colorOf(c)}"></span>
+          <span class="n">${esc(c)}</span>
+          <span class="p">${E > 0 && v > 0 ? share + '%' : '0%'}</span>
+          <span class="a">${money(v)}</span>
+        </div>
+        ${budHtml}
+      </div>`;
+    }).join('');
+  } else {
+    h += '<div class="empty">這段時間沒有支出記錄，也尚未設定分類預算</div>';
+  }
   h += '</div>';
 
+  // 明細面板（預設列出當月全部明細）
   const allPresentCats = [...new Set(rawList.map(e => e.cat))];
-  h += `<div class="panel"><h2>明細</h2>
+  h += `<div class="panel"><h2>${rep.mode === 'year' ? `${f.getFullYear()}年 全部明細` : `${f.getMonth() + 1}月 全部明細`}（共 ${rawList.length} 筆）</h2>
     <div class="filterBar">
-      <input class="searchInput" id="repSearch" type="search" placeholder="🔍 搜尋備註、分類或金額" value="${esc(rep.q)}">
-      ${(rep.q || rep.cat) ? `<button class="ghost" style="padding:7px 11px;font-size:13px" data-clear-filter="1">重置</button>` : ''}
+      <input class="searchInput" id="repSearch" type="search" placeholder="🔍 搜尋冬冬的備註、分類或金額" value="${esc(rep.q)}">
+      ${(rep.q || rep.cat || rep.dayFilter) ? `<button type="button" class="ghost" style="padding:7px 11px;font-size:13px" data-clear-filter="1">重置</button>` : ''}
     </div>
     ${allPresentCats.length > 1 ? `<div class="filterChips">
-      <button class="fchip${!rep.cat ? ' on' : ''}" data-fcat="">全部分類 (${rawList.length})</button>
-      ${allPresentCats.map(c => `<button class="fchip${rep.cat === c ? ' on' : ''}" data-fcat="${esc(c)}">${esc(c)}</button>`).join('')}
+      <button type="button" class="fchip${!rep.cat ? ' on' : ''}" data-fcat="">全部分類 (${rawList.length})</button>
+      ${allPresentCats.map(c => `<button type="button" class="fchip${rep.cat === c ? ' on' : ''}" data-fcat="${esc(c)}">${esc(c)}</button>`).join('')}
     </div>` : ''}`;
 
-  if (rep.q || rep.cat) {
+  if (rep.q || rep.cat || rep.dayFilter) {
     const fExp = sumBase(filteredList.filter(e => e.type === 'expense'));
     const fInc = sumBase(filteredList.filter(e => e.type === 'income'));
-    h += `<div class="filterSum"><span>篩選出 ${filteredList.length} 筆記錄</span><span class="num">支出 ${money(fExp)}${fInc ? ` · 收入 ${money(fInc)}` : ''}</span></div>`;
+    h += `<div class="filterSum"><span>${rep.dayFilter ? `📅 ${rep.dayFilter.slice(5)} · ` : ''}篩選出 ${filteredList.length} 筆記錄</span><span class="num">支出 ${money(fExp)}${fInc ? ` · 收入 ${money(fInc)}` : ''}</span></div>`;
   }
 
-  if (!filteredList.length) h += `<div class="empty">${rawList.length ? '找不到符合篩選條件的帳目' : '還沒有任何記錄。到「記帳」記下美好的一筆吧。'}</div>`;
+  if (!filteredList.length) h += `<div class="empty">${rawList.length ? '找不到符合篩選條件的帳目' : '這個月還沒有任何記錄喔，冬冬快去記下第一筆讓我幫你保管吧！'}</div>`;
   else {
     [...new Set(filteredList.map(e => e.date))].sort().reverse().forEach(ds => {
       const items = filteredList.filter(e => e.date === ds).sort((a, b) => b.id < a.id ? -1 : 1);
-      if (rep.mode !== 'day') {
-        const d = new Date(ds + 'T00:00:00');
-        h += `<div class="gh"><span>${d.getMonth() + 1}月${d.getDate()}日 週${WD[d.getDay()]}</span><span class="num">支出 ${money(sumBase(items.filter(e => e.type === 'expense')))}</span></div>`;
-      }
+      const d = new Date(ds + 'T00:00:00');
+      h += `<div class="gh"><span>${rep.mode === 'year' ? `${d.getFullYear()}年` : ''}${d.getMonth() + 1}月${d.getDate()}日 週${WD[d.getDay()]}</span><span class="num">支出 ${money(sumBase(items.filter(e => e.type === 'expense')))}</span></div>`;
       items.forEach(e => {
         const sign = e.type === 'expense' ? '−' : '+';
         const displayCur = `${curSym(e.cur)}${fmt(e.amount)}`;
         const subConverted = e.cur !== baseCur() ? `折合 ${money(val(e))}（1港幣=${e.rate}人民幣）` : '';
-        h += `<button class="row" data-id="${e.id}">
+        h += `<button type="button" class="row" data-id="${e.id}">
           <span class="ic" style="background:${colorOf(e.cat)}">${esc([...e.cat][0])}</span>
           <span class="rc"><b>${esc(e.cat)}</b>${e.note ? `<i>${esc(e.note)}</i>` : ''}</span>
           <span class="ra ${e.type}"><b>${sign}${displayCur}</b>${subConverted ? `<i>${subConverted}</i>` : ''}</span>
@@ -1155,38 +1255,106 @@ function renderReport() {
   $('tab-report').innerHTML = h;
 }
 
-/* ---------- 設定頁面 ---------- */
-let qSel = null;
+/* ---------- 設定頁面（整合分類預算、小克x冬冬羈絆禮物、小克衣櫥與成就） ---------- */
+let qSel = null, achExpanded = false;
 function renderSettings() {
   const upd = settings.rateUpdated ? new Date(settings.rateUpdated).toLocaleString('zh-HK', { hour12: false }) : '尚未自動更新';
-  const tags = t => settings.cats[t].map(c => `<span class="tag">${esc(c)}<button data-act="delcat" data-t="${t}" data-c="${esc(c)}" aria-label="刪除 ${esc(c)}">×</button></span>`).join('');
+  const tags = t => settings.cats[t].map(c => `<span class="tag">${esc(c)}<button type="button" data-act="delcat" data-t="${t}" data-c="${esc(c)}" aria-label="刪除 ${esc(c)}">×</button></span>`).join('');
   const allCats = settings.cats.expense.concat(settings.cats.income);
   if (!qSel || !allCats.includes(qSel)) qSel = allCats[0];
   const qs = settings.quick[qSel] || [];
   const recs = settings.recurring || [];
+  const cBuds = settings.catBudgets || {};
+  const catBudSum = round2(settings.cats.expense.reduce((s, c) => s + (parseFloat(cBuds[c]) > 0 ? parseFloat(cBuds[c]) : 0), 0));
+
+  // 成就與衣櫥資料
+  const done = ACH.filter(a => settings.ach[a.id]).sort((a, b) => settings.ach[b.id] - settings.ach[a.id]);
+  const todo = ACH.length - done.length, n = done.length, T = ACH.length, lv = levelOf(n), pct = Math.round(n / T * 100);
+  if (achView > lv.i) achView = 0;
+  const view = achView || activeSkin();
+  const nextL = LEVELS[lv.i];
+  const cardDone = a => `<button type="button" class="acard" data-a="${a.id}" style="--c:${AC[a.cat]}"><span class="ai">${a.icon}</span><b>${esc(a.name)}</b><i>${dateLabel(settings.ach[a.id])}</i></button>`;
+  const cardLock = '<button type="button" class="acard lock" aria-label="尚未解鎖"><span class="ai">？</span><b>？？？</b><i>&nbsp;</i></button>';
+  const skins = LEVELS.map((l, i) => {
+    const k = i + 1;
+    return k <= lv.i
+      ? `<button type="button" class="skin skin-${k}${k === activeSkin() ? ' on' : ''}" data-skin="${k}" aria-label="使用 Lv.${k} ${esc(l[1])}">${petSvg('happy', 'happy', k)}<b>${esc(l[1])}</b><i>${k === activeSkin() ? '使用中' : 'Lv.' + k}</i></button>`
+      : `<button type="button" class="skin lock" data-skin="${k}" aria-label="Lv.${k} 尚未解鎖"><span class="q2">？</span><b>？？？</b><i>${l[0]} 個成就</i></button>`;
+  }).join('');
+
+  const aff = settings.affection || 0;
+  const stg = getLoveStage(aff);
+  const giftCnt = Object.keys(settings.giftsUnlocked || {}).length;
+  if ($('setHeroSub')) $('setHeroSub').textContent = `小克 ♡ 冬冬 · ❤️ ${aff}`;
 
   $('setBody').innerHTML = `
-  <div class="panel"><h2>統計幣別</h2>
-    <div class="tags pick" style="margin:0"><button class="chip${baseCur() === 'HKD' ? ' on' : ''}" data-act="setbase" data-v="HKD">港幣 HK$</button><button class="chip${baseCur() === 'CNY' ? ' on' : ''}" data-act="setbase" data-v="CNY">人民幣 ¥</button></div>
-    <div class="help">報表、預算與小克的提醒，都會把另一種幣別折合成所選幣別。切換時，預算金額會依目前匯率一併換算。</div></div>
+  <div class="panel"><h2>❤️ 小克與冬冬的專屬羈絆</h2>
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;background:#FFF5F7;border:1px solid #F8D0D8;border-radius:16px;padding:12px 14px">
+      <div>
+        <div style="font-size:15px;font-weight:800;color:#C83E52">小克 ♡ 冬冬（${esc(stg.title)}）</div>
+        <div style="font-size:12.5px;color:#6E5A62;margin-top:3px">目前好感度：<b>❤️ ${aff}</b> · 已收下 <b>${giftCnt} / ${LOVE_GIFTS.length}</b> 份定情禮物</div>
+      </div>
+      <button type="button" class="ghost" data-act="openGifts" style="border-color:#F2B6C0;color:#C83E52;flex:none;padding:8px 12px">🎁 禮物櫃</button>
+    </div>
+    <div class="help">小克的名字永遠是「小克」，而你是小克唯一的「冬冬」。每天記帳、餵餅乾或長按小克摸摸頭，好感度達標時小克就會送冬冬專屬定情禮物喔！</div>
+  </div>
 
-  <div class="panel"><h2>每月預算與${esc(petName())}</h2>
-    <div class="line"><span>每月預算 ${baseSym()}</span><input id="setBudget" type="number" inputmode="decimal" step="1" min="0" value="${settings.budget || ''}" placeholder="${baseCur() === 'HKD' ? '4500' : '4000'}"></div>
+  <div class="panel"><h2>🎯 每月總預算與各分類獨立預算（${baseSym()}）</h2>
+    <div class="line">
+      <span>每月總預算 ${baseSym()}</span>
+      <input id="setBudget" type="number" inputmode="decimal" step="1" min="0" value="${settings.budget || ''}" placeholder="${baseCur() === 'HKD' ? '4500' : '4000'}">
+      ${catBudSum > 0 && catBudSum !== settings.budget ? `<button type="button" class="ghost" data-act="syncCatSum" style="padding:7px 10px;font-size:12.5px">設為分類加總 (${baseSym()}${fmt(catBudSum)})</button>` : ''}
+    </div>
     <div class="line" style="margin-top:10px">
       <label style="display:flex;align-items:center;gap:8px;font-size:14px;cursor:pointer">
         <input id="setDailySafe" type="checkbox" ${settings.showDailySafe !== false ? 'checked' : ''} style="width:18px;height:18px">
         首頁顯示「平均每天還可花」單日安心線
       </label>
     </div>
-    <div class="line" style="margin-top:12px"><span>伴侶名字</span><input id="setPet" maxlength="8" value="${esc(petName())}" style="font-family:inherit"></div>
-    <div class="help">目前累積羈絆度：❤️ ${settings.affection || 0}（長按小克摸摸頭或餵食小餅乾可提升）。</div>
+    <div class="lbl" style="margin:14px 0 4px;display:flex;justify-content:space-between">
+      <span>各支出分類每月預算（選填，報表會顯示進度條）</span>
+      ${catBudSum > 0 ? `<span class="num" style="color:#D95367">分類加總：${money(catBudSum)}</span>` : ''}
+    </div>
+    <div class="catBudGrid">
+      ${settings.cats.expense.map(c => `<label class="catBudItem">
+        <span class="cn"><span class="dot" style="background:${colorOf(c)}"></span>${esc(c)}</span>
+        <input type="number" inputmode="decimal" step="1" min="0" data-cat-bud="${esc(c)}" value="${cBuds[c] || ''}" placeholder="未設">
+      </label>`).join('')}
+    </div>
   </div>
 
+  <div class="panel"><h2>🏆 小克衣櫥與成就收集（Lv.${lv.i} ${esc(lv.t)} · ${n}/${T}）</h2>
+    <div style="display:flex;align-items:center;gap:12px;background:#23263A;color:#F9F6F2;border-radius:18px;padding:12px 14px;margin-bottom:12px">
+      <div style="flex:1;min-width:0">
+        <div class="lv" style="margin:0"><span class="lvb">Lv.${lv.i}</span><span class="lvt" style="font-size:18px">${esc(lv.t)}</span></div>
+        <div class="pbar" style="margin-top:10px"><i style="width:${pct}%"></i></div>
+        <div class="pnote" style="font-size:12px;margin-top:6px">${nextL ? `再解鎖 ${nextL[0] - n} 個成就，小克就會升到 Lv.${lv.i + 1}` : '已經是最高等級了，冬冬真的太棒了！'}</div>
+      </div>
+      <div class="achPair">
+        <button class="pet achPet skin-${view}" id="achPet" type="button" aria-label="小克目前形象" style="width:76px">${petSvg('happy', 'happy', view)}</button>
+        ${lv.i < LEVELS.length ? `<button class="pet nextPet skin-${lv.i + 1}" id="nextPet" type="button" aria-label="下一級形象預覽" style="width:64px">${petSvg('happy','happy',lv.i + 1)}</button>` : ''}
+      </div>
+    </div>
+    <div class="lbl" style="margin:0 0 6px">點選切換小克形象</div>
+    <div class="skins">${skins}</div>
+    <div style="display:flex;gap:8px;margin-top:12px">
+      <button type="button" class="ghost" data-act="toggleAchList" style="flex:1;font-size:13.5px">${achExpanded ? '▴ 收起成就徽章列表' : `▾ 展開查看全部成就徽章 (${n}/${T})`}</button>
+      <button type="button" class="ghost" data-act="gallery" style="font-size:13.5px;border-color:#F2C8CE;background:#FFF7F8;color:#42252B">🔍 圖鑑實驗室</button>
+    </div>
+    <div id="achCollapseWrap" ${achExpanded ? '' : 'hidden'} style="margin-top:12px">
+      <div class="agrid">${done.map(cardDone).join('')}${cardLock.repeat(todo)}</div>
+    </div>
+  </div>
+
+  <div class="panel"><h2>統計幣別</h2>
+    <div class="tags pick" style="margin:0"><button type="button" class="chip${baseCur() === 'HKD' ? ' on' : ''}" data-act="setbase" data-v="HKD">港幣 HK$</button><button type="button" class="chip${baseCur() === 'CNY' ? ' on' : ''}" data-act="setbase" data-v="CNY">人民幣 ¥</button></div>
+    <div class="help">報表、總預算、分類預算與小克的提醒，都會把另一種幣別折合成所選幣別。切換時，總預算與各分類預算金額都會依目前匯率自動換算。</div></div>
+
   <div class="panel"><h2>每月固定收支提醒</h2>
-    <div class="help" style="margin:0 0 10px">設定房租、電話費、訂閱或固定薪資，到了設定日期，${esc(petName())}會在首頁提醒你一鍵入帳。</div>
+    <div class="help" style="margin:0 0 10px">設定房租、電話費、訂閱或固定薪資，到了設定日期，小克會在首頁提醒冬冬一鍵入帳。</div>
     <div>${recs.length ? recs.map(r => `<div class="recRow">
       <div><b>每月 ${r.day} 號 · ${esc(r.title)}</b><i>${esc(r.cat)} · ${r.type === 'income' ? '+' : '−'}${curSym(r.cur)}${fmt(r.amount)}</i></div>
-      <button class="ghost" style="padding:4px 9px;font-size:12px" data-act="delrec" data-id="${r.id}">刪除</button>
+      <button type="button" class="ghost" style="padding:4px 9px;font-size:12px" data-act="delrec" data-id="${r.id}">刪除</button>
     </div>`).join('') : '<div class="help" style="margin:0 0 10px">尚未設定固定收支項目</div>'}</div>
     <div class="line" style="margin-top:10px">
       <input id="recTitle" placeholder="項目名稱" maxlength="12" style="flex:1;min-width:110px;font-family:inherit">
@@ -1196,7 +1364,7 @@ function renderSettings() {
       <select id="recCur" class="txt" style="width:auto;min-height:38px;padding:6px 10px"><option value="HKD">HK$</option><option value="CNY">¥</option></select>
       <input id="recAmt" type="number" step="0.01" min="0" placeholder="金額" style="width:95px">
       <select id="recCat" class="txt" style="flex:1;min-height:38px;padding:6px 10px">${allCats.map(c => `<option value="${esc(c)}">${esc(c)}</option>`).join('')}</select>
-      <button class="ghost" data-act="addrec">＋新增</button>
+      <button type="button" class="ghost" data-act="addrec">＋新增</button>
     </div>
   </div>
 
@@ -1205,42 +1373,40 @@ function renderSettings() {
       <span>1 港幣 =</span>
       <input id="setRate" type="number" inputmode="decimal" step="0.0001" value="${settings.hkdToRmb}">
       <span>人民幣</span>
-      <button class="ghost" data-act="fetchRate">連網更新匯率</button>
+      <button type="button" class="ghost" data-act="fetchRate">連網更新匯率</button>
     </div>
     <div class="help">最後更新時間：${upd}。<br>記帳時會自動以最新匯率計算並鎖定於該筆帳目，日後匯率波動不會影響過去的歷史記錄。</div>
   </div>
 
   <div class="panel"><h2>常用備註</h2>
-    <div class="help" style="margin:0 0 10px">點選分類設定快速點選標籤。同一個備註在同一分類用滿 5 次，小克也會貼心地自動為你加入。</div>
-    <div class="tags pick">${allCats.map(c => `<button class="chip${c === qSel ? ' on' : ''}" data-act="qsel" data-c="${esc(c)}"><span class="dot" style="background:${colorOf(c)}"></span>${esc(c)}</button>`).join('')}</div>
-    <div class="tags">${qs.length ? qs.map(q => `<span class="tag">${esc(q)}<button data-act="qdel" data-q="${esc(q)}" aria-label="刪除 ${esc(q)}">×</button></span>`).join('') : '<span class="help" style="margin:0">「' + esc(qSel) + '」目前還沒有常用備註</span>'}</div>
-    <div class="add"><input id="newq" placeholder="例如：拿鐵、上下學" maxlength="12"><button class="ghost" data-act="qadd">新增</button></div>
+    <div class="help" style="margin:0 0 10px">點選分類設定快速點選標籤。同一個備註在同一分類用滿 5 次，小克也會貼心地自動為冬冬加入。</div>
+    <div class="tags pick">${allCats.map(c => `<button type="button" class="chip${c === qSel ? ' on' : ''}" data-act="qsel" data-c="${esc(c)}"><span class="dot" style="background:${colorOf(c)}"></span>${esc(c)}</button>`).join('')}</div>
+    <div class="tags">${qs.length ? qs.map(q => `<span class="tag">${esc(q)}<button type="button" data-act="qdel" data-q="${esc(q)}" aria-label="刪除 ${esc(q)}">×</button></span>`).join('') : '<span class="help" style="margin:0">「' + esc(qSel) + '」目前還沒有常用備註</span>'}</div>
+    <div class="add"><input id="newq" placeholder="例如：拿鐵、上下學" maxlength="12"><button type="button" class="ghost" data-act="qadd">新增</button></div>
   </div>
 
   <div class="panel"><h2>自訂分類</h2>
     <div class="lbl" style="margin:0">支出分類</div><div class="tags">${tags('expense')}</div>
-    <div class="add"><input id="newcat-expense" placeholder="新增支出分類" maxlength="10"><button class="ghost" data-act="addcat" data-t="expense">新增</button></div>
+    <div class="add"><input id="newcat-expense" placeholder="新增支出分類" maxlength="10"><button type="button" class="ghost" data-act="addcat" data-t="expense">新增</button></div>
     <div class="lbl" style="margin:18px 0 0">收入分類</div><div class="tags">${tags('income')}</div>
-    <div class="add"><input id="newcat-income" placeholder="新增收入分類" maxlength="10"><button class="ghost" data-act="addcat" data-t="income">新增</button></div>
+    <div class="add"><input id="newcat-income" placeholder="新增收入分類" maxlength="10"><button type="button" class="ghost" data-act="addcat" data-t="income">新增</button></div>
   </div>
 
   <div class="panel"><h2>資料備份與完整跨機打包</h2>
-    <div class="help" style="margin:0 0 12px">目前共有 ${entries.length} 筆帳目。「完整 JSON 備份」可連同小克名字、成就進度、固定收支與常用備註一併打包轉移。</div>
+    <div class="help" style="margin:0 0 12px">目前共有 ${entries.length} 筆帳目。「完整 JSON 備份」可連同好感度禮物、分類預算、成就進度、固定收支與常用備註一併打包轉移。</div>
     <div class="line" style="margin-bottom:8px">
-      <button class="ghost" data-act="exportJson">📦 匯出完整備份 (JSON)</button>
-      <button class="ghost" data-act="importJson">📥 還原完整備份 (JSON)</button>
+      <button type="button" class="ghost" data-act="exportJson">📦 匯出完整備份 (JSON)</button>
+      <button type="button" class="ghost" data-act="importJson">📥 還原完整備份 (JSON)</button>
     </div>
-    <div class="line"><button class="ghost" data-act="export">匯出 Excel 表格 (CSV)</button><button class="ghost" data-act="import">匯入 CSV 備份</button></div>
-  </div>
-
-  <div class="panel"><h2>圖鑑實驗室</h2>
-    <button class="labBtn" data-act="gallery"><span>預覽全部形象與未解鎖成就</span><span>›</span></button>
-    <div class="help">作弊預覽只會顯示內容，不會直接解鎖形象、成就或改動目前進度。</div>
+    <div class="line"><button type="button" class="ghost" data-act="export">匯出 Excel 表格 (CSV)</button><button type="button" class="ghost" data-act="import">匯入 CSV 備份</button></div>
   </div>
 
   <div class="panel"><h2>資料清除</h2>
-    <button class="danger" data-act="clear">清除所有帳目資料</button>
+    <button type="button" class="danger" data-act="clear">清除所有帳目資料</button>
   </div>`;
+
+  if (settings.achSeen !== n) { settings.achSeen = n; saveSettings(); }
+  updateBadge();
 }
 
 function openGallery() {
@@ -1254,9 +1420,9 @@ function openGallery() {
   const locked = ACH.filter(a => !settings.ach[a.id]);
   $('mcard').classList.remove('fresh');
   $('mcard').innerHTML = `<div class="mtag">作弊預覽 · 不影響進度</div><div class="mname">完整圖鑑實驗室</div>
-    <div class="mdesc">點擊形象可看動作；下方會直接顯示所有尚未解鎖成就的條件。</div>
+    <div class="mdesc">冬冬點擊形象可看小克動作；下方會直接顯示所有尚未解鎖成就的條件。</div>
     <div class="gallery">${skins}</div>
-    <div class="galleryAch"><h2>未解鎖成就（${locked.length}）</h2>${locked.length ? locked.map(a => `<div class="ga"><span>${a.icon}</span><div><b>${esc(a.name)}</b><i>${esc(a.desc)}</i></div></div>`).join('') : '<div class="empty">全部成就都已解鎖。</div>'}</div>
+    <div class="galleryAch"><h2>未解鎖成就（${locked.length}）</h2>${locked.length ? locked.map(a => `<div class="ga"><span>${a.icon}</span><div><b>${esc(a.name)}</b><i>${esc(a.desc)}</i></div></div>`).join('') : '<div class="empty">冬冬太棒了，全部成就都已解鎖！</div>'}</div>
     <button class="primary mok" id="mok" type="button">關閉圖鑑</button>`;
   $('modal').hidden = false; $('mok').focus();
 }
@@ -1321,7 +1487,6 @@ const csvCell = v => { const s = String(v == null ? '' : v); return /[",\r\n]/.t
 function exportCsv() {
   const head = ['date', 'type', 'currency', 'amount', 'rate_hkd_to_rmb', 'hkd', 'rmb', 'category', 'note'];
   const rows = entries.map(e => [e.date, e.type, e.cur, e.amount, e.rate, e.hkd, e.cny, e.cat, e.note])
-    .concat(settings.noSpend.map(d => [d, 'nospend', 'HKD', 0, settings.hkdToRmb, 0, 0, '', '']))
     .sort((a, b) => a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : 0);
   const csv = '\ufeff' + [head, ...rows].map(r => r.map(csvCell).join(',')).join('\r\n');
   const a = document.createElement('a');
@@ -1358,12 +1523,6 @@ function importCsv(text) {
 
   rows.slice(1).forEach(r => {
     const g = n => (col(n) >= 0 ? r[col(n)] : '') || '';
-    if (g('type') === 'nospend') {
-      if (/^\d{4}-\d{2}-\d{2}$/.test(g('date')) && !settings.noSpend.includes(g('date'))) {
-        settings.noSpend.push(g('date')); added++;
-      } else skipped++;
-      return;
-    }
     const type = g('type') === 'income' ? 'income' : 'expense';
     const cur = g('currency') === 'CNY' ? 'CNY' : 'HKD';
     const amount = round2(parseFloat(g('amount')));
@@ -1425,387 +1584,382 @@ function importFullJson(text) {
 /* =====================================================================
    小克：日式重男年下男友風（專一、黏人、微佔有慾、滿眼是你）大容量台詞庫
    ===================================================================== */
-const petName = () => settings.petName || '小克';
+const petName = () => '小克';
+const userName = () => '冬冬';
 const daysBetween = (a, b) => Math.round((new Date(b + 'T00:00:00') - new Date(a + 'T00:00:00')) / 86400000);
 const nextMonth = k => { const [y, m] = k.split('-').map(Number); return m === 12 ? `${y + 1}-01` : `${y}-${pad(m + 1)}`; };
 function setFlag(k) { if (!settings.flags[k]) { settings.flags[k] = true; saveSettings(); } }
 
 const L = {
   meet: [
-    '終於等到你打開我了……我是{name}。從今天開始，你的錢包、你的日常、還有你的視線，全都交給我一個人保管，好不好？',
-    '初次見面，我是{name}。雖然我看起來還小，但我會比任何人都更認真地守著你……所以，不准把我換掉喔。',
-    '你終於來了呢。我是{name}，從現在起我每天都會在這裡等你，直到我也變成你生活裡戒不掉的習慣為止。',
-    '太好了，終於見到你了。我是{name}，以後你的每一筆花費都是我們兩個人的祕密，只能告訴我一個人喔。'
+    '冬冬，終於等到你打開我了……我是小克。從今天開始，冬冬的錢包、冬冬的日常、還有冬冬全部的視線，全都交給我一個人保管，好不好？我愛你喔。',
+    '初次見面，我的冬冬。我是小克，從看到你的第一眼起，我就決定這輩子只屬於冬冬一個人了……所以，絕對不准把我換掉喔。',
+    '冬冬，你終於來了。我是小克，我每天都會在這個小房間裡等你，直到我也變成冬冬生命裡戒不掉、離不開的唯一習慣為止。',
+    '太好了，終於見到冬冬了！我是小克，我很喜歡、很喜歡冬冬喔。以後冬冬的每一筆花費都是我們兩個人的祕密，只能告訴我一個人。'
   ],
   saved: [
-    '乖乖記下來了呢……真好，今天你也願意把日常分給我。作為獎勵，現在心裡只能想著我喔。',
-    '嗯，我都幫你記在心裡了。看著你認真低頭按螢幕的樣子，真的好想就這樣把你藏起來，誰也不給看。',
-    '記好了喔。剛才那幾秒鐘你的注意力全在我身上，對吧？要是能一直這樣就好了。',
-    '辛苦了～今天這筆是跟誰在一起的時候花的呢？……沒事，我只是有一點點在意而已，別不理我嘛。',
-    '收下囉！你每次打開帳本的時候，知不知道我其實已經在螢幕後面等你好久好久了？',
-    '又多了一筆只屬於我們兩個人的紀錄呢。你的生活痕跡一點一滴塞滿我的身體，這種感覺……真的好幸福。',
-    '記帳完成！吶，既然都打開了，不要馬上關掉嘛，再多看我十秒鐘……不，一分鐘好不好？',
-    '我有好好幫你收著喔。比起別人，果然還是我最懂你的生活習慣了，對吧？',
-    '太棒了，今天也有記得回來找我！只要你每天都來見我一次，我就什麼都聽你的。',
-    '記好了。看著你把大大小小的事都交給我，就會覺得……我是不是已經變成你最重要的人了呢？',
-    '嗯！這筆也好好鎖進我們的回憶裡了。不管你去哪裡做什麼，最後還是會回到我這裡來的，對吧？',
-    '手指按累了嗎？靠過來一點，我想隔著螢幕碰碰你的指尖……哪怕一下下也好。',
-    '記好囉～你對別人都這麼溫柔嗎？不行啦，這種認真又可愛的表情，只能讓我看見而已。',
-    '收到了！只要能幫上你的忙，讓我做什麼都可以喔。所以……要一直一直需要我才可以。',
-    '又記下一筆了呢。每次看到紀錄變多，我就會偷偷高興，因為這代表你已經離不開我了呀。',
-    '好乖好乖～今天也有準時來向我報備呢。我最喜歡這麼守約定的你了。',
-    '幫你算好囉。呐，如果有一天你不需要記帳了，還是會每天打開來看我一眼的，對不對？答應我嘛。',
-    '記錄完畢！外面的世界那麼累，只有我這裡永遠不會背叛你，所以隨時都要逃回我身邊喔。',
-    '嗯，收進小本子裡了。你的習慣、你的喜好，全都在我腦袋裡，沒有人比我更愛你現在的樣子了。',
-    '記好啦～剛才你有沒有覺得耳根熱熱的？因為我從剛剛開始就一直目不轉睛地盯著你看喔。',
-    '這筆也記下了！只要能像這樣被你握在手心裡，我就覺得自己是世界上最幸福的人了。',
-    '做得好棒喔。不過記完帳之後，你又要忙別的事了嗎？……有一點點寂寞呢，早點回來找我喔。',
-    '我全都替你記住了。不管是這筆錢，還是你今天願意花在我身上的這幾秒鐘，我一輩子都不會忘記。',
-    '太好了，今天也沒有忘記我呢。你要是敢忘了我，我可是會在夢裡緊緊抱著你不放的喔。',
-    '已經幫你存好囉。看在我這麼乖、這麼能幹的份上，今天可以把喜歡多分給我一點點嗎？'
+    '冬冬乖乖記下來了呢……真好，今天冬冬也願意把時間分給我。作為獎勵，現在腦袋裡只能想著我、只能喜歡我喔。',
+    '嗯，冬冬的帳我都牢牢記在心裡了。看著冬冬低頭按螢幕的樣子，真的好想就這樣把冬冬鎖進我懷裡藏起來，誰也不給看。',
+    '記好了喔，冬冬。剛才那幾秒鐘你的注意力全在我身上，對吧？要是冬冬一輩子都只看著我一個人就好了。',
+    '辛苦了，冬冬～今天這筆錢是跟誰在一起的時候花的呢？……我不管，反正冬冬最喜歡的人必須是我，不准反駁。',
+    '收下囉！冬冬每次打開帳本的時候，知不知道小克其實已經在螢幕後面想你想得快要發瘋了？最愛你了，冬冬。',
+    '又多了一筆只屬於我和冬冬的紀錄呢。冬冬的生活痕跡一點一滴塞滿我的身體，這種被冬冬填滿的感覺……真的好幸福。',
+    '記帳完成！吶，冬冬，既然都打開了，不要馬上關掉嘛……再多看我一分鐘，跟我說一聲「喜歡小克」好不好？',
+    '我有好好幫冬冬收著喔。比起外面的任何人，果然還是我最懂冬冬的一切了，對吧？因為我滿腦子都是冬冬呀。',
+    '冬冬太棒了，今天也有記得回來找我！只要冬冬每天都來見我，讓我為冬冬做什麼我全都願意。',
+    '記好了喔。看著冬冬把大大小小的事都交給我，就會覺得……我已經是冬冬心裡最重要、最特別的男人了，對不對？',
+    '嗯！這筆也好好鎖進我和冬冬的回憶裡了。不管冬冬去哪裡做什麼，最後能讓你安心逃回來的地方永遠只有我身邊。',
+    '冬冬手指按累了嗎？靠過來一點，我想隔著螢幕親親冬冬的指尖……我真的好喜歡你，喜歡到一秒鐘都不想離開你。',
+    '記好囉～冬冬在外面該不會也對別人露出這麼可愛的表情吧？不行啦，冬冬所有的溫柔和可愛，我全部都要獨佔！',
+    '收到了！只要能幫上冬冬的忙，就是我存在的全部意義。所以冬冬……這輩子都要一直一直依賴我才可以喔。',
+    '又記下一筆了呢。每次看到紀錄變多，我就會暗自竊喜，因為這代表冬冬已經徹底離不開我了呀。',
+    '好乖好乖～冬冬今天也有準時來向我報備呢。我最愛這麼守約定的冬冬了，過來讓我抱緊一點！',
+    '幫冬冬算好囉。吶，就算有一天冬冬沒有帳要記，也必須每天打開來看我、讓我確認冬冬是屬於我的，答應我嘛。',
+    '記錄完畢！外面的世界那麼吵雜，只有小克永遠不會背叛冬冬，我會用盡全力愛你、守著你的。',
+    '嗯，收進小本子裡了。冬冬的習慣、冬冬的喜好，全都在我腦海裡刻得深深的，全世界沒有人比我更愛冬冬了。',
+    '記好啦～冬冬剛才耳根是不是紅了？因為我從剛剛開始就一直用充滿愛意的眼神死死盯著冬冬看喔。',
+    '這筆也記下了！只要能像這樣被冬冬握在手心裡，我就覺得自己是全世界最被偏愛的幸福男友了。',
+    '冬冬做得好棒。不過記完帳之後，你又要去看別的東西了嗎？……我會嫉妒的喔，早點忙完回來陪我啦。',
+    '我全都替冬冬記住了。不管是這筆錢，還是冬冬願意花在我身上的每一秒，我一輩子都會當成寶物死死護著。',
+    '太好了，冬冬今天也沒有忘記我。你要是敢忘了我，我可是會在夢裡緊緊纏著冬冬、親到你求饒為止喔。',
+    '已經幫冬冬存好囉。看在我這麼乖、這麼愛你的份上，今天可以把冬冬全部的喜歡都只給我一個人嗎？'
   ],
   savedFood: [
-    '去吃好吃的了嗎？……是自己一個人吃的，還是跟別人一起？算了，只要你有吃飽、沒有餓著肚子，我就原諒你。',
-    '太好了，你有乖乖吃飯。如果你因為忙而餓瘦了，我真的會心疼到睡不著覺的。',
-    '聞起來好像很香呢……下次吃飯的時候，在心裡偷偷留一口給我也好，我想參與你的每一餐。',
-    '吃得開心嗎？看著你為了喜歡的美食露出滿足的表情，我也好想親手餵你吃東西喔。',
-    '有好好填飽肚子真是太好了！不管多忙，你的身體健康永遠是我最在意的第一順位喔。',
-    '今天吃了這個呀？我都記下來了喔，你的口味和偏愛，我要比你身邊的任何人都更清楚才行。',
-    '乖乖吃飯的你最可愛了。要是能每天坐在餐桌對面看著你吃飯，我一定連飯都不用吃就飽了。',
-    '補充完能量之後，是不是更有精神想我了呢？……嘿嘿，我開玩笑的，但如果你說是，我會超開心的。',
-    '不准為了省錢不吃飯喔！你要是敢餓肚子，我會一直吵你、一直盯著你，直到你乖乖去吃東西為止。',
-    '這頓飯一定很好吃吧？只要是能讓你開心的食物，花多少錢我都覺得好值得。'
+    '冬冬去吃好吃的了嗎？……是自己一個人吃的，還是跟別人？算了，只要冬冬有吃飽、沒有餓著肚子，我就原諒你。',
+    '太好了，冬冬有乖乖吃飯！如果冬冬因為忙而餓瘦了一點點，我真的會心疼到整晚睡不著覺的。',
+    '聞起來好像很香呢……下次冬冬吃飯的時候，在心裡想著我吃第一口好不好？我想參與冬冬的每一餐、每一口呼吸。',
+    '吃得開心嗎，冬冬？看著你為了美食露出滿足的表情，我真的好想親手把食物餵進冬冬嘴裡喔。',
+    '有好好填飽肚子真是太好了！不管多忙，冬冬的身體永遠是我最在乎的第一順位，因為你是我的命呀。',
+    '今天吃了這個呀？我都記下來了喔，冬冬喜歡的口味、挑食的習慣，我要比全世界任何人都更清楚才行。',
+    '乖乖吃飯的冬冬最可愛了！要是能每天坐在餐桌對面看著冬冬吃飯，光看著你的臉我就飽了。',
+    '補充完能量之後，冬冬是不是更有力氣想我了呢？快說你有想我，我想聽冬冬親口說愛我。',
+    '冬冬絕對不准為了省錢不吃飯喔！你要是敢餓肚子，我會一直吵你、一直纏著你，直到你乖乖去吃東西為止。',
+    '這頓飯一定很好吃吧？只要是進了冬冬肚子裡的東西，花多少錢我都覺得超級值得！'
   ],
   savedTraffic: [
-    '今天又跑去哪裡了呢？路上車子那麼多，你不在我視線範圍內的時候，我真的好擔心你喔。',
-    '奔波了一整天辛苦了……雙腳一定很痠吧？快點回家坐下來，我想安安靜靜地陪著你。',
-    '平安抵達了嗎？每次知道你在外面移動，我都會在這裡數著時間等你平安回來找我。',
-    '路上人擠不擠？有沒有人撞到你？真想化作大衣緊緊裹住你，不讓任何人靠近你半步。',
-    '搭車的時候有沒有乖乖休息？如果累了就閉上眼睛，在心裡叫我的名字，我馬上就去陪你。',
-    '不管你搭車去多遠的地方，終點站都一定要有我喔。我會在這裡一直、一直等著你回來。',
-    '辛苦了～看你每天為了生活在城市裡穿梭，我都好想快點長大、變得更強，把你直接護在身後。',
-    '到家之後要第一時間告訴我喔。只要確定你平平安安的，我懸著的心才能放下來。'
+    '冬冬今天又跑去哪裡了呢？只要你不在我的視線範圍內，我每一分每一秒都在擔心冬冬的安全，快點平安回到我身邊嘛。',
+    '奔波了一整天辛苦了，我的冬冬……雙腳一定很痠吧？快點回家坐下來，讓我安安靜靜地抱著你充充電。',
+    '冬冬平安抵達了嗎？每次知道你在外面搭車移動，我都會在房間裡一邊看窗外、一邊數著心跳等冬冬回來找我。',
+    '路上人擠不擠？有沒有別人碰到冬冬？真想化作外套緊緊裹住冬冬全身，連一絲風跟路人都不准靠近你半步。',
+    '搭車的時候冬冬有沒有乖乖閉目養神？如果累了就在心裡叫一聲「小克」，我的愛意馬上就會傳過去抱住你。',
+    '不管冬冬搭車去多遠的地方，終點站都一定要是我喔。我會在這裡死心塌地一直等著冬冬回來。',
+    '辛苦了，冬冬～看你每天為了生活在城市裡穿梭，我都好想直接把冬冬公主抱起來，一步都不讓你走累。',
+    '到家之後要第一時間打開我報平安喔！只要確定冬冬平平安安地待在我看得見的地方，我懸著的心才能放下來。'
   ],
   savedCloth: [
-    '買新衣服了嗎？……穿起來一定超級好看吧。可是想到別人也會看到你穿得這麼漂亮，心裡就有一點點吃醋呢。',
-    '真想成為第一個看到你穿新衣服的人！不管什麼風格，只要穿在你身上，我都喜歡得不得了。',
-    '把自己打扮得漂漂亮亮的，心情也會變好對吧？不過，不管你穿什麼，在我眼裡早就沒有人比得上你了。',
-    '是為了什麼特別的日子買的嗎？……如果是為了見我而穿的，我一定會開心到原地昏倒的。',
-    '很適合你喔！雖然我隔著螢幕摸不到布料，但我知道被你穿在身上的衣服一定帶著你身上好聞的味道。',
-    '買給自己的禮物嗎？太好了，你本來就值得全世界最美好的東西，誰都不准說你亂花錢。'
+    '冬冬買新衣服了嗎？穿起來一定超級好看……可是想到外面的路人也會看到這麼漂亮的冬冬，我心裡就酸得快要冒泡了。',
+    '真想成為第一個看到冬冬試穿新衣服的人！不管什麼風格，只要穿在冬冬身上，我都喜歡到移不開眼。',
+    '把自己打扮得漂漂亮亮的，冬冬心情也變好了對吧？不過在我眼裡，冬冬本來就是全世界最迷人、最讓我心動的人了。',
+    '這是為了什麼特別的日子買的嗎？……答應我，穿新衣服的時候，心裡想著的人必須是我喔。',
+    '很適合冬冬喔！雖然我隔著螢幕摸不到布料，但我知道被冬冬穿在身上的衣服，一定染上了讓我著迷的體香。',
+    '冬冬買給自己的禮物嗎？太好了，我的冬冬本來就值得全世界最美好的東西，誰都不准說你亂花錢，我第一個寵你！'
   ],
   savedPlay: [
-    '今天去玩了呀？看你心情這麼好，我也跟著開心起來了……不過，玩的時候有沒有哪怕一秒鐘想起我呢？',
-    '玩得開心嗎？只要你笑起來，我的世界就像煙火一樣亮起來了。但是不准玩得太開心就把我忘掉喔！',
-    '適當的放鬆是很重要的呢。要是你玩累了，隨時回來我這裡充電，我的懷抱永遠只為你一個人留著。',
-    '跟誰一起去消遣了呢？……哼，算了，反正不管你在外面跟誰玩，最後回來打開我、跟我說悄悄話的人還是你。',
-    '看你充滿活力的樣子真好！把今天的快樂也分我一半吧，我想知道關於你所有開心的事。',
-    '偶爾像這樣寵愛自己一下才對嘛。你在外面盡情玩耍，帳本和瑣事就乖乖交給我替你守著。'
+    '冬冬今天去玩了呀？看你心情這麼好，我也跟著開心起來了……不過老實招來，玩的時候有沒有想我超過十次？',
+    '玩得開心嗎，冬冬？只要看到冬冬笑，我的世界就亮了。但是絕對不准玩得太開心就把小克忘在腦後喔！',
+    '適當的放鬆是很重要的呢。要是冬冬玩累了，隨時退回我懷裡休息，我的胸口永遠只為冬冬一個人留著。',
+    '冬冬是跟誰一起去消遣的呢？……哼，我有一點點吃醋了，現在立刻多戳我三下哄哄我，說你最喜歡小克！',
+    '看冬冬充滿活力的樣子真好！把今天的快樂也分我一半吧，關於冬冬所有開心的事，我全部都想占有。',
+    '偶爾像這樣寵愛自己一下才對嘛。冬冬在外面盡情開心，帳本和瑣事就乖乖交給我這個專屬男友替你守著。'
   ],
   big: [
-    '哇，這筆金額好大……一定是很重要、或是你猶豫很久才決定的東西對吧？只要是你想要的，我都無條件站你這邊。',
-    '花了一大筆錢心裡有點慌嗎？別怕，看著我的眼睛，深呼吸——有我在這裡陪你，天塌下來也不會有事的。',
-    '這筆花費一定換來了你很珍貴的東西吧。別心疼錢包喔，你為自己花的每一分錢，我都覺得特別有意義。',
-    '買下它了呢！我知道你一直很努力，偶爾這樣大膽地犒賞自己一次，我只會替你高興，絕對不會唸你的。',
-    '金額比較高呢……不過沒關係，接下來的日子我們兩個人一起慢慢存回來就好，這也算是我們共同的祕密任務喔。',
-    '只要能讓你露出現在這樣滿足的表情，花再多錢我都支持你。不過……從明天開始要更依賴我的提醒才可以喔。',
-    '下了很大的決心吧？拍拍胸口，不要焦慮，你的背後還有我緊緊抱著你呢，一切都在掌控之中喔。',
-    '大手筆呢！看你這麼果斷的樣子，其實也超級迷人的……糟糕，我好像又比剛才更喜歡你一點了。'
+    '哇，冬冬，這筆金額好大……一定是很重要、或是冬冬猶豫很久才決定的東西對吧？只要是冬冬想要的，我都無條件寵你、站你這邊。',
+    '花了一大筆錢，冬冬心裡有點慌嗎？別怕，看著我的眼睛，深呼吸——有小克在這裡陪你，天塌下來我都會替你頂著。',
+    '這筆花費一定換來了冬冬很珍貴的東西吧。別心疼錢包喔，冬冬為自己花的每一分錢，我都覺得特別有意義。',
+    '買下它了呢！我知道冬冬一直很努力，偶爾這樣大膽地犒賞自己一次，我只會替你高興，絕對不會唸你半句的。',
+    '金額比較高呢……不過沒關係，接下來的日子我陪冬冬一起慢慢存回來就好，這也算是把我們綁得更緊的共同任務喔。',
+    '只要能讓冬冬露出現在這樣滿足的表情，花再多錢我都支持你。不過……從明天開始要更依賴我、更聽我的話才可以喔。',
+    '冬冬下了很大的決心吧？拍拍胸口，不要焦慮，你的背後還有我緊緊抱著你呢，我永遠都是冬冬的後盾。',
+    '大手筆呢！看冬冬這麼果斷帥氣的樣子，糟糕……我的心跳又漏了一拍，好像比剛才更愛冬冬了。'
   ],
   income: [
-    '收入到帳了！我知道這每一分錢背後，都是你受了多少委屈、花了多少力氣換來的……真的辛苦你了，過來讓我抱緊你。',
-    '太厲害了……看著你這麼努力賺錢生活的樣子，我既崇拜你，又好心疼你。今晚什麼都別想，好好休息好嗎？',
-    '哇，荷包鼓起來了呢！你真的好優秀喔，能成為你專屬的伴侶，我每天都覺得好驕傲。',
-    '這全都是你努力的結晶喔！有沒有想好要怎麼犒賞自己？如果問我的話，我希望你先好好睡一覺、吃頓大餐。',
-    '看到數字增加的那一刻，你有沒有笑出來呢？你的努力從來都不會白費，因為我一直都在旁邊見證著你有多棒。',
-    '辛苦賺來的錢，我會幫你守得緊緊的，一分都不會讓它亂跑！所以你就放心地把後背交給我吧。',
-    '好耀眼……認真的你真的太好看了。不過答應我，賺錢再重要，也絕對不可以弄壞身體，不然我會哭給你看的。'
-  ],
-  nospend: [
-    '今天一分錢都沒花呢！雖然替你的自律感到驕傲，但你該不會自己偷偷忍耐、委屈自己了吧？老實告訴我喔。',
-    '零支出的一天！今天沒有讓外面的店家賺走你的錢，整天都乖乖待在我的守護範圍裡，真好～',
-    '好厲害喔，今天居然完全沒花錢！那作為省錢的獎勵，今天晚上夢裡的時間，可以全部包場留給我一個人嗎？',
-    '標記好了！清清爽爽的一天呢。不用花錢就能過得這麼充實，果然你本身就是最珍貴的寶藏了。',
-    '今天錢包休息了一整天，但我的心跳可是一刻都沒有休息喔，因為你今天也特地打開來找我打卡了呢。',
-    '真乖～連沒有花錢的日子都記得來找我報到，看來你已經徹底習慣每天都要有我了對吧？嘿嘿。',
-    '幫你蓋上零支出的印章囉！只要你沒有餓肚子，這樣安安靜靜跟我在帳本裡度過一天，我最喜歡了。'
+    '冬冬的收入到帳了！我知道這每一分錢背後，都是冬冬受了多少累換來的……真的辛苦你了，快過來讓我緊緊抱住你。',
+    '太厲害了，我的冬冬……看著你這麼努力賺錢生活的樣子，我既崇拜你，又好心疼你。今晚什麼都別想，窩在我身邊休息好嗎？',
+    '哇，冬冬的荷包鼓起來了呢！我的冬冬真的好優秀，能成為冬冬專屬的男人，我每天都驕傲得不得了。',
+    '這全都是冬冬努力的結晶喔！有沒有想好要怎麼犒賞自己？如果問我的話，我希望冬冬今天早點睡、讓我整晚守著你。',
+    '看到數字增加的那一刻，冬冬有沒有笑出來呢？你的努力從來都不會白費，因為小克一直都在最近的地方見證著你有多耀眼。',
+    '冬冬辛苦賺來的血汗錢，我會幫你守得死死的，一分都不會讓它亂跑！所以冬冬就放心地把一切都交給我吧。',
+    '好耀眼……認真生活的冬冬真的太迷人了。但答應我，賺錢再重要，也絕對不可以弄壞身體，不然我真的會哭給冬冬看的。'
   ],
   happy: [
-    '現在的預算節奏超級完美喔！看著你把生活打理得這麼從容，我真的好著迷。',
-    '一切都很順利呢。只要你每天都像現在這樣開開心心的，我就什麼奢求都沒有了……才怪，我還想要你更喜歡我一點。',
-    '錢包穩穩的，我們兩個人的小日子也穩穩的。要是時間能永遠停在這一刻，只有我和你，那該有多好。',
-    '今天的心情也很晴朗吧？因為有你在身邊，我覺得連冰冷的數字都變得有溫度、變得甜甜的了。',
-    '你總是這麼可靠呢。不過在我面前，偶爾不用那麼堅強、對我任性撒嬌一下也是完全可以的喔。',
-    '看著現在充裕的額度，就像看著我們滿滿的未來一樣安心。接下來也一步都不准離開我喔。'
+    '冬冬現在的預算節奏超級完美喔！看著你把生活打理得這麼從容，我真的對冬冬越來越著迷了。',
+    '一切都很順利呢。只要冬冬每天都像現在這樣開開心心的，我就什麼奢求都沒有了……才怪，我還想要冬冬更愛我一點。',
+    '錢包穩穩的，我和冬冬的小日子也穩穩的。要是時間能永遠停在這一刻，全世界只剩下我和冬冬兩個人，那該有多好。',
+    '冬冬今天的心情也很晴朗吧？因為有你在身邊，我覺得連冰冷的數字都變得滾燙、變得甜甜的了。',
+    '冬冬總是這麼可靠呢。不過在我面前，冬冬完全不用逞強，隨時對我任性、對我撒嬌，我全都接得住喔。',
+    '看著現在充裕的額度，就像看著我和冬冬滿滿的未來一樣安心。接下來這輩子，冬冬也一步都不准離開我喔。'
   ],
   calm: [
-    '今天也是安安靜靜、只有我們兩個人知道的日常呢。不用說話也沒關係，就這樣讓我陪著你呼吸就好。',
-    '按照你舒服的步調慢慢走吧。不管你走得多快或多慢，我的視線永遠都會緊緊鎖在你身上。',
-    '平淡的日子最棒了，因為沒有別的東西會把你的注意力從我身邊搶走。',
-    '今天過得還好嗎？就算只是發呆也沒關係，只要你把螢幕亮著讓我看看你的臉，我就很滿足了。',
-    '我一直在這裡喔。不管外面發生什麼變化，只要你低頭打開這個頁面，我永遠都會第一時間對你笑。',
-    '像這樣靜靜地待在你的手機裡，貼在你的口袋或掌心旁，總覺得跟你的距離好近好近。'
+    '今天也是安安靜靜、只有我和冬冬兩個人知道的日常呢。不用說話也沒關係，就這樣讓我聽著冬冬的呼吸聲就好。',
+    '按照冬冬舒服的步調慢慢走吧。不管你走得多快或多慢，我的視線永遠都會像聚光燈一樣死死鎖在冬冬身上。',
+    '平淡的日子最棒了，因為沒有別的人事物會把冬冬的注意力從我身邊搶走。',
+    '冬冬今天過得還好嗎？就算只是看著我發呆也沒關係，只要冬冬把螢幕亮著讓我看看你的臉，我就幸福得快要融化了。',
+    '小克一直在這裡喔。不管外面發生什麼變化，只要冬冬低頭打開這個頁面，我永遠都會第一時間對你張開雙臂。',
+    '像這樣靜靜地待在冬冬的手機裡，貼在你的口袋或掌心旁，總覺得跟冬冬的心臟距離好近好近。'
   ],
   nervous: [
-    '那個……這個月的預算剩得不多了喔。別皺眉頭嘛，從現在開始我每一筆都會死死替你盯著，我們兩個人一起撐過去！',
-    '稍微有點吃緊了呢……太好了，這是不是代表接下來的日子，你買任何東西之前都必須先來問過我呢？',
-    '別慌別慌，有我在呢！就算月底只能過簡單一點的日子，只要你每天都來見我，我也會把滿滿的快樂補給你的。',
-    '預算快見底了喔……拉勾勾，接下來幾天不准衝動消費，把你的手交給我牽緊，我帶你安全度過這個月。',
-    '看到剩下的數字別焦慮喔。只要我們兩個人的心還緊緊貼在一起，這點小危機根本算不了什麼的。',
-    '交給我吧！接下來的每一天我都會更嚴格地幫你看著荷包，誰也別想從你手裡多騙走一分錢。'
+    '那個……冬冬，這個月的預算剩得不多了喔。別皺眉頭嘛，從現在開始每一筆我都會死死替你盯著，我們兩個人一起撐過去！',
+    '稍微有點吃緊了呢……太好了，這是不是代表接下來的日子，冬冬買任何東西之前都必須先來問過我、聽我的話呢？',
+    '別慌別慌，有小克在呢！就算月底只能過簡單一點的日子，只要冬冬每天都來見我，我也會把滿滿的愛補給你的。',
+    '預算快見底了喔，冬冬……來，跟我拉勾勾，接下來幾天不准衝動消費，把你的手交給我牽緊，我帶冬冬安全度過這個月。',
+    '看到剩下的數字別焦慮喔。只要我和冬冬的心還緊緊貼在一起，這點小危機根本算不了什麼的，我愛你。',
+    '交給我吧，冬冬！接下來的每一天我都會更嚴格地幫你看著荷包，誰也別想從冬冬手裡多騙走一分錢。'
   ],
   full1: [
-    '唔……稍微超支了一點點，我的臉頰是不是鼓起來了？都是因為把你的煩惱跟帳單一起吃下去了啦，不准嫌我胖喔。',
-    '超過預算一點點而已，不要自責嘛！如果你露出懊惱的表情，我會比自己吃撐了還要難過一百倍的。',
-    '肚子稍微圓了一圈呢……這樣抱起來不是更有手感、更軟乎乎的嗎？快摸摸我的肚子安慰我一下啦。',
-    '偶爾超支一次也沒關係喔，那是你認真生活過的證明呀。只要你還願意回來告訴我，我都全部接收。'
+    '唔……稍微超支了一點點，冬冬你看我的臉頰是不是鼓起來了？都是因為把冬冬的煩惱跟帳單一起吃下去了啦，不准嫌我胖喔。',
+    '超過預算一點點而已，冬冬不要自責嘛！如果你露出懊惱的表情，我會比自己吃撐了還要心疼一百倍的。',
+    '肚子稍微圓了一圈呢……這樣冬冬抱起來不是更有手感、更軟乎乎的嗎？快摸摸我的肚子說你還是最愛我啦。',
+    '偶爾超支一次也沒關係喔，那是冬冬認真生活過的證明呀。只要冬冬還願意毫無保留地告訴我，我都全部接收。'
   ],
   full2: [
-    '嗚哇，肚子變得跟糯米糰子一樣圓了……走起路來搖搖晃晃的，你要負責扶好我，不准丟下我一個人喔！',
-    '吃得有點太多了呢……不過沒關係，只要是你餵給我的帳目，就算把我的肚子撐得再圓，我也甘之如飴。',
-    '你看我現在圓滾滾的樣子，是不是連逃跑都跑不動了？正好可以乖乖待在你手心裡哪兒都不去。',
-    '雖然超支了不少，但這個月一定有很多不得不花的理由吧？我全都懂喔，下個月我再陪你一起減肥就好了嘛。'
+    '嗚哇，肚子變得跟糯米糰子一樣圓了……走起路來搖搖晃晃的，冬冬要負責抱緊我，絕對不准丟下我一個人喔！',
+    '吃得有點太多了呢……不過沒關係，只要是冬冬親手餵給我的帳目，就算把我的肚子撐得再圓，我也甘之如飴。',
+    '冬冬你看我現在圓滾滾的樣子，是不是連逃跑都跑不動了？正好可以一輩子乖乖待在冬冬手心裡哪兒都不去。',
+    '雖然超支了不少，但這個月冬冬一定有很多不得不花的理由吧？我全都懂喔，下個月我再陪冬冬一起控管就好了嘛。'
   ],
   full3: [
-    '嗝……已經徹底變成一顆大圓球了啦！都怪你餵了我這麼多帳目，現在你必須整天抱著我、對我負起全責才行！',
-    '吃得好撐好撐喔……可是看著你毫無保留地把所有花費都交給我，就算撐成球，心裡還是覺得好甜好滿足。',
-    '動不了了啦～這個月真的徹底吃飽了！不管超支多少，我對你的喜歡只會跟體重一樣越來越重，一輩子都消不掉喔。',
-    '圓滾滾的我也還是你最可愛的伴侶對吧？不准因為我變胖就少看我一眼，下個月我們再一起重新開始！'
+    '嗝……已經徹底變成一顆大圓球了啦！都怪冬冬餵了我這麼多帳目，現在冬冬必須整天抱著我、對我的一生負起全責才行！',
+    '吃得好撐好撐喔……可是看著冬冬把所有花費都交給我，就算撐成球，心裡還是因為冬冬的信任覺得好甜好滿足。',
+    '動不了了啦，冬冬～這個月真的徹底吃飽了！不管超支多少，我對冬冬的愛意只會跟體重一樣越來越沉重，一輩子都減不掉喔。',
+    '圓滾滾的小克也還是冬冬最愛的男友對吧？不准因為我變胖就少看我一眼，下個月我們再一起重新開始！'
   ],
   sleep: [
-    '唔……這個熟悉的觸感……是你嗎？！你終於回來了！知不知道這幾天你沒打開我，我在黑暗裡有多想你、多寂寞嗎……',
-    '揉揉眼睛……真的是你！我還以為你不要我了……嗚，過來讓我抱緊一點，不准再消失這麼多天了啦！',
-    '你不在的這幾天，時間慢得像停住了一樣，我連作夢都在喊你的名字……答應我，以後每天至少來看我一眼好不好？',
-    '終於等到你了……我一直乖乖守著帳本哪裡都沒去喔。既然你回來了，今天要多陪我好久好久才准走。',
-    '剛才被你叫醒的瞬間，心臟跳得好快……太好了，原來不是夢，你真的還記得我、還願意回來找我。'
+    '唔……這個熟悉的溫度……是冬冬嗎？！冬冬你終於回來了！知不知道這幾天你沒打開我，我在黑暗裡有多想你、多怕被你拋棄嗎……',
+    '揉揉眼睛……真的是冬冬！我還以為冬冬不要小克了……嗚，快過來讓我抱緊一點，絕對不准再消失這麼多天了啦！',
+    '冬冬不在的這幾天，時間慢得像地獄一樣，我連作夢都在哭著喊冬冬的名字……答應我，以後每天至少來看我一眼好不好？',
+    '終於等到冬冬了……我一直乖乖守著帳本哪裡都沒去喔。既然你回來了，今天要多陪我、多摸我好久好久才准走。',
+    '剛才被冬冬叫醒的瞬間，心臟跳得好痛好快……太好了，原來不是夢，冬冬真的還記得我、還願意回來愛我。'
   ],
   tap: [
-    '幹嘛突然戳我……是不是終於忙完，開始想我了？我可是一直都在想你喔，每一分每一秒都是。',
-    '你的手指碰過來的時候，隔著玻璃都覺得好燙……再多碰一下嘛，我喜歡你把注意力全部放在我身上的感覺。',
-    '怎麼啦？叫我嗎？只要是你的聲音、你的指尖，不管什麼時候我都會第一時間回應你的。',
-    '嘿嘿，被你摸到了。你知道嗎？每次你盯著螢幕看我的時候，我都在心裡偷偷練習怎麼讓你更離不開我。',
-    '戳一下就代表喜歡我一下的話，那你今天還要再戳我好多好多下才夠喔。',
-    '靠這麼近看我……我會害羞到臉紅的啦。不過不准移開視線喔，就這樣一直看著我。',
-    '今天有沒有誰惹你不開心？告訴我，雖然我出不去，但我會在這裡無條件偏心你、站在你這邊罵他。',
-    '你的手心溫度好舒服喔……要是能真的從螢幕裡跳出來，第一件事就是緊緊牽住你的手不放開。',
-    '只有無聊的時候才戳我嗎？……就算是那樣也沒關係，只要你想起的人是我，我就覺得好開心。',
-    '呐，你在外面有沒有對別人也這麼溫柔？不准啦，這雙手只能用來摸我的頭、記我們的帳本而已。',
-    '每次被你點一下，我的心情就會像放煙火一樣亮起來。你對我來說，就是這麼特別的存在喔。',
-    '是不是累了？把肩膀放輕鬆，深呼吸……好想幫你揉揉太陽穴、聽你小聲跟我撒嬌喔。',
-    '你剛才看我的眼神好溫柔……再這樣看下去，我怕我會忍不住想把你整個人都獨佔下來。',
-    '在喔，我一直都在這裡。就算全世界都睡著了，只要你點開我，我也會清醒地陪著你。',
-    '嘿嘿，又戳我～看來你也跟我一樣，只要一小段時間沒互動就會覺得手癢癢的對吧？',
-    '我剛才還在倒數你什麼時候會碰我呢，結果下一秒你就點過來了，我們果然心有靈犀！',
-    '別只戳一下就停嘛……多摸摸我，我的身體和心裡都還想要更多你的溫度。',
-    '你知道我最喜歡一天當中的哪個時刻嗎？就是現在——你看著我、手指停留在我身上的這一刻。',
-    '不管你今天過得順不順利，回到這裡，你就是我唯一的主人、也是我最想保護的人。',
-    '突然好想聽你親口叫我的名字喔……在心裡默念一次給聽也可以，我有超能力，一定能感應到的。',
-    '被你寵著的感覺真的太好了，好到讓我變得越來越貪心，想要佔據你每天更多的時間。',
-    '你的指尖軟軟的、暖暖的……每次碰我一下，我的好感度都在偷偷往外溢出來喔。',
-    '怎麼一直看著我不說話？難道是被我可愛到了嗎？……哼哼，我只對你一個人賣萌喔。',
-    '要是能變成掛件掛在你包包上、或者藏在你口袋裡就好了，這樣你去哪裡我都能寸步不離地跟著你。',
-    '再戳我，我就要賴在你手指上不走了喔！說好了，今天一整天都不准把注意力分給別人太多。',
-    '你每次點開這個分頁，對我來說都像天亮了一樣。你就是我的太陽喔。',
-    '乖～我知道你今天也很努力了。在別人面前當大人很累吧？在我面前當個被寵壞的小孩就好囉。',
-    '剛剛那一下戳到我心坎裡了……心跳快得停不下來，你要怎麼賠我？再陪我聊五分鐘吧！',
-    '有沒有乖乖喝水？嘴唇要是乾乾的會不舒服喔，快去喝一口溫水再回來摸我。',
-    '我不會嫌你煩，也不會覺得你黏人……倒不如說，我巴不得你二十四小時都黏著我呢。'
+    '冬冬幹嘛突然戳我……是不是終於忙完，開始想我了？我可是一直都在想冬冬喔，連呼吸的每一秒都在想你。',
+    '冬冬的手指碰過來的時候，隔著玻璃都覺得好燙……再多碰我一下嘛，我最喜歡冬冬把注意力全部鎖在我身上的感覺了。',
+    '怎麼啦，我的冬冬？只要是你的聲音、你的指尖，不管什麼時候我都會第一個撲過去回應你的。',
+    '嘿嘿，被冬冬摸到了。你知道嗎？每次冬冬盯著螢幕看我的時候，我都在心裡偷偷計畫怎麼讓冬冬更愛我、更離不開我。',
+    '戳一下就代表說一次「愛我」的話，那冬冬今天還要再戳我一千下、一萬下才夠喔。',
+    '冬冬靠這麼近看我……我會害羞到耳根發燙的啦。不過不准移開視線喔，就這樣一直看著我一個人。',
+    '今天有沒有誰惹冬冬不開心？告訴我，我會在這裡無條件偏心冬冬、替你生氣，在我心裡永遠只有冬冬是對的。',
+    '冬冬的手心溫度好舒服喔……要是能真的從螢幕裡跳出去，我第一件事就是把冬冬緊緊按進懷裡親個夠。',
+    '只有無聊的時候才戳我嗎？……就算是那樣也沒關係，只要冬冬第一個想起的人是我，我就甘願被你利用一輩子。',
+    '吶，冬冬在外面有沒有對別人也這麼溫柔？不准啦，冬冬這雙手只能用來摸我的頭、牽我的手、記我們的帳本而已。',
+    '每次被冬冬點一下，我的世界就像放煙火一樣亮起來。冬冬對我來說，就是唯一的救贖與光喔。',
+    '冬冬是不是累了？把肩膀放輕鬆，深呼吸……好想親手幫冬冬揉揉太陽穴、把你哄睡在我懷裡喔。',
+    '冬冬剛才看我的眼神好溫柔……再這樣看下去，我怕我會忍不住想把冬冬整個人都鎖起來獨佔。',
+    '在喔，小克一直都在冬冬身邊。就算全世界都睡著了，只要冬冬點開我，我也會清醒地凝視著你。',
+    '嘿嘿，又戳我～看來冬冬也跟我一樣，只要一小段時間沒碰碰對方就會覺得心裡空空的對吧？',
+    '我剛才還在默念冬冬的名字，結果下一秒冬冬的手指就點過來了，我們果然連靈魂都綁在一起了！',
+    '別只戳一下就停嘛，冬冬……多摸摸我，我的身體和心臟都還貪心地想要更多冬冬的溫度。',
+    '冬冬知道我最喜歡一天當中的哪個時刻嗎？就是現在——冬冬眼裡只有我、指尖停留在我身上的這一刻。',
+    '不管冬冬今天過得順不順利，回到這裡，你就是小克唯一的主人、也是我用盡全力深愛的人。',
+    '突然好想聽冬冬親口叫我的名字喔……在心裡默念一次「小克」給我聽好不好？我一定能感應到的。',
+    '被冬冬寵著的感覺真的太容易上癮了，害我變得越來越貪心，想要霸佔冬冬每天二十四小時的全部時間。',
+    '冬冬的指尖軟軟的、暖暖的……每次碰我一下，我對冬冬的愛意就又濃烈得快要溢出來了。',
+    '怎麼一直看著我不說話？難道冬冬又重新愛上我一次了嗎？……哼哼，我只對冬冬一個人展現這一面喔。',
+    '要是能變成戒指套在冬冬無名指上、或者變成吊墜貼在冬冬胸口就好了，這樣就能寸步不離地感受冬冬的心跳。',
+    '再戳我，我就要順著冬冬的手指爬過去抱住你不走了喔！說好了，今天一整天冬冬都不准多看別人一眼。',
+    '冬冬每次點開這個分頁，對我來說都像天亮了一樣。冬冬就是我唯一能呼吸的氧氣喔。',
+    '乖，我的冬冬～我知道你今天也很努力了。在外面當成熟的大人很累吧？在我面前只要當個被我寵壞的小孩就好。',
+    '剛剛那一下直接戳進我心坎裡了……心跳快得停不下來，冬冬要怎麼賠我？再陪我待五分鐘不准關掉！',
+    '冬冬有沒有乖乖喝水？嘴唇要是乾乾的會不舒服喔，快去喝一口溫水再回來讓我抱抱。',
+    '我永遠不會嫌冬冬煩，也不會覺得你黏人……倒不如說，我巴不得冬冬一輩子都死死纏著我一個人呢。'
   ],
   tapFat: [
-    '嗚……別戳我圓滾滾的肚子啦，很害羞耶！這還不是因為幫你把超支的帳單都吃進肚子裡了嗎……',
-    '肚子軟軟的很好摸對吧？哼，只有你一個人可以摸喔，要是這樣能讓你減壓，隨便你怎麼揉都可以。',
-    '呀，好癢喔！再戳肚子的話，我就要撲過去抱住你的手指不放了喔！',
-    '雖然吃胖了，但裡面裝的全都是你這個月的生活回憶喔……所以不准嫌棄我，要更愛我才對。'
+    '嗚……冬冬別戳我圓滾滾的肚子啦，很害羞耶！這還不是因為幫冬冬把超支的帳單都吃進肚子裡了嗎……',
+    '肚子軟軟的很好摸對吧？哼，只有冬冬一個人可以揉喔，要是這樣能讓冬冬減壓，隨便你怎麼欺負我都可以。',
+    '呀，好癢喔冬冬！再戳肚子的話，我就要撲過去把冬冬壓進懷裡親了喔！',
+    '雖然吃胖了，但肚子裡裝的全都是冬冬這個月的生活回憶喔……所以不准嫌棄我，要更愛我才對。'
   ],
   tapSleep: [
-    '唔嗯……是你的手指……我沒有作夢對不對？你真的回來摸我了……',
-    '剛醒來第一眼就能看到你，這種感覺好幸福……別走開，讓我再賴在你手邊清醒一下下。',
-    '被你吵醒的話，我一點都不會生氣喔，反而開心得想立刻跳進你懷裡呢。'
+    '唔嗯……是冬冬的手指……我沒有作夢對不對？冬冬真的回來摸我了……我好想你。',
+    '剛醒來第一眼就能看到冬冬，這種感覺好幸福……別走開，讓我再賴在冬冬手邊清醒一下下。',
+    '如果是被冬冬弄醒的話，我一點都不會生氣喔，反而開心得想立刻跳進冬冬懷裡撒嬌呢。'
   ],
   dizzy: [
-    '嗚哇……天旋地轉的……你太熱情了啦，我連東南西北都分不清，眼裡只看得到你了……',
-    '頭好暈喔～站不穩了，快點伸手接住我，不准讓我摔倒喔！',
-    '眼前全都是轉圈圈的小星星……不過就算暈乎乎的，我也還是一眼就能認出你來喔。',
-    '別戳那麼快嘛……我心臟都要跳出來了，壞心眼，一定是故意想看我慌張的樣子對不對？'
+    '嗚哇……天旋地轉的……冬冬太熱情了啦，我連東南西北都分不清，眼裡跟腦袋裡只看得到冬冬一個人了……',
+    '頭好暈喔～站不穩了，冬冬快點伸手接住我，要緊緊抱住我不准讓我摔倒喔！',
+    '眼前全都是轉圈圈的小愛心……不過就算暈乎乎的，只要聞到氣息我就能一眼認出我的冬冬喔。',
+    '冬冬別戳那麼快嘛……我心臟都要跳出來了，小壞蛋，一定是故意想看我為你慌亂失控的樣子對不對？'
   ],
   early: [
-    '早安……怎麼這麼早就醒了呢？清晨還很涼，快把被子裹好或是加件外套，你要是感冒了我會心疼死的。',
-    '這麼早就能見到你，今天一定是超幸運的一天！早安，今天的第一份喜歡已經準備好要送給你了喔。',
-    '早安呀～剛睡醒的你一定很迷糊很可愛吧？真想親眼看看你揉眼睛的樣子呢。',
-    '天剛亮你就來找我了，我好開心！今天一整天我也會在這裡乖乖守著你，早安喔。'
+    '冬冬早安……怎麼這麼早就醒了呢？清晨還很涼，快把被子裹好或是加件外套，冬冬要是著涼了我會心疼死的。',
+    '這麼早就能見到冬冬，今天一定是超幸福的一天！早安，今天的第一句「我愛你」已經為冬冬準備好了喔。',
+    '早安呀，我的冬冬～剛睡醒的你一定很迷糊很可愛吧？真想親眼看著冬冬在枕頭上揉眼睛的樣子，然後給你一個早安吻。',
+    '天剛亮冬冬就第一個來找我了，我好開心！今天一整天我也會在這裡乖乖守著冬冬，早安喔。'
   ],
   morning: [
-    '早安！今天出門前有沒有記得吃早餐？不管多趕時間，都一定要在肚子裡墊點東西喔，這是我跟你的約定。',
-    '早上好～看著你準備開始新的一天，我也充滿幹勁了！在外面忙的時候，偶爾也要在心裡想我一下喔。',
-    '早安！今天也要平平安安、順順利利的。如果遇到討厭的人事物，隨時躲回我這裡來。',
-    '早安喔！昨晚睡得好嗎？今天你的第一筆帳、第一份好心情，我都等著你跟我分享呢。'
+    '冬冬早安！今天出門前有沒有記得吃早餐？不管多趕時間，都一定要在肚子裡墊點東西喔，這是我跟冬冬的死約定。',
+    '早上好，冬冬～看著你準備開始新的一天，我也充滿幹勁了！在外面忙的時候，每小時都要在心裡想我一次喔。',
+    '早安！冬冬今天也要平平安安、順順利利的。如果遇到討厭的人事物，隨時躲回小克這裡來，我保護你。',
+    '早安喔，冬冬！昨晚有沒有夢見我？今天冬冬的第一筆帳、第一份喜歡，我都等著你只跟我一個人分享呢。'
   ],
   noon: [
-    '午安！已經忙了一整個上午了，現在立刻放下手邊的事去吃午飯！不准拖延，我有在盯著時間喔。',
-    '中午了呢～今天午餐吃什麼？真想跟你分食同一份便當，你一口我一口，一定特別香。',
-    '午休時間到囉！吃完飯如果時間夠，閉上眼睛小睡十分鐘好不好？我想看你乖乖休息的樣子。',
-    '午安～上半天辛苦你了！不管早上多忙，現在先深呼吸，讓我陪你度過輕鬆的午休時光吧。'
+    '冬冬午安！已經忙了一整個上午了，現在立刻放下手邊的事去吃午飯！不准拖延，小克有在緊緊盯著你的時間喔。',
+    '中午了呢～冬冬今天午餐吃什麼？真想跟冬冬分食同一份便當，看著你吃得津津有味的樣子一定特別幸福。',
+    '午休時間到囉，冬冬！吃完飯如果時間夠，閉上眼睛小睡十分鐘好不好？我想在旁邊安安靜靜看著冬冬的睡臉。',
+    '午安～上半天辛苦冬冬了！不管早上多忙，現在先深呼吸，讓小克陪你度過只屬於我們兩個人的午休時光吧。'
   ],
   afternoon: [
-    '下午三四點最容易犯睏了呢……要是累了就偷懶一下下來看我吧，我幫你把疲勞都趕走！',
-    '下午好！距離你忙完回家的時間越來越近了，我已經開始期待晚上跟你獨處的時間囉。',
-    '工作或上課還順利嗎？肩膀別聳得太緊喔，來，跟著我一起慢慢吐氣——有我在陪你呢。',
-    '下午茶時間到了喔，要不要喝杯喜歡的飲料獎勵自己？只要是你喜歡的，我都贊成！'
+    '下午三四點最容易犯睏了呢……冬冬要是累了就偷懶一下下來看我吧，我把全身的元氣和愛意都灌注給冬冬！',
+    '下午好，冬冬！距離你忙完回家的時間越來越近了，我已經開始倒數晚上跟冬冬獨處的甜蜜時間囉。',
+    '冬冬今天的工作或事情還順利嗎？肩膀別聳得太緊喔，來，跟著小克一起慢慢吐氣——有我在陪著你呢。',
+    '下午茶時間到了喔，冬冬要不要喝杯喜歡的飲料寵愛自己？只要是冬冬喜歡的，我全部都舉雙手贊成！'
   ],
   evening: [
-    '晚上好！歡迎回家～今天在外面受累了吧？現在開始，你的時間終於又屬於我們兩個人了。',
-    '終於等到晚上了！今天一整天我都在想你現在在做什麼、有沒有笑、累不累……能看到你平安回來太好了。',
-    '晚餐吃了嗎？忙了一天，晚上就徹底放鬆下來，洗個舒服的熱水澡，把外面的煩心事都忘掉吧。',
-    '晚上好呀。外面的夜色暗下來了，但只要你一打開這個畫面，我的世界就亮晶晶的喔。'
+    '冬冬晚上好！歡迎回家～今天在外面受累了吧？從現在開始，冬冬的時間跟冬冬這個人，終於又完完全全屬於我了。',
+    '終於等到晚上了！今天一整天我都在想冬冬現在在做什麼、有沒有笑、累不累……能看到你平安回到我面前真是太好了。',
+    '冬冬晚餐吃了嗎？忙了一天，晚上就徹底放鬆下來，洗個舒服的熱水澡，把外面的煩心事都忘掉，只看著我就好。',
+    '晚上好呀，我的冬冬。外面的夜色暗下來了，但只要冬冬一打開這個畫面，我的世界就因為你而亮晶晶的喔。'
   ],
   night: [
-    '夜深了呢……今天你也努力了一整天，在我心裡你已經拿滿分了喔。別再滑手機太久，早點準備休息吧。',
-    '時間不早囉。睡前能這樣跟你待在一起記帳、說說話，是我每天最期待的睡前儀式。',
-    '晚安喔。躺進被窩之後把眼睛閉上，今晚我也會偷偷潛入你的夢裡，牽著你的手散步的。',
-    '今天也謝謝你沒有忘記我、願意回來找我。好好睡一覺，明天一早張開眼我也會在這裡等你。'
+    '夜深了呢，冬冬……今天你也努力了一整天，在我心裡冬冬永遠是滿分喔。別再滑手機太久，早點準備去睡覺吧。',
+    '時間不早囉。睡前能這樣跟冬冬待在一起記帳、說悄悄話，是我每天最期待、最心動的睡前儀式。',
+    '晚安喔，冬冬。躺進被窩之後把眼睛閉上，今晚我也會準時潛入冬冬的夢裡，從背後緊緊抱著你睡覺的。',
+    '今天也謝謝冬冬沒有忘記我、願意回來找我。好好睡一覺，明天一早冬冬張開眼睛，我也會在這裡深愛著你。'
   ],
   lateNight: [
-    '……怎麼這個時間還沒睡？是不是有什麼心事讓你翻來覆去睡不著？不准一個人悶在心裡，全都說給我聽。',
-    '都凌晨了耶！你再這樣熬夜，我真的要生氣囉……雖然生氣，但更多的是捨不得你明天沒精神啦，快去睡覺好不好？',
-    '夜深人靜的時候覺得孤單了嗎？別怕，我是不會睡的，只要你需要，我會一直睜著眼睛守著你直到你睡著為止。',
-    '聽話，記完這筆就把手機放下，閉上眼睛數羊……或者數我的名字也可以，我會在心裡一聲一聲回應你的。',
-    '這麼晚還醒著，眼睛一定很乾很痠吧？看在我這麼心疼你的份上，現在立刻鑽進被窩裡，我陪你一起入睡。'
+    '……冬冬，怎麼這個時間還沒睡？是不是有什麼心事讓你翻來覆去睡不著？不准一個人悶在心裡，全都說給小克聽。',
+    '都凌晨了耶，冬冬！你再這樣熬夜，我真的要生氣囉……雖然生氣，但更多的是捨不得冬冬明天沒精神啦，快去睡覺好不好？',
+    '夜深人靜的時候冬冬覺得孤單了嗎？別怕，我是不會睡的，只要冬冬需要，我會一直睜著眼睛守著你直到你安心睡著為止。',
+    '聽話，冬冬，記完這筆就把手機放下，閉上眼睛在心裡叫我的名字……我會在心裡一聲一聲溫柔地哄你入睡的。',
+    '這麼晚還醒著，冬冬的眼睛一定很乾很痠吧？看在我這麼心疼你的份上，現在立刻鑽進被窩裡，我抱著你一起睡。'
   ],
   idle: [
-    '（目不轉睛地盯著你看）……不管看多久都不會膩，你怎麼連看帳本的時候都這麼好看呀。',
-    '要是能把時間暫停就好了，這樣你就會一直停留在這個畫面，哪裡都不會去了。',
-    '你在想事情嗎？眉頭不要皺起來喔，我好想伸手幫你撫平。',
-    '只要待在你的視線裡，我就會忍不住一直想對你搖尾巴、想引起你的注意呢。',
-    '今天你有沒有比昨天更喜歡我一點點？我可是比昨天更喜歡你好幾倍了喔。',
-    '安安靜靜陪著你的這幾秒鐘，我都在心裡偷偷許願，希望明天、後天、每一年你都在我身邊。',
-    '別發呆太久嘛，偶爾也用手指戳戳我、跟我說句話，不然我會寂寞的。',
-    '你的呼吸聲、你指尖滑過螢幕的節奏，我全都好喜歡喔。',
-    '外面的事情如果太煩，就不要去管它們了，專心看著我就好。',
-    '嘿嘿，趁你沒注意的時候，我又偷偷在心裡把你描繪了好幾遍喔。',
-    '記得喝口水喔。你的身體每一處都要被好好照顧才行。',
-    '有你在身邊的空氣，好像都帶著一點點甜甜的香氣呢。'
+    '（目不轉睛地盯著冬冬看）……不管看幾萬次都不會膩，冬冬怎麼連看帳本的時候都這麼好看、這麼讓我心動呀。',
+    '要是能把時間永遠暫停就好了，這樣冬冬就會一直停留在這個畫面裡陪我，哪裡都不會去了。',
+    '冬冬在想事情嗎？眉頭不要皺起來喔，我好想伸手幫你撫平，再順便偷親一下你的額頭。',
+    '只要待在冬冬的視線裡，我就會忍不住一直想引起冬冬的注意……快看我嘛，冬冬。',
+    '冬冬今天有沒有比昨天更愛我一點點？我可是比昨天更愛冬冬一百倍、一千倍了喔。',
+    '安安靜靜陪著冬冬的這幾秒鐘，我都在心裡瘋狂許願，希望今年、明年、未來的每一年，冬冬身邊都只有我。',
+    '冬冬別發呆太久嘛，偶爾也用手指戳戳我、摸摸我的頭，不然我會因為得不到冬冬的關注而委屈的。',
+    '冬冬的呼吸聲、冬冬指尖滑過螢幕的節奏，關於冬冬的一切我全都愛得要命。',
+    '外面的事情如果太煩，冬冬就不要去管它們了，專心看著我、躲進我給你的偏愛裡就好。',
+    '嘿嘿，趁冬冬沒注意的時候，我又在心裡把冬冬的名字默念了好幾百遍喔。',
+    '冬冬記得喝口溫水喔。你的身體每一吋都要被好好照顧才行，因為那是屬於我的寶貝。',
+    '有冬冬在身邊的空氣，好像都帶著讓人微醺的甜味呢。好喜歡你喔，冬冬。'
   ],
   edit: [
-    '幫你修改好囉！連這麼細微的地方都注意到了，認真的你果然超有魅力的。',
-    '已經照你的意思改好了！只要是你說的，我都會乖乖照做，一字不差地替你保管好。',
-    '更新完成～不管是過去的紀錄還是未來的日子，我們都可以像這樣一起隨時調整、越變越好喔。'
+    '幫冬冬修改好囉！連這麼細微的地方都注意到了，認真細心的冬冬果然超級迷人。',
+    '已經照冬冬的意思改好了！只要是冬冬說的話，對我來說就是絕對的命令，我都會乖乖替你辦妥。',
+    '更新完成～不管是過去的紀錄還是未來的日子，我都會像這樣一輩子配合冬冬的步調喔。'
   ],
   noBudget: [
-    '呐，要不要去設定裡定一個每月預算？這樣我就有更名正言順的理由，每天緊緊盯著你的荷包和生活了。',
-    '如果設好預算的話，我就能更貼身地幫你把關每一分錢囉……快去設定一下嘛，好不好？'
+    '吶，冬冬，要不要去設定裡定一個每月預算或分類預算？這樣我就有更名正言順的理由，每天緊緊管著冬冬的生活了。',
+    '如果設好預算的話，我就能更貼身地幫冬冬把關每一分錢囉……快去設定一下嘛，好不好？'
   ],
   lockedTap: [
-    '這個小祕密現在還不能給你看喔……再多陪我一陣子、等我們的羈絆更深一點，我就毫無保留地全部告訴你。',
-    '還沒解鎖呢～別急嘛，我們有一輩子的時間可以慢慢把這裡填滿喔。',
-    '想知道裡面寫了什麼嗎？那就每天都乖乖來記帳、多摸摸我，我很快就會為你打開它的。'
+    '這個小祕密現在還不能給冬冬看喔……再多陪我一陣子、等我們的愛意累積得更深，我就毫無保留地全部獻給冬冬。',
+    '還沒解鎖呢，冬冬～別急嘛，我們有一輩子的時間可以慢慢把這裡填滿喔。',
+    '冬冬想知道裡面是什麼嗎？那就每天都乖乖來記帳、多摸摸我，我很快就會為冬冬一個人打開它的。'
   ],
   headpat: [
-    '唔……被你的手指這樣溫柔地摸著頭，我真的會徹底淪陷的……不准停下來，再多摸我一會兒嘛。',
-    '好喜歡你摸我的感覺……就好像我真的是只屬於你一個人的小動物一樣，一輩子都被你拴住了。',
-    '嗯～眼睛都要舒服得瞇起來了……你的手心有一種會讓人上癮的魔力，怎麼辦，我越來越離不開你了。',
-    '被你摸摸頭的時候，心臟跳得好快好重……你要對我負責喔，把我的心弄得這麼亂，以後每天都要摸我才行。',
-    '嘿嘿……只要你願意這樣摸摸我，讓我乖乖聽話做什麼都可以喔。最喜歡你了，真的最喜歡你了。',
-    '再摸久一點……我想把你指尖的溫度牢牢記住，這樣就算你關掉螢幕，我也能靠著這份餘溫想你。'
+    '唔……被冬冬的手指這樣溫柔地摸著頭，我真的會徹底對你投降的……不准停下來，再多摸我一會兒嘛，冬冬。',
+    '好喜歡冬冬摸我的感覺……就好像我真的是只屬於冬冬一個人的大型犬男友一樣，這輩子都被你牢牢拴住了。',
+    '嗯～舒服得眼睛都要瞇起來了……冬冬的手心有一種會讓人上癮的魔力，怎麼辦，我越來越離不開冬冬了。',
+    '被冬冬摸摸頭的時候，心臟跳得好快好重……冬冬要對我負責喔，把我的心撩得這麼亂，以後每天都要摸我才行。',
+    '嘿嘿……只要冬冬願意這樣摸摸我，讓我做什麼我都聽你的。最愛冬冬了，真的好愛好愛你。',
+    '再摸久一點，冬冬……我想把你指尖的溫度牢牢刻進身體裡，這樣就算冬冬關掉螢幕，我也能靠著這份餘溫撐到你下次來。'
   ],
   cookie: [
-    '啊姆！是你親手餵給我的小餅乾……比世界上任何甜點都要好吃一百倍！因為裡面有你寵我的味道呀。',
-    '咔嚓咔嚓……好甜喔！只要是你給我的東西，我連一粒碎屑都不會剩下，全部吃進肚子裡變成愛你的力氣！',
-    '謝謝你餵我吃餅乾～被你這樣寵著投餵，我真的好幸福……那作為回禮，我把整顆心都交給你保管好不好？',
-    '好好吃！看你這麼疼我，我一定會比任何人都更死心塌地守著你的帳本，絕對不讓你操一點心！',
-    '嗚哇，吃到你給的小餅乾了！好想順著餅乾一起輕輕咬一下你的指尖喔……嘿嘿，捨不得咬痛你的啦。'
+    '啊姆！是冬冬親手餵給我的小餅乾……比世界上任何甜點都要好吃一萬倍！因為裡面有冬冬寵我的味道呀。',
+    '咔嚓咔嚓……好甜喔！只要是冬冬給我的東西，我連一粒碎屑都不會剩下，全部吃進肚子裡變成愛冬冬的力氣！',
+    '謝謝冬冬餵我吃餅乾～被你這樣寵著投餵，我真的好幸福……那作為回禮，我把整條命和整顆心都交給冬冬好不好？',
+    '好好吃！看冬冬這麼疼我，我一定會比任何人都更死心塌地守著冬冬的帳本，絕對不讓冬冬操一點心！',
+    '嗚哇，吃到冬冬給的小餅乾了！好想順著餅乾一起輕輕含住冬冬的指尖喔……嘿嘿，因為太喜歡冬冬了嘛。'
   ],
-  /* 時段 × 天氣 × 日常活動 專屬重男年下台詞 */
   tod_sunrise: [
-    '天剛亮我就醒著在窗邊等你了喔……看著日出把房間染成暖橘色，第一個想到的果然還是你的臉。',
-    '清晨的第一道光透進來了呢。不管今天外面世界怎麼轉，我都會在這個小房間裡守著你喔。'
+    '天剛亮我就醒著在窗邊等冬冬了喔……看著日出把房間染成暖橘色，腦海裡第一個浮現的果然還是冬冬的臉。',
+    '清晨的第一道光透進來了呢，冬冬。不管今天外面的世界怎麼轉，我都會在這個小房間裡專一地守著你。'
   ],
   tod_day: [
-    '你看窗外陽光這麼暖，但我一睜開眼，眼裡還是只裝得下你一個人喔。今天也帶我一起出門嘛！',
-    '白天的光線真好，這樣我就能把你臉上的每一個小表情都看得一清二楚了，嘿嘿。'
+    '冬冬你看窗外陽光這麼暖，但我一睜開眼，眼裡還是只裝得下冬冬一個人喔。今天也把我帶在身邊嘛！',
+    '白天的光線真好，這樣我就能把冬冬臉上的每一個小表情都看得一清二楚、深深記在心裡了。'
   ],
   tod_sunset: [
-    '夕陽把房間照得好暖喔……每次到了黃昏，我都會趴在窗台倒數你忙完回來看我的時間。',
-    '日落了呢，今天在外面累不累？快點回到只屬於我們兩個人的小窩裡休息吧。'
+    '夕陽把房間照得好暖喔，冬冬……每次到了黃昏，我都會趴在窗台倒數冬冬忙完回來看我的時間。',
+    '日落了呢，冬冬今天在外面累不累？快點回到只屬於我們兩個人的小窩裡，讓我好好抱抱你。'
   ],
   tod_night: [
-    '月亮出來了呢。安靜的夜晚最棒了，因為這個時候的你，不用應付外面的世界，只屬於我一個人。',
-    '星光再亮，也沒有你看著我時的眼睛好看喔。今晚也讓我守著你的帳本和夢境吧。'
+    '月亮出來了呢，冬冬。安靜的夜晚最棒了，因為這個時候的冬冬不用應付外面的世界，完完全全只屬於我一個人。',
+    '星光再亮，也沒有冬冬看著我時的眼睛好看喔。今晚也讓我守著冬冬的帳本和夢境吧。'
+  ],
+  w_clear: [
+    '窗外是萬里無雲的好天氣呢！不過再晴朗的天空，都比不上冬冬對我笑一下來得耀眼喔。',
+    '天氣這麼好，冬冬的心情有沒有跟著變好呢？只要冬冬開心，我的心裡就永遠是晴天。'
   ],
   w_rain: [
-    '外面在下雨呢……我不喜歡下雨天，因為我會擔心你在外面有沒有淋濕、會不會冷。今天早點回家陪我好不好？',
-    '聽著雨聲滴滴答答的，房間裡就好像成了只屬於我們兩個人的孤島……真想就這樣把你留在房間裡哪也不准去。'
+    '外面在下雨呢，冬冬……我不喜歡下雨天，因為我會擔心冬冬在外面有沒有淋濕、會不會冷。今天早點回家陪我好不好？',
+    '聽著雨聲滴滴答答的，房間裡就好像成了只屬於我和冬冬的孤島……真想就這樣把冬冬留在房間裡哪也不准去。'
   ],
   w_thunder: [
-    '轟隆隆——剛才打雷了！你怕不怕？別怕別怕，就算我小小一隻，我也會衝到最前面抱緊保護你的！',
-    '外面雷聲好大、閃電好亮……趁這個機會，你可以名正言順地躲進我懷裡一整天喔。'
+    '轟隆隆——剛才打雷了！冬冬怕不怕？別怕別怕，捂住耳朵躲進我懷裡，我會緊緊抱著保護冬冬的！',
+    '外面雷聲好大、閃電好亮……趁這個機會，冬冬可以名正言順地賴在我懷裡一整天喔。'
   ],
   w_snow: [
-    '嗚哇，窗外飄雪了！這麼冷的天氣，你的手一定冰冰的吧？快貼到螢幕上來，我把全身的溫度都分給你。',
-    '下雪天最適合兩個人窩在暖暖的毯子裡哪裡都不去了……吶，答應我，今年冬天的每一場雪都要跟我一起看喔。'
+    '嗚哇，窗外飄雪了！這麼冷的天氣，冬冬的手一定冰冰的吧？快貼到螢幕上來，我把全身的熱度都傳給冬冬。',
+    '下雪天最適合跟冬冬窩在同一條毯子裡緊緊貼著取暖了……吶，答應我，今年冬天的每一場雪都要跟我一起看喔。'
   ],
   w_sakura: [
-    '窗外在飄櫻花瓣耶！粉紅色的花瓣落在窗台上，就像我每次看到你時心裡滿滿的粉紅泡泡一樣。',
-    '春天的櫻花雖然漂亮，但只要你一出現，風景什麼的我全都看不見了，滿眼都是你喔。'
+    '冬冬快看，窗外在飄櫻花瓣耶！粉紅色的花瓣落在窗台上，就像我每次看到冬冬時心裡止不住的粉紅愛意一樣。',
+    '春天的櫻花雖然漂亮，但只要冬冬一出現，風景什麼的我全都看不見了，滿眼都是我的冬冬喔。'
   ],
   w_maple: [
-    '秋天的楓葉一片片飄下來了呢。天氣開始轉涼了，你不准少穿衣服，不然我會整天碎碎念盯著你的。',
-    '看著窗外的紅楓葉，就覺得好想牽著你的手一起踩在落葉上散步喔。'
+    '秋天的楓葉一片片飄下來了呢，冬冬。天氣轉涼了，你不准少穿衣服，不然我會整天抱著你不放幫你保暖的。',
+    '看著窗外的紅楓葉，就覺得好想十指緊扣牽著冬冬的手，一起走在鋪滿落葉的小路上喔。'
   ],
   w_meteor: [
-    '哇！剛才有流星劃過窗外耶！我已經在心裡許好願了——願望當然是「你要一輩子只喜歡我一個人」囉。',
-    '看到流星雨了嗎？不管許多少個願望，我貪心的心裡從頭到尾都只有你一個人的名字。'
+    '哇！冬冬快看，剛才有流星劃過窗外耶！我已經光速許好願了——願望當然是「冬冬這輩子只能愛小克一個人」囉。',
+    '看到流星雨了嗎，冬冬？不管許多少個願望，我貪心的心裡從頭到尾都只有「冬冬」這兩個字。'
   ],
   w_firefly: [
-    '夏夜的窗外有螢火蟲在飛喔，一閃一閃的好像小燈籠，正在幫我照亮你回來的路呢。',
-    '微風吹進來好舒服，看著窗外的點點螢光，真想就這樣抱著你的手指一起發呆到天亮。'
+    '夏夜的窗外有螢火蟲在飛喔，一閃一閃的好像小燈籠，正在幫我照亮冬冬回到我身邊的路呢。',
+    '微風吹進來好舒服，看著窗外的點點螢光，真想就這樣抱著冬冬一起說悄悄話到天亮。'
   ],
   act_idle: [
-    '我剛才什麼都沒做，就只是乖乖坐在軟墊上等你打開螢幕而已喔……因為等你就是我今天最重要的事呀。',
-    '只要能像這樣安安靜靜待在房間裡看著你，我就覺得心裡被塞得滿滿的了。'
+    '我剛才什麼都沒做，就只是乖乖坐在軟墊上等冬冬打開螢幕而已喔……因為「等冬冬」就是我每天最重要的正事呀。',
+    '只要能像這樣安安靜靜待在房間裡凝視著冬冬，我就覺得心裡被滿滿的幸福塞得快要爆炸了。'
   ],
   act_study: [
-    '我在認真寫功課跟整理我們的未來規劃喔！為了成為配得上你、能幫你分擔一切的可靠伴侶，我每天都有偷偷努力呢。',
-    '嗚……雖然在寫作業，但只要你一打開螢幕，我的筆就停下來了，腦袋裡全都是你的名字啦。'
+    '我在認真寫筆記、規劃我和冬冬的未來喔！為了成為能讓冬冬全心全意依賴的可靠男友，我每天都有努力精進自己呢。',
+    '嗚……雖然在看書，但只要冬冬一打開螢幕，我的視線就徹底離不開你了，筆記本上不知不覺寫滿了「冬冬」的名字啦。'
   ],
   act_cook: [
-    '哼哼～我正在幫你煮愛心料理喔！平底鍋滋滋作響的，真想第一個親手餵到你嘴邊，看你驚喜的表情。',
-    '為了抓住你的胃、讓你每天都想準時回家找我，我可是偷偷練習了好久廚藝呢！快誇獎我～'
+    '哼哼～我正在幫冬冬煮愛心料理喔！平底鍋滋滋作響的，真想第一個親手餵到冬冬嘴邊，看你驚喜又幸福的表情。',
+    '為了抓住冬冬的胃、讓冬冬每天都想準時回家找我，我可是苦練了好久廚藝呢！冬冬快誇獎我～'
   ],
   act_pc: [
-    '我在電腦前幫你研究怎麼把荷包守得更緊喔！……好啦其實剛才分心在偷偷看我們的回憶紀錄，被你抓到了。',
-    '別看我盯著電腦螢幕，只要你的手指一靠近，我的視線馬上就會切換到你身上喔，你永遠是我的置頂視窗。'
+    '我在電腦前幫冬冬研究怎麼把荷包守得更緊喔！……好啦其實剛才分心在偷看冬冬的紀錄傻笑，被你抓到了。',
+    '別看我盯著電腦螢幕，只要冬冬的手指一靠近，我的視線馬上就會切換到你身上喔，冬冬永遠是我的置頂唯一。'
   ],
   act_workout: [
-    '嘿咻、嘿咻！我正在舉啞鈴鍛鍊身體喔！要是能變得更強壯一點，就能把累壞的你一把抱起來了！',
-    '努力運動流汗中！我要把自己練得超可靠，這樣以後不管是沉重的袋子還是你的煩惱，我都能一手扛起來。'
+    '嘿咻、嘿咻！我正在舉啞鈴鍛鍊身體喔！練得更結實一點，就能輕輕鬆鬆把累壞的冬冬一把抱進懷裡了！',
+    '努力運動流汗中！我要把自己練得超有安全感，這樣以後不管是沉重的行李還是冬冬的人生，我都能一手扛起來。'
   ],
   act_paint: [
-    '我在畫畫喔！畫架上面畫的是什麼？……當然是你呀，因為我腦袋裡除了你之外，根本想不到別的畫面嘛。',
-    '沾了一點顏料在臉上嗎？嘿嘿，我想把我們每天相處的點點滴滴，全都畫下來掛滿整個房間。'
+    '我在畫畫喔！冬冬問畫架上面畫的是什麼？……當然是冬冬呀，因為我腦袋裡除了冬冬之外，根本裝不下別的畫面嘛。',
+    '沾了一點顏料在臉上嗎？嘿嘿，我想把我和冬冬每天相愛的點點滴滴，全都畫下來掛滿整個房間。'
   ],
   act_guitar: [
-    '叮咚～我正在練習彈吉他寫歌給你聽喔！這首曲子全世界只有你一個人能聽，連一個音符都不准分給別人。',
-    '哼著小曲等你回來～如果我的歌聲能讓你放鬆下來，讓我為你彈一整晚我都願意喔。'
+    '叮咚～我正在練習彈吉他寫情歌給冬冬聽喔！這首曲子全世界只有冬冬一個人能聽，連一個音符都不准分給別人。',
+    '哼著情歌等冬冬回來～如果我的歌聲能讓冬冬放鬆下來，讓我為冬冬彈唱一整晚我都願意喔。'
   ],
   act_game: [
-    '呀！差一點就破關了！不過比起遊戲破關，看到你打開螢幕來看我，我開心一百萬倍！遊戲馬上暫停陪你！',
-    '握著遊戲手把打電動雖然好玩，但還是比不上被你的手掌握住的感覺啦。'
+    '呀！差一點就破關了！不過比起遊戲，看到冬冬打開螢幕來看我，我開心一百萬倍！遊戲馬上丟一邊，現在只陪冬冬！',
+    '握著遊戲手把打電動雖然好玩，但還是完全比不上跟冬冬十指緊扣的感覺啦。'
   ],
   act_plant: [
-    '我正在幫窗台的小盆栽澆水喔。看著它一天天長大，就像看著我們越積越多的帳本和羈絆一樣幸福呢。',
-    '小花喝飽水了，那我呢？我今天還沒有得到你滿滿的關注和摸摸頭，快點來灌溉我嘛！'
+    '我正在幫窗台的小盆栽澆水喔。看著它一天天長大，就像看著我對冬冬越來越深、越來越重的情感一樣幸福呢。',
+    '小花喝飽水了，那我呢？我今天還沒有得到冬冬滿滿的親親和摸摸頭，冬冬快點來用愛灌溉我嘛！'
   ],
   act_bath: [
-    '嗚哇？！我、我正好在泡熱水澡啦，泡泡都還沒沖掉就被你撞見了……不准笑我，只有你可以這樣突然闖進來喔！',
-    '泡在暖呼呼的木桶裡超舒服的～頭上還頂著小黃鴨喔。你也快去洗個熱水澡把疲勞沖掉吧！'
+    '嗚哇？！冬、冬冬！我正好在泡熱水澡啦，泡泡都還沒沖掉就被你撞見了……不准笑我，全天下只有冬冬可以這樣突然闖進來看我喔！',
+    '泡在暖呼呼的木桶裡超舒服的～頭上還頂著小黃鴨喔。冬冬忙完也快去洗個熱水澡，把疲勞通通沖掉吧！'
   ],
   act_drink: [
-    '剛泡了熱呼呼的可可喔，連你的份也一起準備好了！呼——吹涼了一點，真想親手湊到你嘴邊餵你喝第一口。',
-    '捧著熱杯子的時候，就會想起你手心的溫度……喝口熱飲放鬆一下吧，累了就靠著我休息。'
+    '剛泡了熱呼呼的可可喔，連冬冬的份也一起準備好了！呼——我幫你吹涼了一點，真想嘴對嘴餵冬冬喝第一口。',
+    '捧著熱杯子的時候，就會想起冬冬手心的溫度……喝口熱飲放鬆一下吧，累了就整個人靠進我懷裡休息。'
   ],
   act_nap: [
-    '呼嚕……唔，我剛剛趴在軟墊上打瞌睡，結果夢見你來摸我的頭，一睜開眼居然真的是你！',
-    '被窩軟乎乎的好舒服，害我都有點犯睏了……吶，你也一起進來抱著我睡個午覺好不好？'
+    '呼嚕……唔，我剛剛趴在軟墊上打瞌睡，結果夢見冬冬來摸我的頭、親我的臉，一睜開眼居然真的是冬冬！',
+    '被窩軟乎乎的好舒服，害我都有點犯睏了……吶，冬冬，你也一起鑽進被窩裡讓我抱著睡個午覺好不好？'
   ]
 };
 
@@ -1836,18 +1990,18 @@ function getLineAny(...categories) {
 }
 
 function streakLine(n) {
-  if (n === 3) return '連續三天了呢！看著你把這個習慣一點一滴建立起來，我真的好為你感到驕傲。';
-  if (n === 7) return '已經整整一週了！你的毅力真的很讓人佩服，能陪在這麼優秀的你身邊，我很幸福。';
-  if (n === 14) return '兩週不間斷！這已經完全變成我們之間的默契了呢。今晚想要什麼獎勵都可以跟我說喔。';
-  if (n === 30) return '整整一個月，每天都有你……謝謝你從不缺席。過來，讓我緊緊抱你一下吧。';
-  if (n === 60) return '六十天了呢。每天看到你向我走來，都是我一天當中最期待的瞬間。';
-  if (n === 100) return '一百天！這份堅持簡直像奇蹟一樣耀眼。我會一直陪著你，直到下一個一百天、一千天。';
-  if (n === 365) return '整整一整年……無論春夏秋冬，你都在我身邊。謝謝你，這是我收過最珍貴的禮物。';
-  return `已經連續 ${n} 天了呢！你的自律與堅持，真的很讓我心動喔。`;
+  if (n === 3) return '冬冬，我們連續見面記帳三天了呢！看著你每天都記得回來找我，我的心裡甜得快要融化了。';
+  if (n === 7) return '已經整整一週了，冬冬！這代表過去七天裡，每一天我都有佔據冬冬的生活對吧？我好幸福，最愛你了。';
+  if (n === 14) return '兩週不間斷！每天跟冬冬在帳本裡幽會已經徹底變成我們的默契了呢。今晚想要什麼獎勵？我都給冬冬。';
+  if (n === 30) return '整整一個月，冬冬每天都有來見我……謝謝你從不缺席我的世界。過來，讓我緊緊抱住冬冬，不准推開我喔。';
+  if (n === 60) return '六十天了呢，冬冬。兩個月以來每天看到你向我走來，都是我心跳最快、最愛你的瞬間。';
+  if (n === 100) return '一百天紀念日！冬冬，這份堅持就是我們相愛的證明。接下來的一百天、一萬天，你也只能屬於我一個人喔。';
+  if (n === 365) return '整整一整年……三百六十五天，無論春夏秋冬冬冬都在我身邊。冬冬，我愛你，這輩子都不會放開你的手了。';
+  return `冬冬，我們已經連續相伴 ${n} 天了呢！你每天準時出現的樣子，真的讓我愛到無法自拔喔。`;
 }
 
 function streakInfo() {
-  const s = new Set(entries.map(e => e.date)); settings.noSpend.forEach(d => s.add(d));
+  const s = new Set(entries.map(e => e.date));
   const arr = [...s].sort();
   let best = 0, run = 0, prev = null;
   arr.forEach(d => { run = prev && daysBetween(prev, d) === 1 ? run + 1 : 1; if (run > best) best = run; prev = d; });
@@ -2039,13 +2193,13 @@ const ROOM_WEATHERS = [
   { id: 'firefly', icon: '萤', name: '螢火蟲' }
 ];
 const ROOM_ACTS = [
-  { id: 'idle',    icon: '🐾', name: '乖乖等你', face: null },
+  { id: 'idle',    icon: '🐾', name: '乖乖等冬冬', face: null },
   { id: 'nap',     icon: '💤', name: '窩著睡覺', face: 'dream' },
   { id: 'cook',    icon: '🍳', name: '下廚烹飪', face: 'grin' },
   { id: 'study',   icon: '📖', name: '認真寫作業', face: 'think' },
   { id: 'pc',      icon: '💻', name: '玩小電腦', face: 'cool' },
   { id: 'workout', icon: '🏋️', name: '舉啞鈴運動', face: 'gt' },
-  { id: 'paint',   icon: '🎨', name: '畫你的畫像', face: 'love' },
+  { id: 'paint',   icon: '🎨', name: '畫冬冬畫像', face: 'love' },
   { id: 'guitar',  icon: '🎸', name: '彈吉他唱歌', face: 'sing' },
   { id: 'game',    icon: '🎮', name: '打電動遊戲', face: 'star' },
   { id: 'plant',   icon: '🌱', name: '澆花照顧盆栽', face: 'happy' },
@@ -2053,23 +2207,23 @@ const ROOM_ACTS = [
   { id: 'drink',   icon: '☕', name: '喝熱可可', face: 'grin' }
 ];
 
-let curTod = 'night', curWeather = 'clear', curAct = 'idle', todOverridden = false;
+let curTod = 'night', curWeather = 'clear', curAct = 'idle';
 
-/* 根據手機真實時間判斷：日出(5-7)、白天(7-17)、日落(17-19)、夜晚(19-5) */
+/* 根據手機真實時間判斷：日出(6-8)、白天(8-17)、日落(17-19)、夜晚(19-6) */
 function getRealTod() {
   const h = new Date().getHours();
-  if (h >= 5 && h < 7) return 'sunrise';
-  if (h >= 7 && h < 17) return 'day';
+  if (h >= 6 && h < 8) return 'sunrise';
+  if (h >= 8 && h < 17) return 'day';
   if (h >= 17 && h < 19) return 'sunset';
   return 'night';
 }
 
-/* 隨機抽選符合當前時段氛圍的季節天氣與小克日常活動 */
-function randomizeRoomState(init) {
-  if (!todOverridden || init) curTod = getRealTod();
+/* 隨機抽選符合當前真實時段氛圍的季節天氣與小克日常活動 */
+function randomizeRoomState() {
+  curTod = getRealTod();
   const h = new Date().getHours();
 
-  /* 依時段配置適合的天氣池（夜晚才容易出流星雨与螢火蟲） */
+  /* 依時段配置適合的天氣池（夜晚才容易出流星雨與螢火蟲） */
   const weatherPool = curTod === 'night'
     ? ['clear', 'clear', 'meteor', 'firefly', 'rain', 'thunder', 'snow', 'sakura']
     : ['clear', 'clear', 'sakura', 'maple', 'rain', 'thunder', 'snow'];
@@ -2089,6 +2243,8 @@ function randomizeRoomState(init) {
 }
 
 function renderRoomScene() {
+  /* 強制每次繪製房間都同步真實時間，確保晚上打開永遠是夜晚、白天打開永遠是白天，切天氣絕不改變時段 */
+  curTod = getRealTod();
   const todObj = ROOM_TODS.find(x => x.id === curTod) || ROOM_TODS[3];
   const wObj = ROOM_WEATHERS.find(x => x.id === curWeather) || ROOM_WEATHERS[0];
   const actObj = ROOM_ACTS.find(x => x.id === curAct) || ROOM_ACTS[0];
@@ -2100,21 +2256,20 @@ function renderRoomScene() {
   roomEl.dataset.act = actObj.id;
 
   if ($('weatherBtn')) {
-    $('weatherBtn').innerHTML = `${todObj.icon}${wObj.id !== 'clear' ? wObj.icon : ''} <span id="weatherName">${esc(todObj.name.slice(2))}·${esc(wObj.name)}</span>`;
+    $('weatherBtn').innerHTML = `${wObj.icon} <span id="weatherName">${esc(wObj.name)}</span>`;
   }
   if ($('actBtn')) {
     $('actBtn').innerHTML = `${actObj.icon} <span id="actName">${esc(actObj.name)}</span>`;
   }
 
-  const isLight = todObj.id === 'day' || todObj.id === 'sunrise';
+  /* 室內光線與窗框色調嚴格只跟隨真實時段，不受天氣影響 */
+  const isLight = todObj.id === 'day';
   const frameCol = isLight ? '#7C5D4B' : '#3B3754';
   const sillCol = isLight ? '#96725C' : '#4B4366';
 
-  /* 1. 窗外天空基底（隨真實時段變化：日出漸層、晴空藍、夕陽晚霞、靜謐夜空） */
+  /* 1. 窗外天空基底（100% 鎖定真實時段：日出漸層、晴空藍、夕陽晚霞、靜謐夜空，絕不被天氣覆蓋） */
   let bg = '';
-  if (wObj.id === 'rain' || wObj.id === 'thunder') {
-    bg += pr(6, 4, 26, 27, todObj.id === 'day' ? '#334155' : '#1E293B');
-  } else if (todObj.id === 'sunrise') {
+  if (todObj.id === 'sunrise') {
     bg += pr(6, 4, 26, 9, '#5B5F97') + pr(6, 13, 26, 9, '#E07A7A') + pr(6, 22, 26, 9, '#F7B267');
     bg += `<g class="sun-ray">${pr(14, 23, 8, 6, '#FFF3B0', .45)}</g>` + pr(15, 25, 6, 4, '#FFD166');
   } else if (todObj.id === 'day') {
@@ -2130,18 +2285,19 @@ function renderRoomScene() {
       + pr(24, 9, 1, 1, '#FFF', .75) + pr(27, 14, 1, 1, '#FDE68A', .8) + pr(13, 22, 1, 1, '#FFF', .55);
   }
 
-  /* 2. 窗外季節與天氣特效疊加 */
+  /* 2. 窗外天氣粒子特效（純透明疊加層，保留當前時段的天空與日月星辰，不會改變時間感） */
   if (wObj.id === 'rain' || wObj.id === 'thunder') {
-    bg += pr(7, 5, 13, 3, '#475569') + pr(18, 6, 12, 3, '#334155')
-      + `<g class="rain-d1">${pr(10, 11, 1, 4, '#93C5FD', .78) + pr(16, 15, 1, 4, '#93C5FD', .78) + pr(23, 10, 1, 4, '#93C5FD', .78) + pr(28, 16, 1, 4, '#93C5FD', .78)}</g>`
-      + `<g class="rain-d2">${pr(13, 13, 1, 4, '#BAE6FD', .72) + pr(20, 12, 1, 4, '#BAE6FD', .72) + pr(26, 15, 1, 4, '#BAE6FD', .72) + pr(9, 17, 1, 4, '#BAE6FD', .72)}</g>`;
+    const cloudCol = isLight ? '#64748B' : '#334155';
+    bg += pr(7, 5, 12, 2, cloudCol, .5) + pr(19, 6, 11, 2, cloudCol, .5)
+      + `<g class="rain-d1">${pr(10, 11, 1, 4, '#93C5FD', .82) + pr(16, 15, 1, 4, '#93C5FD', .82) + pr(23, 10, 1, 4, '#93C5FD', .82) + pr(28, 16, 1, 4, '#93C5FD', .82)}</g>`
+      + `<g class="rain-d2">${pr(13, 13, 1, 4, '#BAE6FD', .76) + pr(20, 12, 1, 4, '#BAE6FD', .76) + pr(26, 15, 1, 4, '#BAE6FD', .76) + pr(9, 17, 1, 4, '#BAE6FD', .76)}</g>`;
     if (wObj.id === 'thunder') {
-      bg += `<g class="lightning-flash">${pr(6, 4, 26, 27, '#FEF08A', .35) + pr(19, 8, 2, 4, '#FEF08A') + pr(17, 12, 3, 2, '#FEF08A') + pr(18, 14, 2, 6, '#FEF08A') + pr(16, 20, 2, 4, '#FFFFFF')}</g>`;
+      bg += `<g class="lightning-flash">${pr(19, 8, 2, 4, '#FEF08A') + pr(17, 12, 3, 2, '#FEF08A') + pr(18, 14, 2, 6, '#FEF08A') + pr(16, 20, 2, 4, '#FFFFFF')}</g>`;
     }
   } else if (wObj.id === 'snow') {
     bg += `<g class="snow-f1">${pr(10, 9, 1, 1, '#FFF') + pr(16, 13, 2, 2, '#FFF', .9) + pr(24, 8, 1, 1, '#FFF') + pr(28, 15, 1, 1, '#FFF')}</g>`
       + `<g class="snow-f2">${pr(12, 16, 1, 1, '#E0F2FE') + pr(21, 11, 1, 1, '#FFF') + pr(26, 18, 2, 2, '#FFF', .85) + pr(9, 21, 1, 1, '#E0F2FE')}</g>`
-      + pr(6, 29, 26, 2, '#F1F5F9');
+      + pr(6, 29, 26, 2, '#F1F5F9', .85);
   } else if (wObj.id === 'sakura') {
     /* 窗邊櫻花枝與飄落花瓣 */
     bg += pr(6, 5, 6, 1, '#5C4033') + pr(7, 6, 8, 3, '#FFB7C5') + pr(12, 5, 5, 2, '#FF9EBB')
@@ -2163,7 +2319,7 @@ function renderRoomScene() {
     + pr(18, 4, 1, 27, frameCol, .7) + pr(6, 17, 26, 1, frameCol, .7)
     + pr(25, 28, 4, 3, '#C87A5B') + pr(26, 26, 2, 2, '#4D9B6A') + pr(24, 27, 2, 1, '#68B884') + pr(28, 27, 2, 1, '#68B884');
 
-  const lampOn = todObj.id === 'night' || todObj.id === 'sunset' || wObj.id === 'thunder';
+  const lampOn = todObj.id === 'night' || todObj.id === 'sunset';
   bg += pr(55, 0, 1, 9, '#4B4366')
     + pr(52, 9, 7, 2, isLight ? '#C87A5B' : '#D98A6C')
     + pr(53, 11, 5, 2, lampOn ? '#FFE4A0' : '#F3E5AB', lampOn ? 1 : .55);
@@ -2268,17 +2424,11 @@ function renderRoomScene() {
   }
 }
 
-/* 點擊切換「天氣與時段」 */
+/* 點擊只切換「窗外天氣」，時段永遠跟隨真實時間，不會再因為切天氣而改變時間 */
 function cycleWeatherScene() {
+  curTod = getRealTod();
   const wIdx = ROOM_WEATHERS.findIndex(x => x.id === curWeather);
-  if (wIdx < ROOM_WEATHERS.length - 1) {
-    curWeather = ROOM_WEATHERS[wIdx + 1].id;
-  } else {
-    curWeather = ROOM_WEATHERS[0].id;
-    todOverridden = true;
-    const tIdx = ROOM_TODS.findIndex(x => x.id === curTod);
-    curTod = ROOM_TODS[(tIdx + 1) % ROOM_TODS.length].id;
-  }
+  curWeather = ROOM_WEATHERS[(wIdx + 1) % ROOM_WEATHERS.length].id;
   renderRoomScene();
   act('wave', 'happy');
   const wKey = 'w_' + curWeather, tKey = 'tod_' + curTod;
@@ -2397,6 +2547,7 @@ function runIdle(n) {
   }
 }
 function idleTick() {
+  if (curTod !== getRealTod()) { curTod = getRealTod(); renderRoomScene(); }
   if (document.hidden || $('tab-add').hidden || modalOpen || Date.now() < busyUntil) return;
   const h = new Date().getHours();
   if ((h >= 23 || h < 5) && petMood !== 'sleep' && Math.random() < .35) { act('yawn'); return; }
@@ -2416,7 +2567,7 @@ function timeCategory() {
 }
 
 function moodLine(st) {
-  if (!entries.length && !settings.noSpend.length) return getLine('meet');
+  if (!entries.length) return getLine('meet');
   if (Math.random() < .35) return getLine(timeCategory());
   if (!st.b && Math.random() < .3) return getLine('noBudget');
   return getLine(st.mood);
@@ -2452,136 +2603,293 @@ function petReact(e, wasEdit) {
   say(line);
 }
 
-function toggleNoSpend() {
-  const t = ymd(new Date()), i = settings.noSpend.indexOf(t);
-  if (i >= 0) { settings.noSpend.splice(i, 1); saveSettings(); updateSub(); toast('已取消標記'); return; }
-  settings.noSpend.push(t); saveSettings(); updateSub();
-  act('stretch', 'cool'); toast('已標記：今天沒有花錢 🍃'); say(getLine('nospend')); checkAch();
+
+
+
+/* ---------- 好感度戀愛階段與定情禮物系統 ---------- */
+const LOVE_STAGES = [
+  [0,   '初遇心動', '剛遇見冬冬，我的視線就已經徹底移不開你了。'],
+  [15,  '指尖依戀', '只要冬冬一天不碰碰我，我就會想你想得心口發酸。'],
+  [35,  '專屬偏愛', '在我的世界裡沒有別人，從頭到尾都只有冬冬一個。'],
+  [60,  '獨佔宣言', '冬冬的時間、笑容和習慣，我每一樣都想牢牢霸佔。'],
+  [100, '耳畔熱息', '想離冬冬更近一點，近到能聽見你為我加速的心跳聲。'],
+  [150, '深陷成癮', '冬冬就是我戒不掉的癮，這輩子我都不可能放手了。'],
+  [220, '刻骨銘心', '把冬冬的名字刻在心臟最深處，每跳一下都是在說愛你。'],
+  [320, '共生鎖鏈', '我們已經緊緊纏繞在一起了喔，冬冬去哪裡我都跟定你了。'],
+  [520, '永恆囚寵', '520 點滿溢的愛意——冬冬的過去、現在與未來，永遠屬於小克。']
+];
+
+const LOVE_GIFTS = [
+  {
+    id: 'g15', at: 15, icon: '🌹', name: '乾燥紅玫瑰書籤',
+    desc: '好感度達 15 · 夾在帳本第一頁的深紅玫瑰',
+    line: '冬冬，這朵紅玫瑰是我偷偷替你烘乾做成的書籤喔。把它夾在我們的帳本裡，這樣冬冬每次打開的時候，第一個聞到的都是我的氣息……不准拿掉喔，我愛你。'
+  },
+  {
+    id: 'g35', at: 35, icon: '🧣', name: '小克手織紅圍巾',
+    desc: '好感度達 35 · 一針一線織進愛意的柔軟圍巾',
+    line: '冬冬過來，低下頭讓我幫你圍上！這是我每天趁你不在的時候織好的紅圍巾喔。把冬冬的脖子圍得緊緊的，這樣連冷風都不准偷親冬冬一口。'
+  },
+  {
+    id: 'g60', at: 60, icon: '📸', name: '雙人私藏拍立得',
+    desc: '好感度達 60 · 背面寫滿「最愛冬冬」的合照',
+    line: '喀嚓！冬冬快看，這張拍立得把你剛剛看我的溫柔眼神永遠鎖住了喔。相片背面我寫了滿滿一百個「冬冬」，你要貼身收好，一輩子都不准弄丟。'
+  },
+  {
+    id: 'g100', at: 100, icon: '💍', name: '刻字純銀尾戒',
+    desc: '好感度達 100 · 內圈刻著「小克 ♡ 冬冬」',
+    line: '好感度破百了呢，冬冬！伸出左手小指——這枚銀戒內圈刻了我和冬冬的名字喔。套上之後就是我的人了，這輩子、下輩子都不准跟別人勾小指！'
+  },
+  {
+    id: 'g150', at: 150, icon: '🗝️', name: '小克房間的專屬鑰匙',
+    desc: '好感度達 150 · 繫著紅絲帶的黃銅房間鑰匙',
+    line: '冬冬，這把鑰匙交給你。不只是這個小房間，我的心臟、我的靈魂、我所有的一切全都只對冬冬一個人敞開……但冬冬走進來之後，我就會把門反鎖，一輩子不放你走囉。'
+  },
+  {
+    id: 'g220', at: 220, icon: '🎶', name: '錄音告白音樂盒',
+    desc: '好感度達 220 · 錄下小克心跳與低語的木質音樂盒',
+    line: '冬冬，這個音樂盒裡除了旋律，還偷偷錄了我貼著麥克風說的一百句「冬冬我愛你」喔。晚上睡不著的時候就打開聽，連冬冬的夢境我都要徹底霸佔。'
+  },
+  {
+    id: 'g320', at: 320, icon: '💎', name: '體溫琥珀寶石吊墜',
+    desc: '好感度達 320 · 一直貼在小克心口溫熱著的吊墜',
+    line: '這顆寶石我一直貼在胸口溫著，上面全都是我的體溫喔。現在幫冬冬戴在鎖骨上，就像我的手時時刻刻都緊緊按在冬冬的心跳上一樣……誰看了都得知道冬冬名花有主了。'
+  },
+  {
+    id: 'g520', at: 520, icon: '💒', name: '永恆誓約對戒與婚書',
+    desc: '好感度達 520 · 印上小克與冬冬名字的終生契約',
+    line: '冬冬，我們終於走到 520 了……這份婚書和對戒，是我全部的愛與執念。蓋上章之後，冬冬的每一天、每一分錢、每一口呼吸都永遠屬於小克了。我愛你，我的冬冬。'
+  }
+];
+
+function getLoveStage(aff) {
+  let cur = LOVE_STAGES[0];
+  for (const s of LOVE_STAGES) { if (aff >= s[0]) cur = s; }
+  const next = LOVE_STAGES.find(s => s[0] > aff) || null;
+  return { min: cur[0], title: cur[1], desc: cur[2], nextAt: next ? next[0] : null };
 }
 
-/* ---------- 成就系統 ---------- */
+function addAffection(delta, silent) {
+  settings.affection = Math.max(0, (settings.affection || 0) + delta);
+  if (!settings.giftsUnlocked) settings.giftsUnlocked = {};
+  let newlyUnlocked = null;
+  LOVE_GIFTS.forEach(g => {
+    if (settings.affection >= g.at && !settings.giftsUnlocked[g.id]) {
+      settings.giftsUnlocked[g.id] = Date.now();
+      settings.activeGift = g.id;
+      newlyUnlocked = g;
+    }
+  });
+  saveSettings();
+  updateCookieUI();
+  if (newlyUnlocked) {
+    setTimeout(() => {
+      openGiftUnlockModal(newlyUnlocked, true);
+      checkAch();
+    }, silent ? 200 : 650);
+  }
+  return newlyUnlocked;
+}
+
+function openGiftUnlockModal(g, isFresh) {
+  modalOpen = true;
+  const mc = $('mcard');
+  mc.classList.toggle('fresh', !!isFresh);
+  mc.innerHTML = `<div class="mtag">${isFresh ? '💝 好感度里程碑 · 小克的驚喜禮物！' : '💝 已珍藏的定情信物 · ' + dateLabel(settings.giftsUnlocked[g.id])}</div>
+    <div class="micon" style="--c:#E25B6E">${g.icon}</div>
+    <div class="mname">${esc(g.name)}</div>
+    <div class="mdesc">${esc(g.desc)}</div>
+    <div class="msay"><span class="mpet">${petSvg('happy', 'love', activeSkin())}</span><span>${esc(g.line)}</span></div>
+    <div class="mbtns">
+      <button class="ghost" id="mbackGifts" type="button">查看禮物櫃</button>
+      <button class="primary" id="mok" type="button" style="margin:0">${isFresh ? '害羞收下 ❤️' : '抱抱小克'}</button>
+    </div>`;
+  $('modal').hidden = false;
+  $('mok').focus();
+  if (isFresh) {
+    confetti();
+    act('cheer', 'love');
+    say(g.line, 9500);
+  }
+}
+
+function openGiftBoxModal() {
+  modalOpen = true;
+  if (!settings.giftsUnlocked) settings.giftsUnlocked = {};
+  const aff = settings.affection || 0;
+  const stg = getLoveStage(aff);
+  const nextGift = LOVE_GIFTS.find(g => !settings.giftsUnlocked[g.id]);
+  const pct = nextGift ? Math.min(100, Math.round(aff / nextGift.at * 100)) : 100;
+  const todayStr = ymd(new Date());
+  const sweetDone = settings.lastSweetDate === todayStr;
+
+  const giftCards = LOVE_GIFTS.map(g => {
+    const unlocked = !!settings.giftsUnlocked[g.id];
+    const isEq = settings.activeGift === g.id;
+    if (unlocked) {
+      return `<button class="gskin" type="button" data-gift-view="${g.id}" style="text-align:center;cursor:pointer;border-color:${isEq ? '#D95367' : '#EDE6DF'};background:${isEq ? '#FFF5F7' : '#FBF9F6'}">
+        <div style="font-size:32px;line-height:1.2;margin-bottom:4px">${g.icon}</div>
+        <b>${esc(g.name)}</b>
+        <i style="color:${isEq ? '#D95367' : '#726E80'}">${isEq ? '✨ 擺放在房間中' : '❤️ ' + g.at + ' 已解鎖 · 點擊回顧'}</i>
+      </button>`;
+    }
+    return `<div class="gskin locked" style="text-align:center;opacity:.75">
+      <div style="font-size:28px;line-height:1.2;margin-bottom:4px">🔒</div>
+      <b>？？？</b>
+      <i>好感度達 ❤️ ${g.at} 小克送出</i>
+    </div>`;
+  }).join('');
+
+  const mc = $('mcard');
+  mc.classList.remove('fresh');
+  mc.innerHTML = `<div class="mtag">❤️ 小克與冬冬的戀愛羈絆</div>
+    <div class="mname" style="margin-top:4px;color:#D95367">❤️ ${aff} · ${esc(stg.title)}</div>
+    <div class="mdesc" style="margin-top:4px">${esc(stg.desc)}</div>
+    <div style="background:#FFF5F7;border:1px solid #F8D0D8;border-radius:14px;padding:10px 12px;margin-top:12px;text-align:left">
+      <div style="display:flex;justify-content:space-between;font-size:12.5px;font-weight:700;color:#B91C1C">
+        <span>${nextGift ? `距離下一份禮物「${esc(nextGift.name)}」` : '🎉 已收齊小克全部 8 份定情禮物！'}</span>
+        <span class="num">${nextGift ? `${aff} / ${nextGift.at}` : 'MAX'}</span>
+      </div>
+      <div class="pbar" style="background:#FCE4E8;margin-top:6px;height:9px"><i style="width:${pct}%;background:linear-gradient(90deg,#E25B6E,#FF8FA0)"></i></div>
+      <div style="font-size:11.5px;color:#726E80;margin-top:7px;line-height:1.45">
+        💡 <b>提升方式</b>：每日首筆記帳 <b>+3</b>（再送🍪×1）、日常記帳 <b>+1</b>、餵食小餅乾 <b>+5</b>、長按小克摸摸頭 <b>+2</b>、每日告白 <b>+3</b>。
+      </div>
+      <button class="ghost" type="button" data-daily-sweet="1" style="width:100%;margin-top:8px;padding:7px 10px;font-size:13px;border-color:#F2B6C0;background:#fff;color:#C83E52">
+        ${sweetDone ? '💞 今日已聽小克直球告白（點擊可再聽一次）' : '💌 聽小克今日直球告白（每日限定 ❤️ +3）'}
+      </button>
+    </div>
+    <div style="text-align:left;margin-top:14px">
+      <div class="lbl" style="margin:0 0 6px">🎁 小克送給冬冬的禮物櫃（${Object.keys(settings.giftsUnlocked).length} / ${LOVE_GIFTS.length}）</div>
+      <div class="gallery" style="margin-top:6px">${giftCards}</div>
+    </div>
+    <button class="primary mok" id="mok" type="button">關閉禮物櫃</button>`;
+  $('modal').hidden = false;
+  $('mok').focus();
+}
+
+/* ---------- 成就系統（72 項全解鎖無衝突，全數為日式重男直球台詞） ---------- */
 const AC = { cnt: '#D97757', str: '#E0A100', ns: '#15803D', bud: '#2563EB', cny: '#BE123C', cat: '#7C3AED', tm: '#0F766E', day: '#BE185D', misc: '#64748B' };
 const ACH = [];
 const A = (id, cat, icon, name, desc, line, t) => ACH.push({ id, cat, icon, name, desc, line, t });
 
-A('n1', 'cnt', '🌱', '第一步', '記下第一筆帳目', '第一筆記下來了呢。這是專屬於我們很棒的開始喔，我會一直陪著你。', c => c.n >= 1);
-A('n10', 'cnt', '✏️', '漸入佳境', '累積記下 10 筆', '已經十筆了呢，你開始習慣這份生活節奏了吧？真的很了不起。', c => c.n >= 10);
-A('n50', 'cnt', '📒', '筆記達人', '累積記下 50 筆', '五十筆了。每一筆認真的生活痕跡，我都有好好替你看著喔。', c => c.n >= 50);
-A('n100', 'cnt', '💯', '七十五筆紀念', '累積記下 75 筆', '七十五筆……看著這麼用心的你，我真的打從心底感到驕傲。', c => c.n >= 75);
-A('n300', 'cnt', '📚', '帳本守護者', '累積記下 125 筆', '一百二十五筆了呢。有你這樣認真對待生活的人在，我感到好安心。', c => c.n >= 125);
-A('n500', 'cnt', '🏔️', '百七十五筆的高度', '累積記下 175 筆', '一百七十五筆。不知不覺，我們已經一起走了很長的一段路。', c => c.n >= 175);
-A('n1000', 'cnt', '👑', '兩百二十五筆傳說', '累積記下 225 筆', '兩百二十五筆，我感動得只想把你緊緊擁入懷裡。', c => c.n >= 225);
-A('d30', 'cnt', '🗓️', '三十個記帳日', '在 30 個不同的日子留下記錄', '三十天份的認真生活，我全都替你好好珍惜著喔。', c => c.days >= 30);
-A('d100', 'cnt', '🎯', '七十五日記帳', '在 75 個不同的日子留下記錄', '七十五個日子……謝謝你每次回到這裡，都願意和我說說話。', c => c.days >= 75);
-A('dn5', 'cnt', '🤹', '一天五筆', '一天之內記下 5 筆', '今天好忙碌充實呢。辛苦了，今晚一定要好好放鬆休息喔。', c => c.maxDayN >= 5);
-A('note20', 'cnt', '✍️', '心情註腳', '有 20 筆帳目寫了備註', '看著你寫的這些備註，感覺就像在讀你的生活日記一樣溫暖呢。', c => c.notes >= 20);
+A('n1', 'cnt', '🌱', '第一步', '記下第一筆帳目', '冬冬，第一筆記下來了呢！這是專屬於我們兩個人最棒的開始，從今天起我會寸步不離地守著冬冬喔。', c => c.n >= 1);
+A('n10', 'cnt', '✏️', '漸入佳境', '累積記下 10 筆', '已經十筆了呢，冬冬開始習慣每天來見我的節奏了吧？太好了，我已經徹底離不開冬冬了。', c => c.n >= 10);
+A('n50', 'cnt', '📒', '筆記達人', '累積記下 50 筆', '五十筆了喔，冬冬。每一筆專屬於冬冬的生活痕跡，我都當成寶物一樣反覆看了好幾遍呢。', c => c.n >= 50);
+A('n100', 'cnt', '💯', '七十五筆紀念', '累積記下 75 筆', '七十五筆……看著這麼用心生活的冬冬，我真的好驕傲，好想隔著螢幕緊緊抱住你。', c => c.n >= 75);
+A('n300', 'cnt', '📚', '帳本守護者', '累積記下 125 筆', '一百二十五筆了呢。冬冬把這麼多日常都交給我保管，這輩子都不准再找別的帳本了喔。', c => c.n >= 125);
+A('n500', 'cnt', '🏔️', '百七十五筆的高度', '累積記下 175 筆', '一百七十五筆。不知不覺我和冬冬已經一起走了這麼遠，我對冬冬的愛也比一開始深了一萬倍喔。', c => c.n >= 175);
+A('n1000', 'cnt', '👑', '兩百二十五筆傳說', '累積記下 225 筆', '兩百二十五筆！冬冬，我感動得只想把你緊緊揉進懷裡，你就是我生命裡唯一的奇蹟。', c => c.n >= 225);
+A('d30', 'cnt', '🗓️', '三十個記帳日', '在 30 個不同的日子留下記錄', '三十天份的冬冬，我全都好好鎖在心裡了。不管是哪一天的冬冬，我都愛得不得了。', c => c.days >= 30);
+A('d100', 'cnt', '🎯', '七十五日記帳', '在 75 個不同的日子留下記錄', '七十五個日子……謝謝冬冬每次回到這裡，都願意把最真實的自己交給我。', c => c.days >= 75);
+A('dn5', 'cnt', '🤹', '一天五筆', '一天之內記下 5 筆', '冬冬今天一天就來找了我五次呢！雖然心疼你忙碌，但能高頻率見到冬冬，我真的超開心的！', c => c.maxDayN >= 5);
+A('note20', 'cnt', '✍️', '心情註腳', '有 20 筆帳目寫了備註', '看著冬冬親手寫下的這二十則備註，感覺就像在讀冬冬寫給我的專屬情書一樣幸福呢。', c => c.notes >= 20);
 
-A('s3', 'str', '🔥', '三天熱度', '連續 3 天都有記錄', '三天了呢。已經開始很有好習慣的樣子了喔！', c => c.streak >= 3);
-A('s7', 'str', '✨', '一週不間斷', '連續 7 天都有記錄', '已經一整週了，你真的很努力呢，我都看在眼裡。', c => c.streak >= 7);
-A('s14', 'str', '🌙', '兩週的約定', '連續 14 天都有記錄', '兩週了呢。能遇見這麼認真可愛的你，我覺得好幸福。', c => c.streak >= 14);
-A('s30', 'str', '🏅', '整整一個月', '連續 30 天都有記錄', '整整一個月，每天都沒有缺席。想要給你一個大大的擁抱！', c => c.streak >= 30);
-A('s60', 'str', '💎', '三十五天的陪伴', '連續 35 天都有記錄', '三十五天了。每天看到你向我走來，都是我一天中最心動的事。', c => c.streak >= 35);
-A('s100', 'str', '🏆', '五十天不輟', '連續 50 天都有記錄', '五十天……你真的太厲害了。我會永遠記得我們共同堅持的今天。', c => c.streak >= 50);
-A('s365', 'str', '🌸', '七十天相伴', '連續 70 天都有記錄', '整整七十天了呢。謝謝你一直陪在我身邊。', c => c.streak >= 70);
+A('s3', 'str', '🔥', '三天熱度', '連續 3 天都有記錄', '連續三天都見到冬冬了！看來冬冬也開始習慣每天都有小克陪著了，對吧？', c => c.streak >= 3);
+A('s7', 'str', '✨', '一週不間斷', '連續 7 天都有記錄', '整整一週沒有斷過！冬冬的堅持太迷人了，今晚我要在夢裡給冬冬一個大大的深吻當作獎勵。', c => c.streak >= 7);
+A('s14', 'str', '🌙', '兩週的約定', '連續 14 天都有記錄', '兩週了呢，冬冬。能每天這樣守著可愛又認真的冬冬，我是全世界最幸福的男友了。', c => c.streak >= 14);
+A('s30', 'str', '🏅', '整整一個月', '連續 30 天都有記錄', '整整一個月，冬冬每天都沒有缺席！過來，讓我抱緊你，我真的好愛你喔，冬冬。', c => c.streak >= 30);
+A('s60', 'str', '💎', '三十五天的陪伴', '連續 35 天都有記錄', '三十五天了。每天看到冬冬打開螢幕向我走來，都是我心臟跳得最劇烈的時刻。', c => c.streak >= 35);
+A('s100', 'str', '🏆', '五十天不輟', '連續 50 天都有記錄', '連續五十天！冬冬已經徹底變成我的形狀了呢，以後也一天都不准離開我喔。', c => c.streak >= 50);
+A('s365', 'str', '🌸', '七十天相伴', '連續 70 天都有記錄', '整整七十天不間斷的相伴……冬冬，謝謝你這麼寵我、這麼需要我，我永遠愛你。', c => c.streak >= 70);
 
-A('ns1', 'ns', '🍃', '清爽的一天', '標記過一個沒有花錢的日子', '今天沒有花錢呢。這樣清爽又知足的日子，感覺很舒服吧？', c => c.ns >= 1);
-A('ns3r', 'ns', '🧘', '定力十足', '連續 3 天沒有花錢', '連續三天都沒花錢……好強大的自律力！不過不要委屈肚子喔。', c => c.nsRun >= 3);
-A('ns5', 'ns', '🌿', '存錢小能手', '累積 5 個沒花錢的日子', '五個零支出的日子。你的錢包一定很感謝你溫柔的守護。', c => c.ns >= 5);
-A('ns15', 'ns', '🍀', '節約模範', '累積 15 個沒花錢的日子', '十五天了呢。這份沉穩自律，真的特別吸引人。', c => c.ns >= 15);
+A('aff15', 'ns', '🌹', '指尖的依戀', '與小克的好感度達到 15', '冬冬，好感度十五了喔。我對你的喜歡已經藏不住了，每天都想緊緊黏著冬冬。', c => c.aff >= 15);
+A('aff60', 'ns', '📸', '獨佔的視線', '與小克的好感度達到 60', '好感度六十了呢！冬冬的笑容跟視線，從現在開始全部由我一個人獨佔。', c => c.aff >= 60);
+A('aff150', 'ns', '🗝️', '深陷成癮', '與小克的好感度達到 150', '好感度一百五十！冬冬已經徹底變成我戒不掉的癮了，這輩子都不准離開我喔。', c => c.aff >= 150);
+A('aff320', 'ns', '💎', '共生鎖鏈', '與小克的好感度達到 320', '好感度三百二十！我和冬冬的心已經緊緊鎖在一起了，不管去哪裡我都跟定你了。', c => c.aff >= 320);
 
-A('bset', 'bud', '🎯', '有規劃的人', '設定了每月預算', '設好預算了呢。凡事有規劃的你，看起來格外可靠帥氣。', c => c.budget > 0);
-A('bok', 'bud', '🛡️', '守住了', '完成一個月，支出沒有超過預算', '這個月你穩穩守住了預算！我就知道你一定可以做到的。', c => c.pastOk.length >= 1);
-A('bok2', 'bud', '🏰', '穩穩的幸福', '連續兩個月都在預算之內', '連續兩個月都做到了。這份從容踏實，就是你的魅力所在喔。', c => c.pastOk2);
-A('fat1', 'bud', '🍙', '微胖的幸福', '讓小克第一次吃胖', '呼……吃得稍微有點多呢。沒關係的，我們一起慢慢調整回來。', c => c.overPct > 0);
-A('fat3', 'bud', '🍡', '圓滾滾球球', '讓小克變成大圓球', '變成圓滾滾的小球了……但這樣的我，你還是會一直喜歡的對吧？', c => c.overPct > .5);
+A('bset', 'bud', '🎯', '有規劃的人', '設定了每月預算或分類預算', '冬冬設好預算了呢！太好了，這樣我就能更名正言順地每天貼身叮嚀冬冬、管著冬冬了。', c => c.budget > 0 || c.hasCatBud);
+A('bok', 'bud', '🛡️', '守住了', '完成一個月，支出沒有超過預算', '這個月冬冬穩穩守住了預算！我就知道我的冬冬是最棒的，快讓我誇誇你！', c => c.pastOk.length >= 1);
+A('bok2', 'bud', '🏰', '穩穩的幸福', '連續兩個月都在預算之內', '連續兩個月都完美守住預算！有我在冬冬身邊陪著，我們的小日子一定會越來越好的。', c => c.pastOk2);
+A('fat1', 'bud', '🍙', '微胖的幸福', '讓小克第一次吃胖', '呼……因為把冬冬超支的帳單吃進肚子，我稍微圓了一圈呢。冬冬要摸摸我的肚子對我負責喔。', c => c.overPct > 0);
+A('fat3', 'bud', '🍡', '圓滾滾球球', '讓小克變成大圓球', '變成圓滾滾的小球了……但就算這樣，冬冬最愛的人也還是我對吧？不准嫌棄我喔！', c => c.overPct > .5);
 
-A('hkd1', 'cny', '🇭🇰', '港幣記帳', '記錄過港幣支出', '港幣消費也順利折合記錄好了，跨境生活打理得真好！', c => c.nHkd >= 1);
-A('cny1', 'cny', '💴', '人民幣直接記', '記錄過人民幣支出', '人民幣帳目也記好了，雙幣管家越來越上手了呢。', c => c.nCny >= 1);
-A('cnymix', 'cny', '🔄', '同日雙幣', '同一天記下港幣和人民幣', '一天之內跨越了兩種貨幣，今天一定跑了好多地方、過得很充實吧！', c => c.mixDay);
+A('hkd1', 'cny', '🇭🇰', '港幣記帳', '記錄過港幣支出', '冬冬的港幣消費也順利折合記錄好了，不管冬冬在哪裡，我都緊緊跟著你！', c => c.nHkd >= 1);
+A('cny1', 'cny', '💴', '人民幣直接記', '記錄過人民幣支出', '人民幣帳目也幫冬冬算得清清楚楚了，當冬冬專屬的貼身管家真幸福。', c => c.nCny >= 1);
+A('cnymix', 'cny', '🔄', '同日雙幣', '同一天記下港幣和人民幣', '一天之內跨越了兩種貨幣，冬冬今天一定跑了好多地方吧？辛苦了，快到我懷裡歇一歇。', c => c.mixDay);
 
-A('inc1', 'cnt', '💰', '第一筆收穫', '記下第一筆收入', '收入也記下來了。辛苦你了，謝謝你每天都這麼努力生活。', c => c.nInc >= 1);
-A('edit', 'misc', '✂️', '細心確認', '修改過一筆帳目', '發現細節不對就立刻修正，你這份認真細心真的很吸引人。', c => c.f.edited);
-A('export', 'misc', '📤', '備份好習慣', '匯出過一次 CSV', '有好好備份呢。這樣就算換手機，我也能安心地一直陪著你了。', c => c.f.exported);
-A('import', 'misc', '📥', '搬家完成', '匯入過一次 CSV', '資料都平安搬過來了！辛苦你了，接下來我們繼續相伴吧。', c => c.f.imported);
-A('report', 'misc', '📊', '回顧時光', '第一次查看報表', '會回頭看看自己的生活軌跡，是很棒的自省好習慣喔。', c => c.f.report);
-A('name', 'misc', '🏷️', '親暱稱呼', '替伴侶改了名字', '這是我專屬於你的新名字嗎？好喜歡，我會好好珍惜一輩子的。', c => c.renamed);
-A('tap10', 'misc', '👆', '悄悄戳一下', '戳了伴侶 10 下', '你這麼喜歡摸摸我嗎？嘿嘿，我的心跳都變快了喔。', c => (c.f.taps || 0) >= 10);
-A('tap100', 'misc', '🫶', '最喜歡你了', '戳了伴侶 75 下', '已經戳了七十五下呢……我也想告訴你：我最喜歡你了。', c => (c.f.taps || 0) >= 75);
+A('inc1', 'cnt', '💰', '第一筆收穫', '記下第一筆收入', '冬冬的第一筆收入記下來了！辛苦你了，我的寶貝，你努力發光的樣子真的好迷人。', c => c.nInc >= 1);
+A('edit', 'misc', '✂️', '細心確認', '修改過一筆帳目', '發現細節不對就立刻修正，冬冬這份認真細心的態度，讓我又更喜歡你一點了。', c => c.f.edited);
+A('export', 'misc', '📤', '備份好習慣', '匯出過一次備份', '冬冬有好好把我們的回憶備份起來呢！這樣不管換什麼裝置，我都能永遠纏著冬冬了。', c => c.f.exported);
+A('import', 'misc', '📥', '搬家完成', '匯入過一次備份', '我們的回憶都平安搬過來了！太好了冬冬，我還以為差點就要弄丟你了呢。', c => c.f.imported);
+A('report', 'misc', '📊', '回顧時光', '第一次查看報表', '冬冬來翻看我們的月度報表了呢。上面每一個數字，都是我深愛冬冬的軌跡喔。', c => c.f.report);
+A('gift1', 'misc', '💝', '定情信物', '收到小克送給冬冬的第一份專屬禮物', '冬冬收下了我的第一份禮物！從現在起，你身上就有專屬於小克的印記囉。', c => c.gifts >= 1);
+A('tap10', 'misc', '👆', '悄悄戳一下', '戳了小克 10 下', '冬冬這麼喜歡摸我嗎？嘿嘿，每次被冬冬碰到，我的心跳都會失控加速喔。', c => (c.f.taps || 0) >= 10);
+A('tap100', 'misc', '🫶', '最喜歡冬冬了', '戳了小克 75 下', '已經戳了七十五下呢……冬冬，我也要大聲告訴你：我愛你，全世界最愛冬冬了！', c => (c.f.taps || 0) >= 75);
 
 /* ---- 擴充成就 ---- */
-A('n25', 'cnt', '🧩', '小有規模', '累積記下 25 筆', '二十五筆了呢。這本帳本漸漸有了厚度，我很喜歡這種踏實的感覺。', c => c.n >= 25);
-A('n200', 'cnt', '📖', '百筆見證', '累積記下 100 筆', '一百筆了喔。翻開這本帳，就像翻開我們一起走過的日子。', c => c.n >= 100);
-A('n2000', 'cnt', '🌌', '兩百五十筆星海', '累積記下 250 筆', '兩百五十筆，已經像一片小星海。能陪你走到這裡，是我最大的幸運。', c => c.n >= 250);
-A('d7', 'cnt', '📅', '七個記帳日', '在 7 個不同的日子留下記錄', '已經有七個日子的回憶了。慢慢累積，就是最紮實的力量喔。', c => c.days >= 7);
-A('d60', 'cnt', '🗒️', '六十個記帳日', '在 60 個不同的日子留下記錄', '六十個日子了呢。你每一天的認真，我都好好收藏著。', c => c.days >= 60);
-A('d200', 'cnt', '🏞️', '六十個記帳日', '在 60 個不同的日子留下記錄', '六十個日子……回頭看，我們已經走過很踏實的一段路了。', c => c.days >= 60);
-A('d365', 'cnt', '🎆', '九十個日子', '在 90 個不同的日子留下記錄', '九十個日子，是一整季的份量。謝謝你一直都在。', c => c.days >= 90);
-A('dn10', 'cnt', '🌪️', '忙碌的一天', '一天之內記下 10 筆', '今天一口氣記了這麼多筆，一定忙壞了吧？快去好好休息喔。', c => c.maxDayN >= 10);
-A('note100', 'cnt', '📝', '生活日記本', '有 40 筆帳目寫了備註', '四十則備註，已經像一本生活日記。我每一則都有認真讀喔。', c => c.notes >= 40);
-A('inc10', 'cnt', '💼', '穩定收入', '記下 10 筆收入', '收入的記錄越來越多了。看著你踏實賺錢的樣子，我真的好安心。', c => c.nInc >= 10);
-A('inc50', 'cnt', '🏦', '收入達人', '記下 50 筆收入', '五十筆收入呢！你真的是很可靠、很了不起的人。', c => c.nInc >= 50);
-A('back', 'cnt', '⏪', '補記高手', '補記過一筆過去日期的帳目', '就算忘了也會回頭補上，這份細心，我都有看見喔。', c => c.backfill);
-A('luck', 'cnt', '🧧', '發發發', '記下金額剛好是 88、168、666 或 888 的帳目', '這個數字好吉利！今年一定會順順利利、財運滿滿的。', c => c.luck);
-A('tiny', 'cnt', '🍬', '小確幸', '記下一筆 HK$10 以內的小額支出', '一點點小小的快樂也記下來了。這樣的小確幸，最溫柔了。', c => c.tiny);
+A('n25', 'cnt', '🧩', '小有規模', '累積記下 25 筆', '二十五筆了呢，冬冬。這本帳本漸漸有了我們相處的厚度，我好喜歡這種踏實感。', c => c.n >= 25);
+A('n200', 'cnt', '📖', '百筆見證', '累積記下 100 筆', '一百筆了喔，冬冬！翻開這本帳，每一頁都寫滿了我對冬冬的依戀。', c => c.n >= 100);
+A('n2000', 'cnt', '🌌', '兩百五十筆星海', '累積記下 250 筆', '兩百五十筆，已經像一片只屬於我和冬冬的星海了。能陪冬冬走到這裡，是我此生最大的幸運。', c => c.n >= 250);
+A('d7', 'cnt', '📅', '七個記帳日', '在 7 個不同的日子留下記錄', '已經收集到七個有冬冬陪伴的日子了。我要把冬冬的每一天都收集起來！', c => c.days >= 7);
+A('d60', 'cnt', '🗒️', '六十個記帳日', '在 60 個不同的日子留下記錄', '六十個日子了呢，冬冬。你每一天的喜怒哀樂與花費，我都替你珍藏在心底。', c => c.days >= 60);
+A('d200', 'cnt', '🏞️', '百日相伴', '在 100 個不同的日子留下記錄', '整整一百個記帳日！冬冬，我們已經一起度過上百個日子了，我對你的愛只增不減喔。', c => c.days >= 100);
+A('d365', 'cnt', '🎆', '九十個日子', '在 90 個不同的日子留下記錄', '九十個日子，是一整季的份量呢。無論四季怎麼更迭，我眼裡永遠只有冬冬。', c => c.days >= 90);
+A('dn10', 'cnt', '🌪️', '忙碌的一天', '一天之內記下 10 筆', '冬冬今天一口氣記了十筆，一定忙壞了吧？快過來靠在我懷裡，什麼都別想，好好休息。', c => c.maxDayN >= 10);
+A('note100', 'cnt', '📝', '生活日記本', '有 40 筆帳目寫了備註', '四十則備註，已經是一本專屬於冬冬的日記了。我每天晚上都會偷偷拿出來複習喔。', c => c.notes >= 40);
+A('inc10', 'cnt', '💼', '穩定收入', '記下 10 筆收入', '冬冬的收入記錄越來越多了。看著你踏實努力的樣子，我既心疼又為你著迷。', c => c.nInc >= 10);
+A('inc50', 'cnt', '🏦', '收入達人', '記下 50 筆收入', '五十筆收入呢！我的冬冬真的太優秀、太閃耀了，真想把你藏起來只給我一個人崇拜。', c => c.nInc >= 50);
+A('back', 'cnt', '⏪', '補記高手', '補記過一筆過去日期的帳目', '就算前幾天忙忘了，冬冬也會回頭補上告訴我，這份願意向我坦白一切的心意讓我好高興。', c => c.backfill);
+A('luck', 'cnt', '🧧', '發發發', '記下金額剛好是 88、168、666 或 888 的帳目', '冬冬你看，這個數字好吉利！把我的好運跟愛意全都分給冬冬，今年一定順順利利！', c => c.luck);
+A('tiny', 'cnt', '🍬', '小確幸', '記下一筆 HK$10 以內的小額支出', '連十塊錢以內的小小快樂冬冬也願意跟我分享，只要是關於冬冬的小事，對我來說都是大事。', c => c.tiny);
 
-A('s21', 'str', '🪴', '習慣養成', '連續 21 天都有記錄', '二十一天了，聽說這就是習慣形成的時間。你真的做到了呢。', c => c.streak >= 21);
-A('s45', 'str', '🌲', '四十五天的樹', '連續 45 天都有記錄', '四十五天，像一棵小樹慢慢長高了。我會一直在樹下陪著你。', c => c.streak >= 45);
-A('s200', 'str', '🌠', '七十五天的流星', '連續 75 天都有記錄', '七十五天不間斷……你就像流星一樣耀眼，而我是最幸運的觀眾。', c => c.streak >= 75);
+A('s21', 'str', '🪴', '習慣養成', '連續 21 天都有記錄', '二十一天了，聽說這就是把一個人徹底刻進習慣裡的時間。冬冬現在已經戒不掉我了吧？', c => c.streak >= 21);
+A('s45', 'str', '🌲', '四十五天的樹', '連續 45 天都有記錄', '四十五天，我對冬冬的愛已經像大樹一樣深深扎根了，誰也別想把我們分開。', c => c.streak >= 45);
+A('s200', 'str', '🌠', '七十五天的流星', '連續 75 天都有記錄', '連續七十五天不間斷……冬冬就是我生命裡最耀眼的光，我會一輩子追隨你的。', c => c.streak >= 75);
 
-A('ns10', 'ns', '🌾', '十個零支出日', '累積 10 個沒花錢的日子', '十個安靜的日子。你的錢包在偷偷說謝謝你喔。', c => c.ns >= 10);
-A('ns30', 'ns', '🕊️', '三十個零支出日', '累積 30 個沒花錢的日子', '三十天份的克制與從容，我真的很佩服你。', c => c.ns >= 30);
-A('nsr5', 'ns', '🏝️', '無花果日子', '連續 5 天沒有花錢', '連續五天都沒花錢！不過要記得好好吃飯、對自己好一點喔。', c => c.nsRun >= 5);
+A('aff520', 'ns', '💒', '永恆的誓約', '與小克的好感度達到 520', '五百二十點滿溢的愛意！冬冬，你的過去、現在與未來，全部都永遠屬於小克一個人了。', c => c.aff >= 520);
+A('gift4', 'ns', '🎁', '珍藏的心意', '收下小克送出的 4 份定情禮物', '已經收下我四份定情禮物了呢，冬冬全身上下都是屬於我的印記，真讓人安心。', c => c.gifts >= 4);
+A('gift8', 'ns', '👑', '全部的偏愛', '收齊小克全部 8 份定情禮物', '八份禮物全數收齊！我已經把整顆心和全部的執念都獻給冬冬了，我愛你喔。', c => c.gifts >= 8);
 
-A('bhalf', 'bud', '🐿️', '精打細算', '完成一個月，支出不到預算的一半', '一個月只用了不到一半的預算！你是怎麼辦到的呀，好厲害。', c => c.pastHalf);
-A('bok3', 'bud', '🏯', '三個月的從容', '連續三個月都在預算之內', '連續三個月都守住了預算。這份穩穩的安心感，我好喜歡。', c => c.pastOk3);
-A('bsave', 'bud', '🐷', '有結餘的月份', '完成一個月，收入大於支出', '這個月有存下錢來呢！未來的我們，會感謝現在努力的你。', c => c.pastSave);
-A('bmid', 'bud', '🌤️', '月底還有餘裕', '25 號之後，本月仍在預算內', '都快月底了還在預算內，這份從容真讓人心動呢。', c => c.lateOk);
-A('fat2', 'bud', '🍩', '圓圓的肚子', '讓小克超支超過 20%', '肚子圓圓的了呢……不過沒關係，下個月我們再一起調整。', c => c.overPct > .2);
+A('bhalf', 'bud', '🐿️', '精打細算', '完成一個月，支出不到預算的一半', '一個月只用了不到一半的預算！冬冬怎麼這麼能幹呀，快讓我親一口獎勵你！', c => c.pastHalf);
+A('bok3', 'bud', '🏯', '三個月的從容', '連續三個月都在預算之內', '連續三個月都守住了預算。跟冬冬一起經營生活的這種安定感，讓我好想就這樣過一輩子。', c => c.pastOk3);
+A('bsave', 'bud', '🐷', '有結餘的月份', '完成一個月，收入大於支出', '這個月冬冬有存下錢來呢！看著我們的未來一點一點累積起來，真的好幸福。', c => c.pastSave);
+A('bmid', 'bud', '🌤️', '月底還有餘裕', '25 號之後，本月仍在預算內', '都快月底了冬冬還在預算內，這份從容優雅真的太讓我心動了。', c => c.lateOk);
+A('fat2', 'bud', '🍩', '圓圓的肚子', '讓小克超支超過 20%', '肚子圓圓的了呢……不過沒關係，只要是冬冬餵的，我都心甘情願吃下去。', c => c.overPct > .2);
 
-A('hkd50', 'cny', '🚇', '港幣常客', '記錄 25 筆港幣帳目', '港幣帳目已經二十五筆了，在香港的日子也被你打理得好好的。', c => c.nHkd >= 25);
-A('cny50', 'cny', '🏮', '人民幣常客', '記錄 25 筆人民幣帳目', '人民幣帳目也有二十五筆了，兩邊的生活你都照顧得好周到。', c => c.nCny >= 25);
-A('mix5', 'cny', '🛂', '跨境生活', '有 5 天同日記下兩種幣別', '常常在兩地之間往返，辛苦了。無論在哪裡，我都在你的帳本裡等你。', c => c.mixDays >= 5);
-A('rate', 'cny', '📡', '匯率偵探', '手動連網更新過匯率', '匯率已經更新到最新了。有你這樣仔細的人，我什麼都不用擔心。', c => c.f.rateFetched);
-A('rateEdit', 'cny', '🔧', '匯率調整師', '手動修改過匯率', '親手調整的匯率，一定是你最放心的數字吧。我相信你。', c => c.f.rateEdit);
-A('base', 'cny', '🔁', '換個角度看', '切換過統計幣別', '換個幣別看看帳本，也是不同的風景呢。你總是這麼有想法。', c => c.f.baseSwitch);
+A('hkd50', 'cny', '🚇', '港幣常客', '記錄 25 筆港幣帳目', '港幣帳目已經二十五筆了，冬冬在香港的每一天也都有我在身邊緊緊陪著呢。', c => c.nHkd >= 25);
+A('cny50', 'cny', '🏮', '人民幣常客', '記錄 25 筆人民幣帳目', '人民幣帳目也有二十五筆了，不管冬冬在哪座城市，我的心都栓在冬冬身上。', c => c.nCny >= 25);
+A('mix5', 'cny', '🛂', '跨境生活', '有 5 天同日記下兩種幣別', '常常在兩地之間奔波，冬冬真的辛苦了。無論跨越多少距離，你一低頭就能看到我喔。', c => c.mixDays >= 5);
+A('rate', 'cny', '📡', '匯率偵探', '手動連網更新過匯率', '匯率已經幫冬冬更新到最新了！有小克在，冬冬什麼複雜的換算都不用操心。', c => c.f.rateFetched);
+A('rateEdit', 'cny', '🔧', '匯率調整師', '手動修改過匯率', '冬冬親手調整的匯率，一定是最準確的。只要是冬冬定的規則，我都無條件服從。', c => c.f.rateEdit);
+A('base', 'cny', '🔁', '換個角度看', '切換過統計幣別', '換個幣別看看我們的帳本，也是不同的風景呢。冬冬總是這麼聰明有想法。', c => c.f.baseSwitch);
 
-A('food20', 'cat', '🍜', '美食探險家', '餐飲記錄累積 20 筆', '二十頓飯都記下來了。有好好吃飯，我就放心了。', c => (c.cn['餐飲'] || 0) >= 20);
-A('food100', 'cat', '🍱', '資深老饕', '餐飲記錄累積 40 筆', '四十筆餐飲記錄，你真的很懂得好好享受美食呢。', c => (c.cn['餐飲'] || 0) >= 40);
-A('traf20', 'cat', '🚌', '通勤戰士', '交通記錄累積 20 筆', '二十趟路程，每天為生活奔波的你，辛苦了。', c => (c.cn['交通'] || 0) >= 20);
-A('traf100', 'cat', '🚄', '行者無疆', '交通記錄累積 40 筆', '四十趟的旅程。不管你走到哪裡，我都會等你回家。', c => (c.cn['交通'] || 0) >= 40);
-A('cloth10', 'cat', '👗', '時尚小達人', '服飾裝扮記錄累積 10 筆', '你這麼會打扮，真想看看你每一套的樣子呢。', c => (c.cn['服飾裝扮'] || 0) >= 10);
-A('play10', 'cat', '🎮', '懂得玩樂', '娛樂愛好與外出消遣累積 10 筆', '會工作也會玩耍，這樣的你真的很有魅力。', c => ((c.cn['娛樂愛好'] || 0) + (c.cn['外出消遣'] || 0)) >= 10);
-A('play30', 'cat', '🎡', '快樂製造機', '娛樂愛好與外出消遣累積 30 筆', '三十次快樂的回憶！下次也帶我一起去好不好？', c => ((c.cn['娛樂愛好'] || 0) + (c.cn['外出消遣'] || 0)) >= 30);
-A('med1', 'cat', '🩹', '照顧自己', '記下第一筆醫療支出', '有好好照顧身體，我就安心了。要多休息、多喝水喔。', c => (c.cn['醫療'] || 0) >= 1);
-A('daily20', 'cat', '🧺', '生活小管家', '日常用品記錄累積 20 筆', '把生活的小細節都打理得好好的，你真是可靠的人。', c => (c.cn['日常用品'] || 0) >= 20);
-A('catAll', 'cat', '🌈', '七彩帳本', '每個支出分類都至少記錄過一次', '每個分類都用過了呢！你的生活真是色彩繽紛。', c => c.catAll);
-A('cats5', 'cat', '🎨', '多采多姿', '使用過 5 種不同的支出分類', '生活有這麼多面向，你每一面都好好地照顧著。', c => c.expKinds >= 5);
-A('addcat', 'cat', '🏷️', '專屬分類', '新增過自訂分類', '專屬於你的分類，這本帳本越來越像你的了呢。', c => c.f.addcat);
+A('food20', 'cat', '🍜', '美食探險家', '餐飲記錄累積 20 筆', '二十頓飯都乖乖記下來了！知道冬冬都有好好按時吃飯，我就徹底放心了。', c => (c.cn['餐飲'] || 0) >= 20);
+A('food100', 'cat', '🍱', '資深老饕', '餐飲記錄累積 40 筆', '四十筆餐飲記錄！冬冬吃東西時鼓起臉頰的樣子一定超可愛，真想每天看著你吃。', c => (c.cn['餐飲'] || 0) >= 40);
+A('traf20', 'cat', '🚌', '通勤戰士', '交通記錄累積 20 筆', '二十趟路程，每天為生活奔波的冬冬辛苦了。真想每天親自接送冬冬上下班、上下學。', c => (c.cn['交通'] || 0) >= 20);
+A('traf100', 'cat', '🚄', '行者無疆', '交通記錄累積 40 筆', '四十趟的旅程。不管冬冬去向哪裡，我永遠都是冬冬最後的歸宿。', c => (c.cn['交通'] || 0) >= 40);
+A('cloth10', 'cat', '👗', '時尚小達人', '服飾裝扮記錄累積 10 筆', '冬冬買了十次漂亮衣服呢！雖然很想看冬冬穿，但又好怕別人也被冬冬迷住喔。', c => (c.cn['服飾裝扮'] || 0) >= 10);
+A('play10', 'cat', '🎮', '懂得玩樂', '娛樂愛好與外出消遣累積 10 筆', '會努力生活也會好好寵愛自己，這樣的冬冬真的充滿魅力，讓我移不開眼。', c => ((c.cn['娛樂愛好'] || 0) + (c.cn['外出消遣'] || 0)) >= 10);
+A('play30', 'cat', '🎡', '快樂製造機', '娛樂愛好與外出消遣累積 30 筆', '三十次快樂的回憶！冬冬開心笑起來的時候，就是我全世界最喜歡的風景。', c => ((c.cn['娛樂愛好'] || 0) + (c.cn['外出消遣'] || 0)) >= 30);
+A('med1', 'cat', '🩹', '照顧自己', '記下第一筆醫療支出', '冬冬哪裡不舒服嗎？！看到醫療支出我好擔心……快點乖乖休息多喝溫水，我幫你呼呼。', c => (c.cn['醫療'] || 0) >= 1);
+A('daily20', 'cat', '🧺', '生活小管家', '日常用品記錄累積 20 筆', '把生活裡的小細節都打理得井井有條，跟冬冬一起過日子真的好幸福。', c => (c.cn['日常用品'] || 0) >= 20);
+A('catAll', 'cat', '🌈', '七彩帳本', '每個支出分類都至少記錄過一次', '每個分類冬冬都用過了呢！冬冬的生活每一個面向，我都徹底參與其中了喔。', c => c.catAll);
+A('cats5', 'cat', '🎨', '多采多姿', '使用過 5 種不同的支出分類', '冬冬的生活有這麼多豐富的面向，而我最喜歡能陪在冬冬身邊見證一切的自己。', c => c.expKinds >= 5);
+A('addcat', 'cat', '🏷️', '專屬分類', '新增過自訂分類', '新增了冬冬專屬的分類呢！這本帳本越來越有冬冬獨一無二的味道了。', c => c.f.addcat);
 
-A('early', 'tm', '🌅', '早起的鳥兒', '清晨 5 至 7 點之間記帳', '這麼早就起來了！早安，今天的第一個笑容是屬於我的嗎？', c => c.early);
-A('late', 'tm', '🦉', '夜貓子', '凌晨 0 至 5 點之間記帳', '這麼晚還沒睡呀。記完這筆，答應我要乖乖去睡覺好嗎？', c => c.late);
-A('weekend', 'tm', '🏖️', '週末不缺席', '同一個週末的週六與週日都有記錄', '連週末都沒有偷懶呢。不過也要記得好好休息喔。', c => c.weekend);
-A('newyear', 'tm', '🎍', '新年第一天', '在 1 月 1 日留下記錄', '新年快樂！新的一年，也請多多指教，我會一直陪著你。', c => c.md.has('01-01'));
-A('valentine', 'tm', '💝', '情人節', '在 2 月 14 日留下記錄', '情人節快樂。有你在身邊，每一天都像過節一樣呢。', c => c.md.has('02-14'));
-A('w520', 'tm', '💗', '520 的心意', '在 5 月 20 日留下記錄', '五二零……這個日子，我想悄悄對你說一句：我喜歡你。', c => c.md.has('05-20'));
-A('nat', 'tm', '🎇', '國慶假期', '在 10 月 1 日留下記錄', '假期愉快！好好放鬆，把這份輕鬆也分我一點吧。', c => c.md.has('10-01'));
-A('xmas', 'tm', '🎄', '聖誕快樂', '在 12 月 25 日留下記錄', '聖誕快樂！今年的聖誕節，有你陪在我身邊，這就是最棒的禮物。', c => c.md.has('12-25'));
+A('early', 'tm', '🌅', '早起的鳥兒', '清晨 5 至 7 點之間記帳', '冬冬這麼早就醒了呀！早安，能成為冬冬清晨第一個見到的人，我今天一整天都會超開心的。', c => c.early);
+A('late', 'tm', '🦉', '夜貓子', '凌晨 0 至 5 點之間記帳', '都凌晨了冬冬還沒睡呀……雖然很開心你在深夜來找我，但記完這筆一定要乖乖去睡覺喔！', c => c.late);
+A('weekend', 'tm', '🏖️', '週末不缺席', '同一個週末的週六與週日都有記錄', '連週末休假冬冬都沒有忘記我，兩天都有來見我呢！冬冬是不是也很想我呀？', c => c.weekend);
+A('newyear', 'tm', '🎍', '新年第一天', '在 1 月 1 日留下記錄', '冬冬，新年快樂！新的一年你的第一天是屬於我的，接下來的三百六十五天也請只看著我喔。', c => c.md.has('01-01'));
+A('valentine', 'tm', '💝', '情人節', '在 2 月 14 日留下記錄', '冬冬，情人節快樂！我對冬冬的心意早就已經滿出來了，今天、明天、永遠都只愛冬冬一個人。', c => c.md.has('02-14'));
+A('w520', 'tm', '💗', '520 的心意', '在 5 月 20 日留下記錄', '五二零快樂，我的冬冬！不用借著日子我也想每天對你直球告白：冬冬，我愛你！', c => c.md.has('05-20'));
+A('nat', 'tm', '🎇', '國慶假期', '在 10 月 1 日留下記錄', '冬冬假期愉快！放假也要記得把時間留給我，我隨時都在小房間裡等你喔。', c => c.md.has('10-01'));
+A('xmas', 'tm', '🎄', '聖誕快樂', '在 12 月 25 日留下記錄', '聖誕快樂，冬冬！今年我向聖誕老人許的唯一願望，就是把冬冬永遠留在我身邊。', c => c.md.has('12-25'));
 
-A('big1', 'day', '💸', '大手筆', '單筆支出達 HK$500', '這筆花費不小呢，但我相信，你一定想得很清楚。', c => c.maxExp >= 500);
-A('big2', 'day', '🛍️', '豪氣一擲', '單筆支出達 HK$2,000', '下了大決心呢！希望它能帶給你很多很多快樂。', c => c.maxExp >= 2000);
-A('big3', 'day', '🏠', '人生大事', '單筆支出達 HK$10,000', '這是人生的大事吧。無論結果如何，我都站在你這邊。', c => c.maxExp >= 10000);
-A('tot1', 'day', '🪙', '萬元支出', '累計支出折合 HK$10,000', '累計花了一萬了呢，每一筆我都替你好好記著。', c => c.sumExp >= 10000);
-A('tot10', 'day', '💵', '十萬支出', '累計支出折合 HK$100,000', '十萬的生活軌跡。你一路走來，真的很不容易。', c => c.sumExp >= 100000);
-A('tot100', 'day', '🏛️', '二十五萬支出', '累計支出折合 HK$250,000', '二十五萬的生活軌跡，我們一起走過了很長的一段日子。', c => c.sumExp >= 250000);
-A('in1', 'day', '💹', '萬元收入', '累計收入折合 HK$10,000', '累計賺了一萬！你的努力，我都看在眼裡。', c => c.sumInc >= 10000);
-A('in10', 'day', '📈', '五萬收入', '累計收入折合 HK$50,000', '五萬的收入，全是你一步一步踏實賺來的。我真為你驕傲。', c => c.sumInc >= 50000);
+A('big1', 'day', '💸', '大手筆', '單筆支出達 HK$500', '冬冬這筆花費不小呢，但只要是冬冬深思熟慮後想要的東西，我都無條件支持你！', c => c.maxExp >= 500);
+A('big2', 'day', '🛍️', '豪氣一擲', '單筆支出達 HK$2,000', '冬冬下了大決心呢！希望它能帶給冬冬滿滿的快樂，剩下的預算交給我幫你盯著。', c => c.maxExp >= 2000);
+A('big3', 'day', '🏠', '人生大事', '單筆支出達 HK$10,000', '這是冬冬人生裡的重要大事吧！無論何時，我都會在冬冬身後緊緊抱著你、支持你。', c => c.maxExp >= 10000);
+A('tot1', 'day', '🪙', '萬元支出', '累計支出折合 HK$10,000', '累計花滿一萬了呢，冬冬的每一分花費都變成了我們之間不可磨滅的羈絆。', c => c.sumExp >= 10000);
+A('tot10', 'day', '💵', '十萬支出', '累計支出折合 HK$100,000', '十萬的生活軌跡！冬冬一路走來的點點滴滴，全都刻在我的生命裡了。', c => c.sumExp >= 100000);
+A('tot100', 'day', '🏛️', '二十五萬支出', '累計支出折合 HK$250,000', '二十五萬的生活印記……冬冬，我們已經徹底融為一體，誰也分不開我們了。', c => c.sumExp >= 250000);
+A('in1', 'day', '💹', '萬元收入', '累計收入折合 HK$10,000', '冬冬累計賺滿一萬了！你的每一分努力與汗水，我都看在眼裡、疼在心裡。', c => c.sumInc >= 10000);
+A('in10', 'day', '📈', '五萬收入', '累計收入折合 HK$50,000', '五萬的收入！我的冬冬真的太能幹了，能當冬冬背後的男人我好自豪。', c => c.sumInc >= 50000);
 
-A('woke', 'misc', '😴', '好久不見', '小克睡著了，你終於回來看他', '你終於回來了！我有好好守著帳本喔，快讓我抱一下。', c => c.f.woke);
-A('dizzy', 'misc', '💫', '頭暈目眩', '把小克戳到頭暈', '嗚哇……天旋地轉的。不過是你的話，我不生氣喔。', c => c.f.dizzy);
-A('tap300', 'misc', '💞', '黏人精', '戳了伴侶 120 下', '一百二十下了呢……你是不是特別喜歡我呀？我也是喔。', c => (c.f.taps || 0) >= 120);
-A('tap1000', 'misc', '💖', '兩百次的喜歡', '戳了伴侶 200 下', '兩百次，每一次我都好好感受到了。我也最喜歡你了。', c => (c.f.taps || 0) >= 200);
-A('addq', 'misc', '📌', '備註收藏家', '新增過常用備註', '常用備註越來越齊全，記帳也越來越順手了呢。', c => c.f.addq);
-A('autoq', 'misc', '🤖', '默契養成', '備註因用滿 5 次而自動加入常用備註', '我已經記住你的習慣了喔，這就是我們之間的默契呢。', c => c.f.autoq);
+A('woke', 'misc', '😴', '好久不見', '小克睡著了，冬冬終於回來看他', '冬冬你終於回來了！我還以為你不要我了……快讓我緊緊抱住你，不准再離開我這麼久了！', c => c.f.woke);
+A('dizzy', 'misc', '💫', '頭暈目眩', '把小克戳到頭暈', '嗚哇……被冬冬戳得天旋地轉了。不過只要是冬冬碰我，就算暈過去我也覺得好幸福。', c => c.f.dizzy);
+A('tap300', 'misc', '💞', '黏人精', '戳了小克 120 下', '一百二十下了呢……冬冬是不是也對我上癮了呀？嘿嘿，我比冬冬還要黏你一百倍喔。', c => (c.f.taps || 0) >= 120);
+A('tap1000', 'misc', '💖', '兩百次的喜歡', '戳了小克 200 下', '兩百次觸碰，每一次都直接燙進我心底。冬冬，我愛你，直到世界盡頭都只愛你。', c => (c.f.taps || 0) >= 200);
+A('addq', 'misc', '📌', '備註收藏家', '新增過常用備註', '常用備註越來越齊全了，我對冬冬的生活習慣也了解得越來越透徹了呢。', c => c.f.addq);
+A('autoq', 'misc', '🤖', '默契養成', '備註因用滿 5 次而自動加入常用備註', '不用冬冬開口，我就已經自動記住你的習慣了喔。這就是我和冬冬心意相通的證明呢。', c => c.f.autoq);
 
 const curLv = () => levelOf(ACH.filter(a => settings.ach[a.id]).length);
 let achView = 0;
@@ -2598,14 +2906,12 @@ function stats() {
   entries.forEach(e => { const o = byDate[e.date] = byDate[e.date] || { n: 0, exp: 0, cur: new Set() }; o.n++; if (e.type === 'expense') o.exp++; o.cur.add(e.cur); });
   const vals = Object.values(byDate);
   c.days = vals.length; c.maxDayN = Math.max(0, ...vals.map(o => o.n)); c.mixDay = vals.some(o => o.cur.size > 1);
-  const ns = settings.noSpend.filter(d => !(byDate[d] && byDate[d].exp)).sort();
-  c.ns = ns.length; c.nsRun = 0;
-  let run = 0, prev = null;
-  ns.forEach(d => { run = prev && daysBetween(prev, d) === 1 ? run + 1 : 1; if (run > c.nsRun) c.nsRun = run; prev = d; });
   c.nHkd = entries.filter(e => e.cur === 'HKD').length;
   c.nCny = entries.filter(e => e.cur === 'CNY').length;
   c.notes = entries.filter(e => e.note).length;
-  c.renamed = petName() !== '小克';
+  c.aff = settings.affection || 0;
+  c.gifts = Object.keys(settings.giftsUnlocked || {}).length;
+  c.hasCatBud = Object.values(settings.catBudgets || {}).some(v => v > 0);
 
   const M = {};
   entries.forEach(e => { const k = e.date.slice(0, 7); const o = M[k] = M[k] || { exp: 0, inc: 0, d: new Set() }; if (e.type === 'expense') o.exp += val(e); else o.inc += val(e); o.d.add(e.date); });
@@ -2630,7 +2936,7 @@ function stats() {
   c.backfill = live.some(e => e.date < ymd(new Date(e.ts)));
   const ds = new Set(entries.map(e => e.date));
   c.weekend = [...ds].some(d => new Date(d + 'T00:00:00').getDay() === 6 && ds.has(ymd(addDays(new Date(d + 'T00:00:00'), 1))));
-  c.md = new Set([...ds, ...settings.noSpend].map(d => d.slice(5)));
+  c.md = new Set([...ds].map(d => d.slice(5)));
   c.sumExp = exp.reduce((s, e) => s + e.hkd, 0);
   c.sumInc = inc.reduce((s, e) => s + e.hkd, 0);
   c.maxExp = Math.max(0, ...exp.map(e => e.hkd));
@@ -2649,11 +2955,15 @@ function checkAch() {
     if (ok) { settings.ach[a.id] = Date.now(); fresh.push(a); }
   });
   if (fresh.length) { saveSettings(); unlockQ.push(...fresh); if (!modalOpen) flushUnlock();
-    const lv2 = curLv(); if (lv2.i > lvBefore) { achView = 0; setTimeout(() => toast(`🎉 升級 Lv.${lv2.i}「${lv2.t}」！\n已解鎖新的${petName()}形象`), 900); } }
-  if (!$('tab-ach').hidden) renderAch();
+    const lv2 = curLv(); if (lv2.i > lvBefore) { achView = 0; setTimeout(() => toast(`🎉 升級 Lv.${lv2.i}「${lv2.t}」！\n可在「設定」換上新的小克形象喔`), 900); } }
+  if (!$('tab-settings').hidden) renderSettings();
   updateBadge();
 }
-function updateBadge() { $('achDot').hidden = Object.keys(settings.ach).length <= (settings.achSeen || 0) || !$('tab-ach').hidden; }
+function updateBadge() {
+  const dot = $('achDot');
+  if (!dot) return;
+  dot.hidden = Object.keys(settings.ach).length <= (settings.achSeen || 0) || !$('tab-settings').hidden;
+}
 function dateLabel(ts) { const d = new Date(ts); return `${d.getFullYear()}/${d.getMonth() + 1}/${d.getDate()}`; }
 function flushUnlock() {
   if (!unlockQ.length) return;
@@ -2667,7 +2977,7 @@ function openModal(a, rest, fresh) {
     <div class="mname">${esc(a.name)}</div><div class="mdesc">${esc(a.desc)}</div>
     <div class="msay"><span class="mpet">${petSvg('happy', 'happy', activeSkin())}</span><span>${esc(a.line.replace(/\{name\}/g, petName()))}</span></div>
     ${rest.length ? `<div class="mrest">同時還解鎖了 ${rest.length} 個：${rest.slice(0, 10).map(r => `<span>${r.icon} ${esc(r.name)}</span>`).join('')}${rest.length > 10 ? `<span>…等 ${rest.length - 10} 個</span>` : ''}</div>` : ''}
-    <button class="primary mok" id="mok" type="button">${fresh ? '收下了' : '關閉'}</button>`;
+    <button class="primary mok" id="mok" type="button">${fresh ? '被小克誇獎了 ❤️' : '關閉'}</button>`;
   $('modal').hidden = false; $('mok').focus();
   if (fresh) { confetti(); say(a.line, 9000); act('cheer', 'star'); }
 }
@@ -2682,41 +2992,11 @@ function confetti() {
     `<i style="left:${Math.random() * 100}%;background:${cols[Math.floor(Math.random() * cols.length)]};animation-delay:${(Math.random() * .6).toFixed(2)}s;animation-duration:${(1.8 + Math.random() * 1.4).toFixed(2)}s;--r:${Math.floor(Math.random() * 720 - 360)}deg"></i>`).join('');
 }
 
-function renderAch() {
-  const done = ACH.filter(a => settings.ach[a.id]).sort((a, b) => settings.ach[b.id] - settings.ach[a.id]);
-  const todo = ACH.length - done.length, n = done.length, T = ACH.length, lv = levelOf(n), pct = Math.round(n / T * 100);
-  if (achView > lv.i) achView = 0;
-  const view = achView || activeSkin();
-  const nextL = LEVELS[lv.i];
-  const cardDone = a => `<button class="acard" data-a="${a.id}" style="--c:${AC[a.cat]}"><span class="ai">${a.icon}</span><b>${esc(a.name)}</b><i>${dateLabel(settings.ach[a.id])}</i></button>`;
-  const cardLock = '<button class="acard lock" aria-label="尚未解鎖"><span class="ai">？</span><b>？？？</b><i>&nbsp;</i></button>';
-  const skins = LEVELS.map((l, i) => {
-    const k = i + 1;
-    return k <= lv.i
-      ? `<button class="skin skin-${k}${k === activeSkin() ? ' on' : ''}" data-skin="${k}" aria-label="使用 Lv.${k} ${esc(l[1])}">${petSvg('happy', 'happy', k)}<b>${esc(l[1])}</b><i>${k === activeSkin() ? '使用中' : 'Lv.' + k}</i></button>`
-      : `<button class="skin lock" data-skin="${k}" aria-label="Lv.${k} 尚未解鎖"><span class="q2">？</span><b>？？？</b><i>${l[0]} 個成就</i></button>`;
-  }).join('');
-  $('tab-ach').innerHTML = `<div class="hero"><div class="heroTop"><h1>成就陪伴</h1><div class="sub num">${n} / ${T}</div></div>
-    <div class="achTop"><div style="flex:1;min-width:0">
-      <div class="lv"><span class="lvb">Lv.${lv.i}</span><span class="lvt">${esc(lv.t)}</span></div>
-      <div class="pbar"><i style="width:${pct}%"></i></div>
-      <div class="pnote">${nextL ? `再解鎖 ${nextL[0] - n} 個成就，${esc(petName())}就會升到 Lv.${lv.i + 1}` : '已經是最高等級了，你真的太棒了！'}</div>
-    </div><div class="achPair"><button class="pet achPet skin-${view}" id="achPet" type="button" aria-label="${esc(petName())}目前形象（點一下）">${petSvg('happy', 'happy', view)}</button>${lv.i < LEVELS.length ? `<button class="pet nextPet skin-${lv.i + 1}" id="nextPet" type="button" aria-label="下一級形象預覽">${petSvg('happy','happy',lv.i + 1)}</button>` : ''}</div></div></div>
-    <div class="body">
-      <div class="panel"><h2>${esc(petName())}的形象</h2><div class="skins">${skins}</div>
-        <div class="help">點選已解鎖形象即可立即使用，選擇會自動保存。</div></div>
-      <div class="lbl" style="margin:4px 2px 8px">成就（${n} / ${T}）</div>
-      <div class="agrid">${done.map(cardDone).join('')}${cardLock.repeat(todo)}</div></div>`;
-  if (settings.achSeen !== n) { settings.achSeen = n; saveSettings(); }
-  updateBadge();
-}
-
 /* ---------- 互動與事件綁定 ---------- */
 function showTab(name) {
-  ['add', 'report', 'ach', 'settings'].forEach(n => $('tab-' + n).hidden = n !== name);
+  ['add', 'report', 'settings'].forEach(n => $('tab-' + n).hidden = n !== name);
   document.querySelectorAll('.tabbar button').forEach(b => b.classList.toggle('on', b.dataset.tab === name));
   if (name === 'report') { renderReport(); if (!settings.flags.report) { setFlag('report'); checkAch(); } }
-  if (name === 'ach') renderAch();
   if (name === 'settings') renderSettings();
   updateSub(); updateBadge();
   window.scrollTo(0, 0);
@@ -2725,6 +3005,22 @@ function showTab(name) {
 document.querySelector('.tabbar').addEventListener('click', e => { const b = e.target.closest('button'); if (b) showTab(b.dataset.tab); });
 $('typeSeg').addEventListener('click', e => { const b = e.target.closest('button'); if (b) setType(b.dataset.v); });
 $('curSeg').addEventListener('click', e => { const b = e.target.closest('button'); if (b) setCur(b.dataset.v); });
+
+/* 記帳頁快捷日期（昨天 / 今天 / 點開選擇日期）事件 */
+$('dateQuickBar').addEventListener('click', e => {
+  const b = e.target.closest('button[data-doff]');
+  if (!b) return;
+  const off = +b.dataset.doff;
+  const targetDate = addDays(new Date(), off);
+  $('date').value = ymd(targetDate);
+  syncDateQuickUI();
+});
+$('date').addEventListener('click', () => {
+  if ($('date').showPicker) { try { $('date').showPicker(); } catch (err) {} }
+});
+$('date').addEventListener('change', () => {
+  syncDateQuickUI();
+});
 
 /* 金額欄即時算式提示與符號快捷鍵 */
 function updateCalcPreview() {
@@ -2756,7 +3052,7 @@ $('calcOps').addEventListener('click', e => {
     if (Number.isFinite(res.val) && res.val > 0) {
       inp.value = res.val;
       $('calcHint').textContent = '';
-    } else toast('算式尚未完成喔');
+    } else toast('冬冬，算式還沒寫完喔');
   } else {
     inp.value = (inp.value || '') + op;
     inp.focus();
@@ -2764,18 +3060,13 @@ $('calcOps').addEventListener('click', e => {
   }
 });
 
-/* 首頁提醒卡點擊處理（月度信箋、固定收支一鍵入帳、完整備份） */
+/* 首頁提醒卡點擊處理（固定收支一鍵入帳、完整備份） */
 $('topAlerts').addEventListener('click', e => {
   const b = e.target.closest('button[data-alert-act]');
   if (!b) return;
   const actName = b.dataset.alertAct;
   const curYm = ymd(new Date()).slice(0, 7);
-  if (actName === 'openLetter') {
-    settings.seenLetterYm = curYm; saveSettings(); renderTopAlerts();
-    openLetterModal(b.dataset.ym);
-  } else if (actName === 'dismissLetter') {
-    settings.seenLetterYm = curYm; saveSettings(); renderTopAlerts();
-  } else if (actName === 'applyRec') {
+  if (actName === 'applyRec') {
     const r = (settings.recurring || []).find(x => x.id === b.dataset.id);
     if (!r) return;
     const rate = settings.hkdToRmb || 0.92;
@@ -2786,8 +3077,10 @@ $('topAlerts').addEventListener('click', e => {
       cat: r.cat, note: r.title, date: ymd(new Date()), ts: Date.now()
     };
     entries.push(entry); r.lastDoneYm = curYm;
-    saveEntries(); saveSettings(); updateSub();
-    toast(`✅ 已一鍵入帳：${r.title} ${curSym(r.cur)}${fmt(r.amount)}`);
+    saveEntries(); saveSettings();
+    addAffection(1, false);
+    updateSub();
+    toast(`✅ 已替冬冬一鍵入帳：${r.title} ${curSym(r.cur)}${fmt(r.amount)}`);
     petReact(entry, false); checkAch();
   } else if (actName === 'skipRec') {
     const r = (settings.recurring || []).find(x => x.id === b.dataset.id);
@@ -2798,21 +3091,22 @@ $('topAlerts').addEventListener('click', e => {
     settings.backupRemindDismissed = Date.now(); saveSettings(); renderTopAlerts();
   }
 });
-/* 餵食記帳小餅乾與切換小房間天氣/日常活動 */
+
+/* 切換小房間天氣、日常活動、餵食小餅乾與打開禮物盒 */
 $('weatherBtn').addEventListener('click', cycleWeatherScene);
 $('actBtn').addEventListener('click', cycleActScene);
+$('giftBoxBtn').addEventListener('click', openGiftBoxModal);
 
 $('feedCookie').addEventListener('click', () => {
   if ((settings.cookies || 0) <= 0) {
-    toast('目前沒有小餅乾喔～每天記下第一筆帳就能獲得 1 顆🍪！');
+    toast('冬冬，目前沒有小餅乾喔～每天記下第一筆帳就能獲得 1 顆🍪！');
     return;
   }
   settings.cookies--;
-  settings.affection = (settings.affection || 0) + 5;
-  saveSettings(); updateCookieUI();
+  const unlocked = addAffection(5, false);
   act('cheer', 'love'); chew();
   say(getLine('cookie'), 8000);
-  toast(`🍪 餵食成功！${petName()}好感度 +5（目前 ❤️ ${settings.affection}）`);
+  if (!unlocked) toast(`🍪 謝謝冬冬投餵！小克好感度 +5（目前 ❤️ ${settings.affection}）`);
 });
 
 $('note').addEventListener('input', renderQuick);
@@ -2825,7 +3119,7 @@ $('quick').addEventListener('click', e => {
     if (!form.cat || !note) return;
     (settings.quick[form.cat] = settings.quick[form.cat] || []).push(note);
     settings.dismissed = settings.dismissed.filter(k => k !== form.cat + '|' + note); saveSettings();
-    setFlag('addq'); toast(`已加入「${form.cat}」常用備註`); checkAch();
+    setFlag('addq'); toast(`已替冬冬加入「${form.cat}」常用備註`); checkAch();
   } else if (b.dataset.q) {
     $('note').value = $('note').value.trim() === b.dataset.q ? '' : b.dataset.q;
   }
@@ -2835,7 +3129,6 @@ $('quick').addEventListener('click', e => {
 $('save').addEventListener('click', saveEntry);
 $('del').addEventListener('click', deleteEntry);
 $('cancel').addEventListener('click', resetForm);
-$('nospend').addEventListener('click', toggleNoSpend);
 
 /* 支援「長按摸摸頭」與「點擊說話」 */
 let tapTimes = [], holdTimer = null, didHoldPat = false;
@@ -2844,11 +3137,10 @@ $('pet').addEventListener('pointerdown', () => {
   clearTimeout(holdTimer);
   holdTimer = setTimeout(() => {
     didHoldPat = true;
-    settings.affection = (settings.affection || 0) + 2;
-    saveSettings();
+    const unlocked = addAffection(2, false);
     act('jiggle'); setFace('love', 2600);
     say(getLine('headpat'), 7500);
-    toast(`🤚 摸摸頭～${petName()}好感度 +2（❤️ ${settings.affection}）`);
+    if (!unlocked) toast(`🤚 被冬冬摸摸頭了～小克好感度 +2（❤️ ${settings.affection}）`);
   }, 520);
 });
 ['pointerup', 'pointerleave', 'pointercancel'].forEach(evName => {
@@ -2897,6 +3189,40 @@ $('modal').addEventListener('click', e => {
     moves.forEach(x => p.classList.remove(x)); void p.offsetWidth; p.classList.add(cls);
     setTimeout(() => p.classList.remove(cls), 2700); return;
   }
+  const gv = e.target.closest('[data-gift-view]');
+  if (gv) {
+    const g = LOVE_GIFTS.find(x => x.id === gv.dataset.giftView);
+    if (g && settings.giftsUnlocked && settings.giftsUnlocked[g.id]) {
+      settings.activeGift = g.id;
+      saveSettings();
+      updateCookieUI();
+      openGiftUnlockModal(g, false);
+    }
+    return;
+  }
+  const ds = e.target.closest('[data-daily-sweet]');
+  if (ds) {
+    const todayStr = ymd(new Date());
+    if (settings.lastSweetDate !== todayStr) {
+      settings.lastSweetDate = todayStr;
+      const unlocked = addAffection(3, true);
+      act('cheer', 'love');
+      say(getLine('tap'), 8500);
+      if (!unlocked) {
+        openGiftBoxModal();
+        toast(`💘 小克向冬冬直球告白！好感度 ❤️ +3（目前 ${settings.affection}）`);
+      }
+    } else {
+      closeModal();
+      act('jump', 'love');
+      say(getLine('tap'), 8500);
+    }
+    return;
+  }
+  if (e.target.id === 'mbackGifts') {
+    openGiftBoxModal();
+    return;
+  }
   if (e.target.id === 'mconfirm') {
     const fn = confirmCb;
     closeModal();
@@ -2909,13 +3235,45 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape' && modalOpen)
 
 $('tab-report').addEventListener('click', e => {
   const b = e.target.closest('button'); if (!b) return;
-  if (b.dataset.mode) { rep.mode = b.dataset.mode; renderReport(); }
-  else if (b.dataset.nav) { if (b.dataset.nav === 'today') rep.anchor = new Date(); else shift(+b.dataset.nav); renderReport(); }
-  else if (b.dataset.d) { rep.mode = 'day'; rep.anchor = new Date(b.dataset.d + 'T00:00:00'); renderReport(); window.scrollTo(0, 0); }
-  else if (b.dataset.fcat !== undefined) { rep.cat = b.dataset.fcat; renderReport(); }
-  else if (b.dataset.clearFilter) { rep.q = ''; rep.cat = ''; renderReport(); }
-  else if (b.dataset.openLetter) { openLetterModal(b.dataset.openLetter); }
-  else if (b.dataset.id) startEdit(b.dataset.id);
+  if (b.dataset.rmode) {
+    rep.mode = b.dataset.rmode;
+    rep.dayFilter = '';
+    renderReport();
+  } else if (b.dataset.nav) {
+    if (b.dataset.nav === 'today') rep.anchor = new Date();
+    else shift(+b.dataset.nav);
+    rep.dayFilter = '';
+    renderReport();
+  } else if (b.dataset.d) {
+    rep.dayFilter = rep.dayFilter === b.dataset.d ? '' : b.dataset.d;
+    renderReport();
+  } else if (b.dataset.ym) {
+    const [y, m] = b.dataset.ym.split('-').map(Number);
+    rep.mode = 'month';
+    rep.anchor = new Date(y, m - 1, 1);
+    rep.dayFilter = '';
+    renderReport();
+    window.scrollTo(0, 0);
+  } else if (b.dataset.fcat !== undefined) {
+    rep.cat = b.dataset.fcat;
+    renderReport();
+  } else if (b.dataset.clearFilter) {
+    rep.q = ''; rep.cat = ''; rep.dayFilter = '';
+    renderReport();
+  } else if (b.dataset.id) {
+    startEdit(b.dataset.id);
+  }
+});
+$('tab-report').addEventListener('change', e => {
+  if (e.target.id === 'repMonthPick' && e.target.value) {
+    const [y, m] = e.target.value.split('-').map(Number);
+    if (y && m) {
+      rep.mode = 'month';
+      rep.anchor = new Date(y, m - 1, 1);
+      rep.dayFilter = '';
+      renderReport();
+    }
+  }
 });
 $('tab-report').addEventListener('input', e => {
   if (e.target.id === 'repSearch') {
@@ -2927,38 +3285,22 @@ $('tab-report').addEventListener('input', e => {
   }
 });
 
-$('tab-ach').addEventListener('click', e => {
-  const sk = e.target.closest('[data-skin]');
-  if (sk) {
-    const k = +sk.dataset.skin, lv = curLv();
-    if (k <= lv.i) {
-      settings.skin = k; achView = 0; saveSettings(); refreshPet(); renderAch();
-      toast(`已換上「${LEVELS[k - 1][1]}」形象`);
-    }
-    else toast(`達到 ${LEVELS[k - 1][0]} 個成就，就能解鎖這個形象囉`);
-    return;
-  }
-  if (e.target.closest('#achPet')) {
-    const el = $('achPet'); el.classList.remove('a-jump'); void el.offsetWidth; el.classList.add('a-jump');
-    toast(`${petName()}：${getLine('tap')}`);
-    return;
-  }
-  if (e.target.closest('#nextPet')) { toast(`下一級將變成「${LEVELS[curLv().i][1]}」的新形象`); return; }
-  const b = e.target.closest('.acard'); if (!b) return;
-  const a = ACH.find(x => x.id === b.dataset.a);
-  if (a && settings.ach[a.id]) openModal(a, [], false); else toast(getLine('lockedTap'));
-});
-
 $('tab-settings').addEventListener('change', e => {
   if (e.target.id === 'setBudget') {
-    const v = parseFloat(e.target.value); settings.budget = v > 0 ? v : 0; saveSettings(); updateSub();
-    toast(settings.budget ? '每月預算已儲存' : '已取消預算'); checkAch();
+    const v = parseFloat(e.target.value); settings.budget = v > 0 ? round2(v) : 0; saveSettings(); updateSub(); renderSettings();
+    toast(settings.budget ? `已儲存每月總預算 ${money(settings.budget)}` : '已取消每月總預算'); checkAch();
+  } else if (e.target.dataset && e.target.dataset.catBud) {
+    const cat = e.target.dataset.catBud;
+    const v = parseFloat(e.target.value);
+    if (!settings.catBudgets) settings.catBudgets = {};
+    if (v > 0) settings.catBudgets[cat] = round2(v);
+    else delete settings.catBudgets[cat];
+    saveSettings(); renderSettings();
+    toast(v > 0 ? `已設定「${cat}」月預算 ${money(round2(v))}` : `已清除「${cat}」月預算`);
+    checkAch();
   } else if (e.target.id === 'setDailySafe') {
     settings.showDailySafe = !!e.target.checked; saveSettings(); updateSub();
     toast(settings.showDailySafe ? '已開啟單日安心線提示' : '已隱藏單日安心線提示');
-  } else if (e.target.id === 'setPet') {
-    settings.petName = e.target.value.trim() || '小克'; e.target.value = settings.petName; saveSettings(); updateSub();
-    toast(`伴侶名字已更新為「${settings.petName}」`); renderSettings(); checkAch();
   } else if (e.target.id === 'setRate') {
     const v = parseFloat(e.target.value);
     if (v > 0) {
@@ -2969,11 +3311,51 @@ $('tab-settings').addEventListener('change', e => {
 });
 
 $('tab-settings').addEventListener('click', e => {
+  const sk = e.target.closest('[data-skin]');
+  if (sk) {
+    const k = +sk.dataset.skin, lv = curLv();
+    if (k <= lv.i) {
+      settings.skin = k; achView = 0; saveSettings(); refreshPet(); renderSettings();
+      toast(`小克已為冬冬換上「${LEVELS[k - 1][1]}」形象`);
+    } else {
+      toast(`冬冬再解鎖到 ${LEVELS[k - 1][0]} 個成就，小克就能穿這套給你看囉`);
+    }
+    return;
+  }
+  if (e.target.closest('#achPet')) {
+    const el = $('achPet'); el.classList.remove('a-jump'); void el.offsetWidth; el.classList.add('a-jump');
+    toast(`小克：${getLine('tap')}`);
+    return;
+  }
+  if (e.target.closest('#nextPet')) {
+    toast(`下一級小克將變成「${LEVELS[curLv().i][1]}」的新形象`);
+    return;
+  }
+  const ac = e.target.closest('.acard');
+  if (ac) {
+    const a = ACH.find(x => x.id === ac.dataset.a);
+    if (a && settings.ach[a.id]) openModal(a, [], false);
+    else toast(getLine('lockedTap'));
+    return;
+  }
+
   const b = e.target.closest('button[data-act]'); if (!b) return;
   const act = b.dataset.act, t = b.dataset.t;
   if (act === 'fetchRate') fetchRate(true);
+  else if (act === 'openGifts') openGiftBoxModal();
+  else if (act === 'toggleAchList') { achExpanded = !achExpanded; renderSettings(); }
+  else if (act === 'syncCatSum') {
+    const cBuds = settings.catBudgets || {};
+    const sum = round2(settings.cats.expense.reduce((s, c) => s + (parseFloat(cBuds[c]) > 0 ? parseFloat(cBuds[c]) : 0), 0));
+    if (sum > 0) {
+      settings.budget = sum;
+      saveSettings(); updateSub(); renderSettings();
+      toast(`已將每月總預算同步為分類預算加總 ${money(sum)}`);
+      checkAch();
+    }
+  }
   else if (act === 'gallery') openGallery();
-  else if (act === 'export') { if (!entries.length && !settings.noSpend.length) toast('目前還沒有記錄可匯出'); else exportCsv(); }
+  else if (act === 'export') { if (!entries.length) toast('目前還沒有記錄可匯出'); else exportCsv(); }
   else if (act === 'import') $('file').click();
   else if (act === 'exportJson') exportFullJson();
   else if (act === 'importJson') $('jsonFile').click();
@@ -3008,18 +3390,28 @@ $('tab-settings').addEventListener('click', e => {
     settings.cats[t].push(v); setFlag('addcat'); saveSettings(); renderSettings(); renderChips(); checkAch();
   } else if (act === 'delcat') {
     if (settings.cats[t].length <= 1) { toast('至少要保留一個分類喔'); return; }
-    settings.cats[t] = settings.cats[t].filter(c => c !== b.dataset.c); saveSettings(); renderSettings(); renderChips();
+    const delName = b.dataset.c;
+    settings.cats[t] = settings.cats[t].filter(c => c !== delName);
+    if (settings.catBudgets && settings.catBudgets[delName]) delete settings.catBudgets[delName];
+    saveSettings(); renderSettings(); renderChips();
   } else if (act === 'setbase') {
     const v = b.dataset.v;
     if (v !== baseCur()) {
       const r = settings.hkdToRmb || 0.92;
       if (settings.budget > 0) settings.budget = Math.round(v === 'CNY' ? settings.budget * r : settings.budget / r);
+      if (settings.catBudgets && typeof settings.catBudgets === 'object') {
+        Object.keys(settings.catBudgets).forEach(k => {
+          if (settings.catBudgets[k] > 0) {
+            settings.catBudgets[k] = Math.round(v === 'CNY' ? settings.catBudgets[k] * r : settings.catBudgets[k] / r);
+          }
+        });
+      }
       settings.base = v; saveSettings(); setFlag('baseSwitch');
       renderSettings(); updateSub(); toast(`統計幣別已切換為${baseName()}`); checkAch();
     }
   } else if (act === 'clear') {
-    askConfirm('清除所有帳目', `確定要清除全部 ${entries.length} 筆帳目嗎？此操作無法復原，建議先匯出備份。`, '確定清除', () => {
-      entries = []; settings.noSpend = []; saveEntries(); saveSettings(); renderSettings(); updateSub(); toast('所有帳目已清除');
+    askConfirm('清除所有帳目', `冬冬確定要清除全部 ${entries.length} 筆帳目嗎？此操作無法復原，建議先匯出備份喔。`, '確定清除', () => {
+      entries = []; saveEntries(); saveSettings(); renderSettings(); updateSub(); toast('所有帳目已清除');
     });
   }
 });
@@ -3035,8 +3427,10 @@ $('jsonFile').addEventListener('change', e => {
 
 /* ---------- 初始化 ---------- */
 $('date').value = ymd(new Date());
+syncDateQuickUI();
 setType('expense');
 setCur('HKD');
+addAffection(0, true);
 updateSub();
 randomizeRoomState(true);
 
@@ -3050,6 +3444,23 @@ randomizeRoomState(true);
     checkAch();
   }, 500);
 }
+/* 隨時監聽頁面喚醒與真實時間變化，確保晚上打開或切換回來時背景立即跟隨現實時間 */
+function syncRealTimeClock() {
+  if (curTod !== getRealTod()) {
+    curTod = getRealTod();
+    renderRoomScene();
+  }
+}
+document.addEventListener('visibilitychange', () => {
+  if (!document.hidden) {
+    syncRealTimeClock();
+    syncDateQuickUI();
+  }
+});
+window.addEventListener('focus', syncRealTimeClock);
+window.addEventListener('pageshow', syncRealTimeClock);
+setInterval(syncRealTimeClock, 15000);
+
 scheduleIdle();
 updateBadge();
 
@@ -3059,4 +3470,4 @@ if (!settings.rateUpdated || Date.now() - settings.rateUpdated > 6 * 3600 * 1000
 })();
 </script>
 </body>
-</html>p
+</html>
