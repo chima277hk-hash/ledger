@@ -9,6 +9,7 @@
 <meta name="apple-mobile-web-app-title" content="小克記帳">
 <meta name="application-name" content="小克記帳">
 <meta name="theme-color" content="#232538">
+<link rel="manifest" href="manifest.json">
 <title>小克記帳</title>
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -842,7 +843,12 @@ const calcDual = (amt, cur, rateHkdToRmb) => {
   if (dirtySettings) saveSettings();
 })();
 
-// 單檔離線安全執行（已移除外部 sw.js 依賴）
+// 註冊 Service Worker（PWA 安裝必需）
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js').catch(() => {});
+  });
+}
 
 /* ---------- 提示與自訂確認彈窗 ---------- */
 let toastTimer, confirmCb = null;
