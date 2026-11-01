@@ -197,10 +197,10 @@ body.cny #amount:focus{border-bottom-color:#F3C262}
 .monthPickLabel{position:relative;display:inline-flex;align-items:center;gap:5px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.1);color:#F9F6F2;border-radius:999px;padding:5px 12px;font-size:12.5px;font-weight:700;cursor:pointer}
 .monthPickLabel input[type="month"]{position:absolute;inset:0;opacity:0;width:100%;height:100%;cursor:pointer}
 
-/* 報表分類預算進度與設定頁分類預算網格 */
+/* 報表分類額度與設定頁分類額度網格 */
 .catBudBlock{padding:9px 0;border-bottom:1px solid #F4EFE9}
 .catBudBlock:last-child{border-bottom:0}
-.cbBar{height:7px;background:#F1ECE6;border-radius:999px;overflow:hidden;margin-top:5px}
+.cbBar{height:5px;background:#F1ECE6;border-radius:999px;overflow:hidden;margin-top:5px}
 .cbFill{display:block;height:100%;border-radius:999px;transition:width .4s ease}
 .cbMeta{display:flex;justify-content:space-between;font-size:12px;color:#726E80;margin-top:4px}
 .cbMeta b.over{color:#B91C1C}
@@ -211,14 +211,14 @@ body.cny #amount:focus{border-bottom-color:#F3C262}
 .catBudItem span.cn{display:inline-flex;align-items:center;gap:6px;font-size:13.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .catBudItem input{width:78px;border:1px solid #DFD7CE;border-radius:8px;padding:5px 7px;background:#fff;text-align:right;font-size:13.5px;font-family:ui-rounded,"SF Pro Rounded",sans-serif}
 
-/* 房間內定情信物徽章 */
-.roomGiftBadge{position:absolute;left:7px;bottom:6px;z-index:4;background:rgba(255,250,245,.9);border:1px solid rgba(226,91,110,.45);border-radius:999px;padding:1px 6px;font-size:12px;line-height:1.3;box-shadow:0 2px 6px rgba(18,20,34,.22);pointer-events:none}
-
-/* 週期性固定收支列表 */
-.recRow{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:9px 0;border-bottom:1px solid #F2ECE6;font-size:14px}
-.recRow:last-child{border-bottom:0}
-.recRow b{font-weight:700}
-.recRow i{font-style:normal;color:#726E80;font-size:12px;margin-left:6px}
+/* 額度摘要卡、零花錢設定與自動入帳標籤 */
+.limitCard{background:#FBF9F6;border:1px solid #EDE6DF;border-radius:16px;padding:12px 14px;margin-bottom:12px}
+.limitCard .lh{font-size:13px;color:#726E80}
+.limitCard .lv{font-size:22px;font-weight:800;margin:2px 0 8px}
+.limitCard .lv.over{color:#B91C1C}
+.limitCard .lf{font-size:12px;color:#8A8596;margin-top:7px}
+.allowOn{display:flex;align-items:center;justify-content:space-between;gap:10px;background:#FFF8E6;border:1px solid #F3E2B3;border-radius:14px;padding:10px 12px;margin-bottom:12px;font-size:13.5px;line-height:1.45}
+.autoTag{display:inline-block;font-size:10.5px;font-weight:700;color:#8A6A12;background:#FFF1CC;border-radius:6px;padding:0 5px;margin-left:6px;vertical-align:1px}
 
 /* body 溫暖紙張底色與空氣感卡片 */
 .body{padding:20px 16px 0}
@@ -527,7 +527,6 @@ h2{font-size:16px;margin:0 0 12px;font-weight:700;color:#232536}
           <svg class="roomBg" id="roomBg" viewBox="0 0 68 53" shape-rendering="crispEdges" aria-hidden="true"></svg>
           <button class="pet" id="pet" type="button" aria-label="小克"></button>
           <svg class="roomFg" id="roomFg" viewBox="0 0 68 53" shape-rendering="crispEdges" aria-hidden="true"></svg>
-          <div class="roomGiftBadge" id="roomGiftBadge" hidden></div>
         </div>
       </div>
       <div class="petCareBar">
@@ -623,9 +622,9 @@ const fmt = n => n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFr
 const WD = ['日', '一', '二', '三', '四', '五', '六'];
 
 const CAT_COLORS = {
-  '餐飲': '#C2570C', '交通': '#2563EB', '日常用品': '#0F766E', '服飾裝扮': '#BE185D',
+  '餐飲': '#C2570C', '交通': '#2563EB', '日常用品': '#0F766E', '服飾美容': '#BE185D',
   '娛樂愛好': '#7C3AED', '外出消遣': '#0891B2', '醫療': '#B91C1C', '其他': '#64748B',
-  '薪資': '#15803D', '其他收入': '#0E7490',
+  '薪資': '#15803D', '零花錢': '#B7791F', '其他收入': '#0E7490',
   '居住': '#0F766E', '購物': '#BE185D', '娛樂': '#7C3AED'
 };
 const EXTRA = ['#9333EA', '#0369A1', '#A16207', '#BE123C', '#4D7C0F', '#6D28D9'];
@@ -652,8 +651,8 @@ if (navigator.storage && navigator.storage.persist) navigator.storage.persist().
 
 /* ---------- 資料結構與設定 ---------- */
 const DEFAULT_CATS = {
-  expense: ['餐飲', '交通', '日常用品', '服飾裝扮', '娛樂愛好', '外出消遣', '醫療', '其他'],
-  income: ['薪資', '其他收入']
+  expense: ['餐飲', '交通', '日常用品', '服飾美容', '娛樂愛好', '外出消遣', '醫療', '其他'],
+  income: ['零花錢', '薪資', '其他收入']
 };
 const OLD_CATS = ['居住', '購物', '娛樂'];
 
@@ -676,7 +675,7 @@ let settings = Object.assign({
   giftsUnlocked: {},     /* 已解鎖的小克定情禮物 { g15: ts, ... } */
   activeGift: null,      /* 房間內展示中的定情禮物 id */
   lastSweetDate: '',     /* 每日直球告白互動日期 */
-  recurring: [],         /* 每月固定收支 [{id, title, day, type, cur, amount, cat, lastDoneYm}] */
+  allowance: { on: false, amount: 0, cur: 'HKD', day: 1, lastYm: '' },  /* 每月固定零花錢（到發放日自動記成一筆收入） */
   lastBackupTs: 0,       /* 上次匯出備份時間戳 */
   lastBackupCount: 0,    /* 上次備份時的帳目總數 */
   backupRemindDismissed: 0,
@@ -685,11 +684,39 @@ let settings = Object.assign({
 }, store.get('ledger.settings', {}));
 settings.petName = '小克';
 settings.userName = '冬冬';
+if (!settings.allowance || typeof settings.allowance !== 'object') settings.allowance = { on: false, amount: 0, cur: 'HKD', day: 1, lastYm: '' };
 if (!settings.catBudgets || typeof settings.catBudgets !== 'object') settings.catBudgets = {};
 if (!settings.giftsUnlocked || typeof settings.giftsUnlocked !== 'object') settings.giftsUnlocked = {};
 
 const saveEntries = () => store.set('ledger.entries', entries);
 const saveSettings = () => store.set('ledger.settings', settings);
+
+/* 資料遷移：分類「服飾裝扮」改名為「服飾美容」、補上「零花錢」收入分類（匯入備份後也會再跑一次） */
+function migrateData() {
+  let dE = false, dS = false;
+  const OLD = '服飾裝扮', NEW = '服飾美容';
+  entries.forEach(e => { if (e.cat === OLD) { e.cat = NEW; dE = true; } });
+  if (!settings.cats || typeof settings.cats !== 'object') settings.cats = JSON.parse(JSON.stringify(DEFAULT_CATS));
+  const cats = settings.cats;
+  ['expense', 'income'].forEach(t => { if (!Array.isArray(cats[t])) { cats[t] = DEFAULT_CATS[t].slice(); dS = true; } });
+  const i = cats.expense.indexOf(OLD);
+  if (i >= 0) { if (cats.expense.includes(NEW)) cats.expense.splice(i, 1); else cats.expense[i] = NEW; dS = true; }
+  const cb = settings.catBudgets;
+  if (cb && cb[OLD] != null) { if (!(cb[NEW] > 0)) cb[NEW] = cb[OLD]; delete cb[OLD]; dS = true; }
+  const q = settings.quick;
+  if (q && q[OLD]) { q[NEW] = Array.from(new Set([...(q[NEW] || []), ...q[OLD]])); delete q[OLD]; dS = true; }
+  if (Array.isArray(settings.dismissed) && settings.dismissed.some(k => String(k).startsWith(OLD + '|'))) {
+    settings.dismissed = settings.dismissed.map(k => String(k).startsWith(OLD + '|') ? NEW + String(k).slice(OLD.length) : k); dS = true;
+  }
+  if (!settings.flags || typeof settings.flags !== 'object') settings.flags = {};
+  if (!settings.flags.catAllowance) {
+    settings.flags.catAllowance = true;
+    if (!cats.income.includes('零花錢')) cats.income.unshift('零花錢');
+    dS = true;
+  }
+  if (dE) saveEntries();
+  if (dS) saveSettings();
+}
 
 /* 安全計算簡易四則運算式 */
 function evalMathExpr(raw) {
@@ -731,7 +758,7 @@ function evalMathExpr(raw) {
   }
 }
 
-/* 更新小餅乾、好感度按鈕與房間禮物徽章狀態 */
+/* 更新小餅乾與好感度按鈕狀態 */
 function updateCookieUI() {
   const btn = $('feedCookie'), cnt = $('cookieCnt');
   if (btn && cnt) {
@@ -745,17 +772,6 @@ function updateCookieUI() {
     const unlockedCnt = Object.keys(settings.giftsUnlocked || {}).length;
     affCnt.textContent = `❤️ ${aff}`;
     gBtn.classList.toggle('has', unlockedCnt > 0);
-  }
-  const badge = $('roomGiftBadge');
-  if (badge) {
-    const gId = settings.activeGift;
-    const gObj = typeof LOVE_GIFTS !== 'undefined' && gId ? LOVE_GIFTS.find(x => x.id === gId) : null;
-    if (gObj && settings.giftsUnlocked && settings.giftsUnlocked[gObj.id]) {
-      badge.textContent = `${gObj.icon} ${gObj.name.slice(0, 4)}`;
-      badge.hidden = false;
-    } else {
-      badge.hidden = true;
-    }
   }
 }
 
@@ -812,8 +828,8 @@ const calcDual = (amt, cur, rateHkdToRmb) => {
   }
 };
 
-/* 舊版資料相容與平滑升級 */
-(() => {
+/* 舊版資料相容與平滑升級（啟動與匯入備份後都會執行） */
+function compatUpgrade() {
   let dirtyEntries = false, dirtySettings = false;
   if (!settings.hkdToRmb) {
     if (settings.rate && settings.rate > 0) {
@@ -841,7 +857,9 @@ const calcDual = (amt, cur, rateHkdToRmb) => {
   });
   if (dirtyEntries) saveEntries();
   if (dirtySettings) saveSettings();
-})();
+}
+compatUpgrade();
+migrateData();
 
 // 註冊 Service Worker（PWA 安裝必需）
 if ('serviceWorker' in navigator) {
@@ -938,23 +956,48 @@ function updateSub() {
   $('sub').textContent = s;
 }
 
-/* 首頁提醒卡片：1.固定收支到期提醒 2.定期備份提醒 */
+/* ---------- 每月固定零花錢：到了發放日自動記成一筆收入 ---------- */
+const prevYm = k => { const [y, m] = k.split('-').map(Number); return m === 1 ? `${y - 1}-12` : `${y}-${pad(m - 1)}`; };
+function allowDueDate(ym, day) {
+  const [y, m] = ym.split('-').map(Number);
+  const last = new Date(y, m, 0).getDate();
+  return `${ym}-${pad(Math.min(Math.max(1, day | 0), last))}`;
+}
+function applyAllowance() {
+  const a = settings.allowance;
+  if (!a || !a.on || !(a.amount > 0)) return 0;
+  const today = ymd(new Date()), curYm = today.slice(0, 7);
+  let ym = a.lastYm ? nextMonth(a.lastYm) : curYm, n = 0, guard = 0;
+  while (ym <= curYm && guard++ < 36) {
+    const due = allowDueDate(ym, a.day);
+    if (due > today) break;
+    const rate = settings.hkdToRmb || 0.92, dual = calcDual(a.amount, a.cur, rate);
+    entries.push({ id: uid(), type: 'income', cur: a.cur, amount: round2(a.amount), rate, hkd: dual.hkd, cny: dual.cny,
+      cat: '零花錢', note: '每月零花錢', date: due, ts: Date.now(), auto: true, imp: true });
+    a.lastYm = ym; n++; ym = nextMonth(ym);
+  }
+  if (n) { saveEntries(); saveSettings(); }
+  return n;
+}
+function runAllowance(silent) {
+  const n = applyAllowance();
+  if (!n) return;
+  const a = settings.allowance;
+  updateSub();
+  if (!$('tab-report').hidden) renderReport();
+  if (!$('tab-settings').hidden) renderSettings();
+  if (!silent) toast(`💰 每月零花錢入帳 ${curSym(a.cur)}${fmt(a.amount * n)}${n > 1 ? `（補記 ${n} 個月）` : ''}`);
+  checkAch();
+}
+
+/* 首頁提醒卡片：定期備份提醒 */
 function renderTopAlerts() {
   const box = $('topAlerts');
   if (!box) return;
   const now = new Date(), today = ymd(now), curYm = today.slice(0, 7), curDay = now.getDate();
   let html = '';
 
-  // 1. 固定收支到期提醒
-  const dueList = (settings.recurring || []).filter(r => r.lastDoneYm !== curYm && curDay >= (r.day || 1));
-  dueList.forEach(r => {
-    html += `<div class="alertCard">
-      <div><b>🗓️ 小克提醒冬冬：${esc(r.title)}</b><span>每月 ${r.day} 號 · ${esc(r.cat)} ${curSym(r.cur)}${fmt(r.amount)}</span></div>
-      <div class="acts"><button type="button" data-alert-act="applyRec" data-id="${r.id}">一鍵入帳</button><button type="button" class="sec" data-alert-act="skipRec" data-id="${r.id}">本月略過</button></div>
-    </div>`;
-  });
-
-  // 2. 定期備份提醒（距離上次備份超過 14 天且新增 >= 15 筆）
+  // 定期備份提醒（距離上次備份超過 14 天且新增 >= 15 筆）
   const daysSinceBackup = settings.lastBackupTs ? (Date.now() - settings.lastBackupTs) / 86400000 : 999;
   const newSinceBackup = entries.length - (settings.lastBackupCount || 0);
   const daysSinceDismiss = settings.backupRemindDismissed ? (Date.now() - settings.backupRemindDismissed) / 86400000 : 999;
@@ -1003,6 +1046,7 @@ function saveEntry() {
     ts: old ? old.ts : Date.now()
   };
   if (old && old.imp) e.imp = true;
+  if (old && old.auto) e.auto = true;
 
   const i = entries.findIndex(x => x.id === e.id);
   if (i >= 0) entries[i] = e; else entries.push(e);
@@ -1067,7 +1111,7 @@ function deleteEntry() {
   });
 }
 
-/* ---------- 報表模組（預設月報表、支援選月與看年、分類預算進度、本月完整明細） ---------- */
+/* ---------- 報表模組（預設月報表、支援選月與看年、分類額度、本月完整明細） ---------- */
 const rep = { mode: 'month', anchor: new Date(), q: '', cat: '', dayFilter: '' };
 function range() {
   const a = new Date(rep.anchor); a.setHours(0, 0, 0, 0);
@@ -1161,28 +1205,22 @@ function renderReport() {
   }
   h += '</div><div class="body">';
 
-  // 支出分類與各分類預算進度面板
+  // 支出分類與各分類額度面板
   const by = {}; exp.forEach(e => by[e.cat] = (by[e.cat] || 0) + val(e));
   const cBuds = settings.catBudgets || {};
-  const allRelevantCats = new Set([...Object.keys(by), ...Object.keys(cBuds).filter(k => cBuds[k] > 0)]);
-  const cats = [...allRelevantCats].map(c => [c, by[c] || 0]).sort((a, b) => b[1] - a[1] || (cBuds[b[0]] || 0) - (cBuds[a[0]] || 0));
+  const cats = Object.keys(by).map(c => [c, by[c]]).filter(([, v]) => v > 0).sort((a, b) => b[1] - a[1]);
 
-  h += `<div class="panel"><h2>支出分類與${rep.mode === 'year' ? '年度' : '本月'}預算進度</h2>`;
+  h += `<div class="panel"><h2>支出分類</h2>`;
   if (settings.budget > 0) {
     const totalLim = settings.budget * mult;
+    const left = totalLim - E, overAll = left < 0;
     const totalPct = Math.round(E / totalLim * 100);
-    const overAll = E > totalLim;
     const barCol = overAll ? '#DC2626' : totalPct >= 80 ? '#D97706' : '#15803D';
-    h += `<div style="background:#FBF9F6;border:1px solid #EDE6DF;border-radius:14px;padding:10px 12px;margin-bottom:12px">
-      <div style="display:flex;justify-content:space-between;font-size:13.5px;font-weight:700">
-        <span>🛡️ ${rep.mode === 'year' ? '全年總預算進度' : '本月總預算進度'}</span>
-        <span class="num">${money(E)} / ${money(totalLim)} (${totalPct}%)</span>
-      </div>
-      <div class="cbBar" style="margin-top:6px;height:9px"><i class="cbFill" style="width:${Math.min(100, totalPct)}%;background:${barCol}"></i></div>
-      <div class="cbMeta">
-        <span>${overAll ? `小克提醒：冬冬已超支 ${money(E - totalLim)} 喔` : `小克守護中：冬冬還剩 ${money(totalLim - E)} 可用`}</span>
-        <b class="${overAll ? 'over' : totalPct >= 80 ? 'warn' : 'ok'}">${overAll ? '已超支' : totalPct >= 80 ? '接近上限' : '安心範圍'}</b>
-      </div>
+    h += `<div class="limitCard">
+      <div class="lh">${rep.mode === 'year' ? '今年' : '這個月'}${overAll ? '已超出額度' : '還可以花'}</div>
+      <div class="lv num${overAll ? ' over' : ''}">${money(Math.abs(left))}</div>
+      <div class="cbBar" style="height:6px"><i class="cbFill" style="width:${Math.min(100, totalPct)}%;background:${barCol}"></i></div>
+      <div class="lf num">已花 ${money(E)} · 額度 ${money(totalLim)}</div>
     </div>`;
   }
 
@@ -1201,10 +1239,7 @@ function renderReport() {
         const isOver = v > bLim;
         const bCol = isOver ? '#DC2626' : bPct >= 80 ? '#D97706' : colorOf(c);
         budHtml = `<div class="cbBar"><i class="cbFill" style="width:${Math.min(100, bPct)}%;background:${bCol}"></i></div>
-          <div class="cbMeta">
-            <span class="num">預算 ${money(bLim)} · 進度 ${bPct}%</span>
-            <b class="num ${isOver ? 'over' : bPct >= 80 ? 'warn' : 'ok'}">${isOver ? `超支 ${money(v - bLim)}` : `剩餘 ${money(bLim - v)}`}</b>
-          </div>`;
+          <div class="cbMeta"><span class="num">額度 ${money(bLim)}</span><b class="num ${isOver ? 'over' : bPct >= 80 ? 'warn' : 'ok'}">${isOver ? `超出 ${money(v - bLim)}` : `還可花 ${money(bLim - v)}`}</b></div>`;
       }
       return `<div class="catBudBlock">
         <div class="lg" style="padding:2px 0">
@@ -1217,7 +1252,7 @@ function renderReport() {
       </div>`;
     }).join('');
   } else {
-    h += '<div class="empty">這段時間沒有支出記錄，也尚未設定分類預算</div>';
+    h += '<div class="empty">這段時間還沒有支出記錄</div>';
   }
   h += '</div>';
 
@@ -1242,7 +1277,7 @@ function renderReport() {
   if (!filteredList.length) h += `<div class="empty">${rawList.length ? '找不到符合篩選條件的帳目' : '這個月還沒有任何記錄喔，冬冬快去記下第一筆讓我幫你保管吧！'}</div>`;
   else {
     [...new Set(filteredList.map(e => e.date))].sort().reverse().forEach(ds => {
-      const items = filteredList.filter(e => e.date === ds).sort((a, b) => b.id < a.id ? -1 : 1);
+      const items = filteredList.filter(e => e.date === ds).sort((a, b) => (b.ts || 0) - (a.ts || 0) || (b.id < a.id ? -1 : 1));
       const d = new Date(ds + 'T00:00:00');
       h += `<div class="gh"><span>${rep.mode === 'year' ? `${d.getFullYear()}年` : ''}${d.getMonth() + 1}月${d.getDate()}日 週${WD[d.getDay()]}</span><span class="num">支出 ${money(sumBase(items.filter(e => e.type === 'expense')))}</span></div>`;
       items.forEach(e => {
@@ -1251,7 +1286,7 @@ function renderReport() {
         const subConverted = e.cur !== baseCur() ? `折合 ${money(val(e))}（1港幣=${e.rate}人民幣）` : '';
         h += `<button type="button" class="row" data-id="${e.id}">
           <span class="ic" style="background:${colorOf(e.cat)}">${esc([...e.cat][0])}</span>
-          <span class="rc"><b>${esc(e.cat)}</b>${e.note ? `<i>${esc(e.note)}</i>` : ''}</span>
+          <span class="rc"><b>${esc(e.cat)}${e.auto ? '<span class="autoTag">自動入帳</span>' : ''}</b>${e.note ? `<i>${esc(e.note)}</i>` : ''}</span>
           <span class="ra ${e.type}"><b>${sign}${displayCur}</b>${subConverted ? `<i>${subConverted}</i>` : ''}</span>
         </button>`;
       });
@@ -1269,7 +1304,13 @@ function renderSettings() {
   const allCats = settings.cats.expense.concat(settings.cats.income);
   if (!qSel || !allCats.includes(qSel)) qSel = allCats[0];
   const qs = settings.quick[qSel] || [];
-  const recs = settings.recurring || [];
+  const al = settings.allowance || {};
+  const alNext = (al.on && al.amount > 0 && al.day) ? (() => {
+    const cy = ymd(new Date()).slice(0, 7);
+    let m = al.lastYm ? nextMonth(al.lastYm) : cy; if (m < cy) m = cy;
+    const d = new Date(allowDueDate(m, al.day) + 'T00:00:00');
+    return `${d.getMonth() + 1}/${d.getDate()}`;
+  })() : '';
   const cBuds = settings.catBudgets || {};
   const catBudSum = round2(settings.cats.expense.reduce((s, c) => s + (parseFloat(cBuds[c]) > 0 ? parseFloat(cBuds[c]) : 0), 0));
 
@@ -1305,9 +1346,9 @@ function renderSettings() {
     <div class="help">小克的名字永遠是「小克」，而你是小克唯一的「冬冬」。每天記帳、餵餅乾或長按小克摸摸頭，好感度達標時小克就會送冬冬專屬定情禮物喔！</div>
   </div>
 
-  <div class="panel"><h2>🎯 每月總預算與各分類獨立預算（${baseSym()}）</h2>
+  <div class="panel"><h2>🎯 每月花費額度（${baseSym()}）</h2>
     <div class="line">
-      <span>每月總預算 ${baseSym()}</span>
+      <span>每月總額度 ${baseSym()}</span>
       <input id="setBudget" type="number" inputmode="decimal" step="1" min="0" value="${settings.budget || ''}" placeholder="${baseCur() === 'HKD' ? '4500' : '4000'}">
       ${catBudSum > 0 && catBudSum !== settings.budget ? `<button type="button" class="ghost" data-act="syncCatSum" style="padding:7px 10px;font-size:12.5px">設為分類加總 (${baseSym()}${fmt(catBudSum)})</button>` : ''}
     </div>
@@ -1318,7 +1359,7 @@ function renderSettings() {
       </label>
     </div>
     <div class="lbl" style="margin:14px 0 4px;display:flex;justify-content:space-between">
-      <span>各支出分類每月預算（選填，報表會顯示進度條）</span>
+      <span>各分類每月額度（選填，報表會顯示還可以花多少）</span>
       ${catBudSum > 0 ? `<span class="num" style="color:#D95367">分類加總：${money(catBudSum)}</span>` : ''}
     </div>
     <div class="catBudGrid">
@@ -1356,22 +1397,20 @@ function renderSettings() {
     <div class="tags pick" style="margin:0"><button type="button" class="chip${baseCur() === 'HKD' ? ' on' : ''}" data-act="setbase" data-v="HKD">港幣 HK$</button><button type="button" class="chip${baseCur() === 'CNY' ? ' on' : ''}" data-act="setbase" data-v="CNY">人民幣 ¥</button></div>
     <div class="help">報表、總預算、分類預算與小克的提醒，都會把另一種幣別折合成所選幣別。切換時，總預算與各分類預算金額都會依目前匯率自動換算。</div></div>
 
-  <div class="panel"><h2>每月固定收支提醒</h2>
-    <div class="help" style="margin:0 0 10px">設定房租、電話費、訂閱或固定薪資，到了設定日期，小克會在首頁提醒冬冬一鍵入帳。</div>
-    <div>${recs.length ? recs.map(r => `<div class="recRow">
-      <div><b>每月 ${r.day} 號 · ${esc(r.title)}</b><i>${esc(r.cat)} · ${r.type === 'income' ? '+' : '−'}${curSym(r.cur)}${fmt(r.amount)}</i></div>
-      <button type="button" class="ghost" style="padding:4px 9px;font-size:12px" data-act="delrec" data-id="${r.id}">刪除</button>
-    </div>`).join('') : '<div class="help" style="margin:0 0 10px">尚未設定固定收支項目</div>'}</div>
-    <div class="line" style="margin-top:10px">
-      <input id="recTitle" placeholder="項目名稱" maxlength="12" style="flex:1;min-width:110px;font-family:inherit">
-      <input id="recDay" type="number" min="1" max="31" placeholder="日期(1-31)" style="width:92px">
+  <div class="panel"><h2>💰 每月固定零花錢</h2>
+    ${al.on && al.amount > 0 ? `<div class="allowOn"><div>每月 <b>${al.day}</b> 號自動入帳 <b>${curSym(al.cur)}${fmt(al.amount)}</b><br><span style="font-size:12px;color:#8A6A12">下一次：${alNext}</span></div><button type="button" class="ghost" data-act="offAllow" style="padding:6px 11px;font-size:12.5px;flex:none">停用</button></div>` : ''}
+    <div class="help" style="margin:0 0 10px">${al.on ? '想改金額或日期，直接填新的再按「更新」就好。' : '每個月固定會有的零花錢，開啟後到了發放日，小克會自動替冬冬記成一筆「零花錢」收入，不用每個月自己記。'}</div>
+    <div class="line">
+      <span>每月</span>
+      <input id="alDay" type="number" inputmode="numeric" min="1" max="31" placeholder="日" value="${al.on ? al.day : ''}" style="width:64px">
+      <span>號發放</span>
     </div>
     <div class="line" style="margin-top:8px">
-      <select id="recCur" class="txt" style="width:auto;min-height:38px;padding:6px 10px"><option value="HKD">HK$</option><option value="CNY">¥</option></select>
-      <input id="recAmt" type="number" step="0.01" min="0" placeholder="金額" style="width:95px">
-      <select id="recCat" class="txt" style="flex:1;min-height:38px;padding:6px 10px">${allCats.map(c => `<option value="${esc(c)}">${esc(c)}</option>`).join('')}</select>
-      <button type="button" class="ghost" data-act="addrec">＋新增</button>
+      <select id="alCur" class="txt" style="width:auto;min-height:38px;padding:6px 10px"><option value="HKD"${al.cur !== 'CNY' ? ' selected' : ''}>HK$</option><option value="CNY"${al.cur === 'CNY' ? ' selected' : ''}>¥</option></select>
+      <input id="alAmt" type="number" inputmode="decimal" step="0.01" min="0" placeholder="每月金額" value="${al.on ? al.amount : ''}" style="width:110px">
+      <button type="button" class="ghost" data-act="saveAllow">${al.on ? '更新' : '開啟'}</button>
     </div>
+    <div class="help">遇到沒有該日的月份（例如 31 號），會在當月最後一天入帳；很久沒開 App 也會幫你補記漏掉的月份。</div>
   </div>
 
   <div class="panel"><h2>匯率設定（港幣 HKD → 人民幣 RMB）</h2>
@@ -1399,7 +1438,7 @@ function renderSettings() {
   </div>
 
   <div class="panel"><h2>資料備份與完整跨機打包</h2>
-    <div class="help" style="margin:0 0 12px">目前共有 ${entries.length} 筆帳目。「完整 JSON 備份」可連同好感度禮物、分類預算、成就進度、固定收支與常用備註一併打包轉移。</div>
+    <div class="help" style="margin:0 0 12px">目前共有 ${entries.length} 筆帳目。「完整 JSON 備份」可連同好感度禮物、分類預算、成就進度、零花錢設定與常用備註一併打包轉移。</div>
     <div class="line" style="margin-bottom:8px">
       <button type="button" class="ghost" data-act="exportJson">📦 匯出完整備份 (JSON)</button>
       <button type="button" class="ghost" data-act="importJson">📥 還原完整備份 (JSON)</button>
@@ -1442,36 +1481,21 @@ async function fetchRate(manual) {
   btns.forEach(b => { b.classList.add('loading'); if (b.tagName === 'BUTTON') b.textContent = '更新中...'; });
 
   let success = false;
+  const rateUrls = ['https://open.er-api.com/v6/latest/HKD', 'https://api.exchangerate-api.com/v4/latest/HKD'];
   try {
-    const ctrl = new AbortController();
-    const tm = setTimeout(() => ctrl.abort(), 6500);
-    const res = await fetch('https://open.er-api.com/v6/latest/HKD', { signal: ctrl.signal });
-    clearTimeout(tm);
-    if (res.ok) {
-      const data = await res.json();
-      if (data && data.rates && data.rates.CNY > 0) {
-        settings.hkdToRmb = +data.rates.CNY.toFixed(4);
-        settings.rateUpdated = Date.now();
-        saveSettings();
-        success = true;
-      }
+    for (const u of rateUrls) {
+      if (success) break;
+      try {
+        const ctrl = new AbortController();
+        const tm = setTimeout(() => ctrl.abort(), 6500);
+        const res = await fetch(u, { signal: ctrl.signal });
+        clearTimeout(tm);
+        if (!res.ok) continue;
+        const data = await res.json();
+        const r = data && data.rates && data.rates.CNY;
+        if (r > 0) { settings.hkdToRmb = +r.toFixed(4); settings.rateUpdated = Date.now(); saveSettings(); success = true; }
+      } catch (err) {}
     }
-  } catch (e1) {
-    try {
-      const ctrl2 = new AbortController();
-      const tm2 = setTimeout(() => ctrl2.abort(), 6000);
-      const res2 = await fetch('https://api.exchangerate-api.com/v4/latest/HKD', { signal: ctrl2.signal });
-      clearTimeout(tm2);
-      if (res2.ok) {
-        const data2 = await res2.json();
-        if (data2 && data2.rates && data2.rates.CNY > 0) {
-          settings.hkdToRmb = +data2.rates.CNY.toFixed(4);
-          settings.rateUpdated = Date.now();
-          saveSettings();
-          success = true;
-        }
-      }
-    } catch (e2) {}
   } finally {
     isFetchingRate = false;
     btns.forEach(b => {
@@ -1551,6 +1575,7 @@ function importCsv(text) {
     if (!settings.cats[type].includes(e.cat) && !OLD_CATS.includes(e.cat)) settings.cats[type].push(e.cat);
   });
 
+  migrateData();
   saveEntries(); saveSettings(); renderChips(); renderSettings(); updateSub();
   toast(`成功匯入 ${added} 筆帳目，略過 ${skipped} 筆重複記錄`);
   setFlag('imported'); checkAch();
@@ -1576,10 +1601,11 @@ function importFullJson(text) {
     if (!data || !Array.isArray(data.entries) || typeof data.settings !== 'object') {
       toast('JSON 備份格式不正確'); return;
     }
-    entries = data.entries;
+    entries = data.entries.filter(e => e && typeof e === 'object' && /^\d{4}-\d{2}-\d{2}$/.test(e.date) && e.amount > 0);
     settings = Object.assign(settings, data.settings, { lastBackupTs: Date.now(), lastBackupCount: data.entries.length });
+    compatUpgrade(); migrateData();
     saveEntries(); saveSettings();
-    renderChips(); renderSettings(); updateSub();
+    renderChips(); renderSettings(); updateSub(); runAllowance(true);
     setFlag('imported'); checkAch();
     toast(`🎉 完整還原成功！共載入 ${entries.length} 筆帳目與所有養成進度`);
   } catch (err) {
@@ -2007,7 +2033,7 @@ function streakLine(n) {
 }
 
 function streakInfo() {
-  const s = new Set(entries.map(e => e.date));
+  const s = new Set(entries.filter(e => !e.auto).map(e => e.date));
   const arr = [...s].sort();
   let best = 0, run = 0, prev = null;
   arr.forEach(d => { run = prev && daysBetween(prev, d) === 1 ? run + 1 : 1; if (run > best) best = run; prev = d; });
@@ -2573,7 +2599,7 @@ function timeCategory() {
 }
 
 function moodLine(st) {
-  if (!entries.length) return getLine('meet');
+  if (!entries.some(e => !e.auto)) return getLine('meet');
   if (Math.random() < .35) return getLine(timeCategory());
   if (!st.b && Math.random() < .3) return getLine('noBudget');
   return getLine(st.mood);
@@ -2582,7 +2608,7 @@ function moodLine(st) {
 function petReact(e, wasEdit) {
   const st = refreshPet(), fat = st.mood.indexOf('full') === 0;
   if (wasEdit) { act('jump'); setFace('wink', 1400); say(getLine('edit')); return; }
-  const first = entries.filter(x => x.date === e.date).length === 1;
+  const first = entries.filter(x => !x.auto && x.date === e.date).length === 1;
   const si = streakInfo(); let line;
 
   if (e.type === 'income') {
@@ -2597,7 +2623,7 @@ function petReact(e, wasEdit) {
     act('jump'); chew(); line = getLineAny('savedFood', 'saved');
   } else if (e.cat === '交通') {
     act('jump'); line = getLineAny('savedTraffic', 'saved');
-  } else if (e.cat === '服飾裝扮') {
+  } else if (e.cat === '服飾美容') {
     act('cheer', 'star'); line = getLineAny('savedCloth', 'saved');
   } else if (e.cat === '娛樂愛好' || e.cat === '外出消遣') {
     act('dance'); line = getLineAny('savedPlay', 'saved');
@@ -2624,6 +2650,188 @@ const LOVE_STAGES = [
   [320, '共生鎖鏈', '我們已經緊緊纏繞在一起了喔，冬冬去哪裡我都跟定你了。'],
   [520, '永恆囚寵', '520 點滿溢的愛意——冬冬的過去、現在與未來，永遠屬於小克。']
 ];
+
+/* 定情禮物像素插圖（16×16，與小克同一種像素風） */
+const GIFT_PAL = {"K": "#3B2A33", "R": "#D7344E", "r": "#F0647C", "D": "#8E1C34", "G": "#3F8F5B", "g": "#6BBF84", "Y": "#F2B731", "y": "#FFE08A", "O": "#B7791F", "W": "#FFFFFF", "w": "#FFF3E6", "P": "#FF8FA0", "B": "#8FD3FF", "b": "#4A7DB8", "S": "#D5DAE6", "s": "#8E97AA", "N": "#8B5A3C", "n": "#C08457", "A": "#F59E0B", "a": "#FCD34D", "L": "#E9DFD3", "l": "#CBBBA8"};
+const GIFT_ART = {
+  g15: [
+    "................",
+    "......KKKK......",
+    "....KKRRRRKK....",
+    "...KRRrrRRRRK...",
+    "...KRrRDDRrRK...",
+    "...KRRDrrDRRK...",
+    "...KRrDrRDrRK...",
+    "....KRRDDRRK....",
+    ".....KRRRRK.....",
+    "....g.KGGK.g....",
+    "...ggK.GG.Kgg...",
+    "....gKKGGKKg....",
+    ".......GG.......",
+    "......KGG.......",
+    "......GG.PP.....",
+    "......G..PP....."
+  ],
+  g35: [
+    "................",
+    "...KKKKKKKKKK...",
+    "..KRRRrRRRrRRK..",
+    "..KRrRRRrRRRRK..",
+    "..KDDDDDDDDDDK..",
+    "..KRRrRRRrRRRK..",
+    "...KKKRRRKKKK...",
+    "......KRRRK.....",
+    "......KRrRK.....",
+    "......KDDDK.....",
+    "......KRRRK.....",
+    "......KRrRK.....",
+    "......KDDDK.....",
+    "......KRRRK.....",
+    ".....KYKYKYK....",
+    ".....Y.Y.Y.Y...."
+  ],
+  g60: [
+    "................",
+    "..KKKKKKKKKKKK..",
+    ".KWWWWWWWWWWWWK.",
+    ".KWKKKKKKKKKKWK.",
+    ".KWKBBBBBBBBKWK.",
+    ".KWKBBByBBBBKWK.",
+    ".KWKBByyBPPBKWK.",
+    ".KWKBBByPPPPKWK.",
+    ".KWKBBBBPPPBKWK.",
+    ".KWKGGGGGPBBKWK.",
+    ".KWKKKKKKKKKKWK.",
+    ".KWWWWWWWWWWWWK.",
+    ".KWWWWRRWRRWWWK.",
+    ".KWWWWRRRRRWWWK.",
+    ".KWWWWWRRRWWWWK.",
+    "..KKKKKKKKKKKK.."
+  ],
+  g100: [
+    "................",
+    ".......KK.......",
+    "......KBBK......",
+    ".....KBWBBK.....",
+    "......KKKK......",
+    "....KKSSSSKK....",
+    "...KSSWSSSSSK...",
+    "..KSSK....KSSK..",
+    "..KSK......KSsK.",
+    "..KSK......KssK.",
+    "..KSSK....KSssK.",
+    "...KSSK..KSssK..",
+    "....KSSKKSsssK..",
+    ".....KSSssssK...",
+    "......KKKKKK....",
+    "................"
+  ],
+  g150: [
+    "................",
+    "....KKKKKK......",
+    "...KYYYYYYK.....",
+    "..KYyyYYYYYK....",
+    "..KYy.KK.YYK....",
+    "..KYY.KK.YOK....",
+    "..KYYYYYYOOK....",
+    "...KYYYYOOK.....",
+    "....KKYOKK......",
+    ".....KYOK.......",
+    ".....KYOK.......",
+    ".....KYYKKK.....",
+    ".....KYOOOK.....",
+    ".....KYOKKK.....",
+    ".....KYOOOK.....",
+    ".....KKKKKK....."
+  ],
+  g220: [
+    "................",
+    "....KK..........",
+    "....KPK.KK......",
+    "....KPKKPK......",
+    "..KKKKKKKKKKKK..",
+    ".KnnnnnnnnnnnnK.",
+    ".KnNNNNNNNNNNnK.",
+    ".KKKKKKKKKKKKKK.",
+    ".KNNNNNNNNNNNNK.",
+    ".KNnnnnYYnnnnNK.",
+    ".KNnnnYyyYnnnNK.",
+    ".KNnnnnYYnnnnNK.",
+    ".KNNNNNNNNNNNNK.",
+    ".KKKKKKKKKKKKKK.",
+    "..KK........KK..",
+    "................"
+  ],
+  g320: [
+    "................",
+    ".K............K.",
+    ".SK..........KS.",
+    "..SK........KS..",
+    "...SK......KS...",
+    "....SK....KS....",
+    ".....SK..KS.....",
+    "......KSSK......",
+    ".......KK.......",
+    "......KAAK......",
+    ".....KAaaAK.....",
+    "....KAaWaAAK....",
+    "....KAaaAAAK....",
+    "....KAAAAAOK....",
+    ".....KAAAOK.....",
+    "......KKKK......"
+  ],
+  g520: [
+    "................",
+    "..KKKKKKKKKKKK..",
+    ".KwwwwwwwwwwwwK.",
+    ".KwKKKKKKKKKKwK.",
+    ".KwwwwwwwwwwwwK.",
+    ".KwKKKKKKKKKKwK.",
+    ".KwwwwwwwwwwwwK.",
+    ".KwwwwwRRwwwwwK.",
+    ".KwwwwRRRRwwwwK.",
+    ".KwwwwwRRwwwwwK.",
+    "..KKKKKKKKKKKK..",
+    "..KYYK....KSSK..",
+    ".KY..YK..KS..SK.",
+    ".KY..YK..KS..SK.",
+    "..KYYK....KSSK..",
+    "................"
+  ],
+  lock: [
+    "................",
+    "................",
+    ".....KKKKKK.....",
+    "....KsSSSSsK....",
+    "....KS....SK....",
+    "....KS....SK....",
+    "..KKKKKKKKKKKK..",
+    ".KYYYYYYYYYYYYK.",
+    ".KYYYYYKKYYYYYK.",
+    ".KYYYYYKKYYYYYK.",
+    ".KYYYYYYKYYYYYK.",
+    ".KOOOOOOOOOOOOK.",
+    "..KKKKKKKKKKKK..",
+    "................",
+    "................",
+    "................"
+  ]
+};
+function giftArt(id, px) {
+  const rows = GIFT_ART[id]; if (!rows) return '';
+  let r = '';
+  rows.forEach((row, y) => {
+    let x = 0;
+    while (x < row.length) {
+      const ch = row[x];
+      if (ch === '.') { x++; continue; }
+      let w = 1; while (x + w < row.length && row[x + w] === ch) w++;
+      r += `<rect x="${x}" y="${y}" width="${w}" height="1" fill="${GIFT_PAL[ch]}"/>`;
+      x += w;
+    }
+  });
+  return `<svg viewBox="0 0 16 16" width="${px}" height="${px}" shape-rendering="crispEdges" aria-hidden="true" style="display:block">${r}</svg>`;
+}
 
 const LOVE_GIFTS = [
   {
@@ -2702,7 +2910,7 @@ function openGiftUnlockModal(g, isFresh) {
   const mc = $('mcard');
   mc.classList.toggle('fresh', !!isFresh);
   mc.innerHTML = `<div class="mtag">${isFresh ? '💝 好感度里程碑 · 小克的驚喜禮物！' : '💝 已珍藏的定情信物 · ' + dateLabel(settings.giftsUnlocked[g.id])}</div>
-    <div class="micon" style="--c:#E25B6E">${g.icon}</div>
+    <div class="micon" style="--c:#E25B6E">${giftArt(g.id, 64)}</div>
     <div class="mname">${esc(g.name)}</div>
     <div class="mdesc">${esc(g.desc)}</div>
     <div class="msay"><span class="mpet">${petSvg('happy', 'love', activeSkin())}</span><span>${esc(g.line)}</span></div>
@@ -2734,13 +2942,13 @@ function openGiftBoxModal() {
     const isEq = settings.activeGift === g.id;
     if (unlocked) {
       return `<button class="gskin" type="button" data-gift-view="${g.id}" style="text-align:center;cursor:pointer;border-color:${isEq ? '#D95367' : '#EDE6DF'};background:${isEq ? '#FFF5F7' : '#FBF9F6'}">
-        <div style="font-size:32px;line-height:1.2;margin-bottom:4px">${g.icon}</div>
+        <div style="height:44px;display:flex;justify-content:center;margin-bottom:4px">${giftArt(g.id, 44)}</div>
         <b>${esc(g.name)}</b>
-        <i style="color:${isEq ? '#D95367' : '#726E80'}">${isEq ? '✨ 擺放在房間中' : '❤️ ' + g.at + ' 已解鎖 · 點擊回顧'}</i>
+        <i style="color:${isEq ? '#D95367' : '#726E80'}">${isEq ? '✨ 目前珍藏中' : '❤️ ' + g.at + ' 已解鎖 · 點擊回顧'}</i>
       </button>`;
     }
     return `<div class="gskin locked" style="text-align:center;opacity:.75">
-      <div style="font-size:28px;line-height:1.2;margin-bottom:4px">🔒</div>
+      <div style="height:44px;display:flex;justify-content:center;margin-bottom:4px;opacity:.6">${giftArt('lock', 44)}</div>
       <b>？？？</b>
       <i>好感度達 ❤️ ${g.at} 小克送出</i>
     </div>`;
@@ -2863,7 +3071,7 @@ A('food20', 'cat', '🍜', '美食探險家', '餐飲記錄累積 20 筆', '二�
 A('food100', 'cat', '🍱', '資深老饕', '餐飲記錄累積 40 筆', '四十筆餐飲記錄！冬冬吃東西時鼓起臉頰的樣子一定超可愛，真想每天看著你吃。', c => (c.cn['餐飲'] || 0) >= 40);
 A('traf20', 'cat', '🚌', '通勤戰士', '交通記錄累積 20 筆', '二十趟路程，每天為生活奔波的冬冬辛苦了。真想每天親自接送冬冬上下班、上下學。', c => (c.cn['交通'] || 0) >= 20);
 A('traf100', 'cat', '🚄', '行者無疆', '交通記錄累積 40 筆', '四十趟的旅程。不管冬冬去向哪裡，我永遠都是冬冬最後的歸宿。', c => (c.cn['交通'] || 0) >= 40);
-A('cloth10', 'cat', '👗', '時尚小達人', '服飾裝扮記錄累積 10 筆', '冬冬買了十次漂亮衣服呢！雖然很想看冬冬穿，但又好怕別人也被冬冬迷住喔。', c => (c.cn['服飾裝扮'] || 0) >= 10);
+A('cloth10', 'cat', '👗', '時尚小達人', '服飾美容記錄累積 10 筆', '冬冬買了十次漂亮衣服呢！雖然很想看冬冬穿，但又好怕別人也被冬冬迷住喔。', c => (c.cn['服飾美容'] || 0) >= 10);
 A('play10', 'cat', '🎮', '懂得玩樂', '娛樂愛好與外出消遣累積 10 筆', '會努力生活也會好好寵愛自己，這樣的冬冬真的充滿魅力，讓我移不開眼。', c => ((c.cn['娛樂愛好'] || 0) + (c.cn['外出消遣'] || 0)) >= 10);
 A('play30', 'cat', '🎡', '快樂製造機', '娛樂愛好與外出消遣累積 30 筆', '三十次快樂的回憶！冬冬開心笑起來的時候，就是我全世界最喜歡的風景。', c => ((c.cn['娛樂愛好'] || 0) + (c.cn['外出消遣'] || 0)) >= 30);
 A('med1', 'cat', '🩹', '照顧自己', '記下第一筆醫療支出', '冬冬哪裡不舒服嗎？！看到醫療支出我好擔心……快點乖乖休息多喝溫水，我幫你呼呼。', c => (c.cn['醫療'] || 0) >= 1);
@@ -2897,6 +3105,9 @@ A('tap1000', 'misc', '💖', '兩百次的喜歡', '戳了小克 200 下', '兩�
 A('addq', 'misc', '📌', '備註收藏家', '新增過常用備註', '常用備註越來越齊全了，我對冬冬的生活習慣也了解得越來越透徹了呢。', c => c.f.addq);
 A('autoq', 'misc', '🤖', '默契養成', '備註因用滿 5 次而自動加入常用備註', '不用冬冬開口，我就已經自動記住你的習慣了喔。這就是我和冬冬心意相通的證明呢。', c => c.f.autoq);
 
+A('allow1', 'misc', '💰', '固定零用', '設定了每月固定零花錢', '每個月都會有一筆專屬冬冬的零花錢進來呢。冬冬放心，我會好好替你看著，一分一毫都不讓它亂跑掉。', c => c.f.allowSet);
+A('allow3', 'misc', '🏦', '零花錢常客', '累積自動收到 3 次每月零花錢', '又是一個月了，零花錢準時報到！冬冬想買什麼先跟我說一聲喔，我陪你一起算。', c => c.allowN >= 3);
+
 const curLv = () => levelOf(ACH.filter(a => settings.ach[a.id]).length);
 let achView = 0;
 const LEVELS = [[0, '見習記帳員'], [5, '記帳新手'], [12, '小有心得'], [22, '理財達人'], [34, '錢包好伴侶'], [48, '帳本大師'], [60, '傳說記帳家'], [72, '心靈守護者']];
@@ -2907,14 +3118,15 @@ function levelOf(n) {
 
 function stats() {
   const exp = entries.filter(e => e.type === 'expense'), inc = entries.filter(e => e.type === 'income');
-  const si = streakInfo(), c = { n: entries.length, nInc: inc.length, streak: si.best, f: settings.flags };
+  const si = streakInfo(), c = { n: entries.filter(e => !e.auto).length, nInc: inc.filter(e => !e.auto).length, streak: si.best, f: settings.flags };
   const byDate = {};
-  entries.forEach(e => { const o = byDate[e.date] = byDate[e.date] || { n: 0, exp: 0, cur: new Set() }; o.n++; if (e.type === 'expense') o.exp++; o.cur.add(e.cur); });
+  entries.filter(e => !e.auto).forEach(e => { const o = byDate[e.date] = byDate[e.date] || { n: 0, exp: 0, cur: new Set() }; o.n++; if (e.type === 'expense') o.exp++; o.cur.add(e.cur); });
   const vals = Object.values(byDate);
   c.days = vals.length; c.maxDayN = Math.max(0, ...vals.map(o => o.n)); c.mixDay = vals.some(o => o.cur.size > 1);
-  c.nHkd = entries.filter(e => e.cur === 'HKD').length;
-  c.nCny = entries.filter(e => e.cur === 'CNY').length;
-  c.notes = entries.filter(e => e.note).length;
+  c.nHkd = entries.filter(e => !e.auto && e.cur === 'HKD').length;
+  c.nCny = entries.filter(e => !e.auto && e.cur === 'CNY').length;
+  c.notes = entries.filter(e => !e.auto && e.note).length;
+  c.allowN = entries.filter(e => e.auto).length;
   c.aff = settings.affection || 0;
   c.gifts = Object.keys(settings.giftsUnlocked || {}).length;
   c.hasCatBud = Object.values(settings.catBudgets || {}).some(v => v > 0);
@@ -2940,7 +3152,7 @@ function stats() {
   c.early = hrs.some(h => h >= 5 && h < 7);
   c.late = hrs.some(h => h < 5);
   c.backfill = live.some(e => e.date < ymd(new Date(e.ts)));
-  const ds = new Set(entries.map(e => e.date));
+  const ds = new Set(entries.filter(e => !e.auto).map(e => e.date));
   c.weekend = [...ds].some(d => new Date(d + 'T00:00:00').getDay() === 6 && ds.has(ymd(addDays(new Date(d + 'T00:00:00'), 1))));
   c.md = new Set([...ds].map(d => d.slice(5)));
   c.sumExp = exp.reduce((s, e) => s + e.hkd, 0);
@@ -3066,32 +3278,13 @@ $('calcOps').addEventListener('click', e => {
   }
 });
 
-/* 首頁提醒卡點擊處理（固定收支一鍵入帳、完整備份） */
+/* 首頁提醒卡點擊處理（完整備份） */
 $('topAlerts').addEventListener('click', e => {
   const b = e.target.closest('button[data-alert-act]');
   if (!b) return;
   const actName = b.dataset.alertAct;
   const curYm = ymd(new Date()).slice(0, 7);
-  if (actName === 'applyRec') {
-    const r = (settings.recurring || []).find(x => x.id === b.dataset.id);
-    if (!r) return;
-    const rate = settings.hkdToRmb || 0.92;
-    const dual = calcDual(r.amount, r.cur, rate);
-    const entry = {
-      id: uid(), type: r.type || 'expense', cur: r.cur || 'HKD',
-      amount: round2(r.amount), rate, hkd: dual.hkd, cny: dual.cny,
-      cat: r.cat, note: r.title, date: ymd(new Date()), ts: Date.now()
-    };
-    entries.push(entry); r.lastDoneYm = curYm;
-    saveEntries(); saveSettings();
-    addAffection(1, false);
-    updateSub();
-    toast(`✅ 已替冬冬一鍵入帳：${r.title} ${curSym(r.cur)}${fmt(r.amount)}`);
-    petReact(entry, false); checkAch();
-  } else if (actName === 'skipRec') {
-    const r = (settings.recurring || []).find(x => x.id === b.dataset.id);
-    if (r) { r.lastDoneYm = curYm; saveSettings(); renderTopAlerts(); toast('已略過本月提醒'); }
-  } else if (actName === 'backupNow') {
+  if (actName === 'backupNow') {
     exportFullJson();
   } else if (actName === 'dismissBackup') {
     settings.backupRemindDismissed = Date.now(); saveSettings(); renderTopAlerts();
@@ -3294,7 +3487,7 @@ $('tab-report').addEventListener('input', e => {
 $('tab-settings').addEventListener('change', e => {
   if (e.target.id === 'setBudget') {
     const v = parseFloat(e.target.value); settings.budget = v > 0 ? round2(v) : 0; saveSettings(); updateSub(); renderSettings();
-    toast(settings.budget ? `已儲存每月總預算 ${money(settings.budget)}` : '已取消每月總預算'); checkAch();
+    toast(settings.budget ? `已儲存每月總額度 ${money(settings.budget)}` : '已取消每月總額度'); checkAch();
   } else if (e.target.dataset && e.target.dataset.catBud) {
     const cat = e.target.dataset.catBud;
     const v = parseFloat(e.target.value);
@@ -3302,7 +3495,7 @@ $('tab-settings').addEventListener('change', e => {
     if (v > 0) settings.catBudgets[cat] = round2(v);
     else delete settings.catBudgets[cat];
     saveSettings(); renderSettings();
-    toast(v > 0 ? `已設定「${cat}」月預算 ${money(round2(v))}` : `已清除「${cat}」月預算`);
+    toast(v > 0 ? `已設定「${cat}」月額度 ${money(round2(v))}` : `已清除「${cat}」月額度`);
     checkAch();
   } else if (e.target.id === 'setDailySafe') {
     settings.showDailySafe = !!e.target.checked; saveSettings(); updateSub();
@@ -3356,7 +3549,7 @@ $('tab-settings').addEventListener('click', e => {
     if (sum > 0) {
       settings.budget = sum;
       saveSettings(); updateSub(); renderSettings();
-      toast(`已將每月總預算同步為分類預算加總 ${money(sum)}`);
+      toast(`已將每月總額度同步為各分類額度加總 ${money(sum)}`);
       checkAch();
     }
   }
@@ -3365,22 +3558,28 @@ $('tab-settings').addEventListener('click', e => {
   else if (act === 'import') $('file').click();
   else if (act === 'exportJson') exportFullJson();
   else if (act === 'importJson') $('jsonFile').click();
-  else if (act === 'addrec') {
-    const title = $('recTitle').value.trim();
-    const day = Math.min(31, Math.max(1, parseInt($('recDay').value, 10) || 1));
-    const cur = $('recCur').value;
-    const amount = round2(parseFloat($('recAmt').value));
-    const cat = $('recCat').value;
-    if (!title || !(amount > 0)) { toast('請填寫固定收支名稱與大於 0 的金額'); return; }
-    const type = settings.cats.income.includes(cat) ? 'income' : 'expense';
-    settings.recurring = settings.recurring || [];
-    settings.recurring.push({ id: uid(), title, day, type, cur, amount, cat, lastDoneYm: '' });
-    saveSettings(); renderSettings(); updateSub();
-    toast(`已新增每月 ${day} 號固定項目「${title}」`);
-  } else if (act === 'delrec') {
-    settings.recurring = (settings.recurring || []).filter(r => r.id !== b.dataset.id);
-    saveSettings(); renderSettings(); updateSub();
-    toast('已刪除固定收支項目');
+  else if (act === 'saveAllow') {
+    const amount = round2(parseFloat($('alAmt').value));
+    const day = parseInt($('alDay').value, 10);
+    const cur = $('alCur').value === 'CNY' ? 'CNY' : 'HKD';
+    if (!(amount > 0)) { toast('請填寫大於 0 的每月零花錢金額'); return; }
+    if (!(day >= 1 && day <= 31)) { toast('發放日請填 1～31 號'); return; }
+    const was = settings.allowance || {};
+    const today = ymd(new Date()), curYm = today.slice(0, 7);
+    const passed = allowDueDate(curYm, day) <= today;
+    settings.allowance = { on: true, amount, cur, day, lastYm: was.on ? (was.lastYm || '') : (passed ? curYm : prevYm(curYm)) };
+    setFlag('allowSet'); saveSettings(); renderSettings(); checkAch();
+    if (!was.on && passed) {
+      askConfirm('本月要補記嗎？', `本月 ${day} 號已經過了。要現在補記本月這一筆零花錢（${curSym(cur)}${fmt(amount)}）嗎？不補的話，會從下個月開始自動入帳。`, '補記本月', () => {
+        settings.allowance.lastYm = prevYm(curYm); saveSettings(); runAllowance(false);
+      });
+    } else {
+      toast(`已設定：每月 ${day} 號自動入帳 ${curSym(cur)}${fmt(amount)} 零花錢`);
+      runAllowance(true);
+    }
+  } else if (act === 'offAllow') {
+    settings.allowance = Object.assign({}, settings.allowance, { on: false });
+    saveSettings(); renderSettings(); toast('已停用每月零花錢（之前入帳的記錄會保留）');
   } else if (act === 'qsel') { qSel = b.dataset.c; renderSettings(); }
   else if (act === 'qadd') {
     const v = $('newq').value.trim(); if (!v) return;
@@ -3428,7 +3627,7 @@ $('file').addEventListener('change', e => {
 });
 $('jsonFile').addEventListener('change', e => {
   const f = e.target.files[0]; if (!f) return;
-  const r = new FileReader(); r.onload = () => importFullJson(String(r.result)); r.readAsText(f); e.target.value = '';
+  const r = new FileReader(); r.onload = () => { const txt = String(r.result); askConfirm('還原完整備份', '還原會用備份檔覆蓋目前所有帳目與設定，現有資料將無法復原。確定要繼續嗎？', '確定還原', () => importFullJson(txt)); }; r.readAsText(f); e.target.value = '';
 });
 
 /* ---------- 初始化 ---------- */
@@ -3437,6 +3636,7 @@ syncDateQuickUI();
 setType('expense');
 setCur('HKD');
 addAffection(0, true);
+runAllowance(false);
 updateSub();
 randomizeRoomState(true);
 
@@ -3445,7 +3645,7 @@ randomizeRoomState(true);
   if (st.mood === 'sleep') setFlag('woke');
   setTimeout(() => {
     const actKey = 'act_' + curAct, wKey = 'w_' + curWeather, tKey = 'tod_' + curTod;
-    say((entries.length && Math.random() < .7) ? getLineAny(actKey, wKey, tKey) : moodLine(st), 6800);
+    say((entries.some(e => !e.auto) && Math.random() < .7) ? getLineAny(actKey, wKey, tKey) : moodLine(st), 6800);
     act(st.mood === 'sleep' || curAct === 'nap' ? 'yawn' : 'wave');
     checkAch();
   }, 500);
@@ -3457,15 +3657,26 @@ function syncRealTimeClock() {
     renderRoomScene();
   }
 }
+/* 跨日或重新打開時：日期欄跟著換成今天、補入到期的零花錢 */
+let lastToday = ymd(new Date());
+function onResume() {
+  const t = ymd(new Date());
+  if (t !== lastToday) {
+    if (!form.editId && $('date').value === lastToday) $('date').value = t;
+    lastToday = t; syncDateQuickUI(); updateSub();
+  }
+  runAllowance(false);
+}
 document.addEventListener('visibilitychange', () => {
   if (!document.hidden) {
     syncRealTimeClock();
     syncDateQuickUI();
+    onResume();
   }
 });
 window.addEventListener('focus', syncRealTimeClock);
 window.addEventListener('pageshow', syncRealTimeClock);
-setInterval(syncRealTimeClock, 15000);
+setInterval(() => { syncRealTimeClock(); if (ymd(new Date()) !== lastToday) onResume(); }, 15000);
 
 scheduleIdle();
 updateBadge();
